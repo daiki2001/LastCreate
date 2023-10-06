@@ -49,6 +49,18 @@ public://サブクラス
 		XMMATRIX bones[MAX_BONES];
 	};
 
+	struct AnimationData
+	{
+		FbxTakeInfo* takeinfo;
+		FbxAnimStack* animeStack;
+		//アニメーション開始時間
+		FbxTime startTime;
+		//アニメーション終了時間
+		FbxTime endTime;
+		//現在時間(アニメーション)
+		FbxTime currentTime;
+	};
+
 public://メンバ関数
 	/// <summary>
 	/// 初期化
@@ -84,6 +96,10 @@ public://メンバ関数
 	/// アニメーションの停止
 	/// </summary>
 	void StopAnimation();
+	/// <summary>
+	/// アニメーションロード
+	/// </summary>
+	void LoadAnumation();
 
 	void SetPosition(const Vec3 &pos) { m_position = pos; }
 	void SetScale(const Vec3 &scale) { m_scale = scale; }
@@ -126,4 +142,10 @@ protected://メンバ変数
 	bool m_isPlay = false;
 	//アニメーションをループさせるかどうか
 	bool m_isLoop = false;
+	//複数アニメーション用
+	std::vector<AnimationData> animeDatas_ = {};
+	//シーン
+	FbxScene* scene;
+	//アーマチュア番号
+	int armatureNo = 0;
 };

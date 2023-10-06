@@ -24,7 +24,7 @@ void Player::Init()
 	m_fbx = std::make_unique<FBXObject3d>();
 	m_fbx->Initialize();
 	m_fbx->SetModel(m_model.get());
-	m_fbx->SetScale(Vec3(0.005f, 0.005f, 0.005f));
+	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	
 	m_fbx->PlayAnimation(true);
 }

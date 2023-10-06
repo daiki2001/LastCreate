@@ -386,7 +386,6 @@ void FBXObject3d::Update()
 	{
 		//1フレーム進める
 		m_currentTime += m_frameTime;
-		m_currentTime += m_frameTime;
 		//最後まで再生したら先頭に戻す
 		if (m_currentTime > m_endTime)
 		{
@@ -533,3 +532,30 @@ void FBXObject3d::StopAnimation()
 {
 	m_isPlay = false;
 }
+
+//void FBXObject3d::LoadAnumation()
+//{
+//	scene = model->GetFbxScene();
+//	//アニメーション取得
+//	int animeStackCount = scene->GetSrcObjectCount<FbxAnimStack>();
+//
+//	for (int i = 0; i < animeStackCount; i++)
+//	{
+//		AnimationData animeData;
+//		//i番目のアニメーション取得
+//		animeData.animeStack = scene->GetSrcObject<FbxAnimStack>(i);
+//		//アニメーションの名前取得
+//		const char* animstackname = animeData.animeStack->GetName();
+//		//アニメーションの時間情報
+//		animeData.takeinfo = scene->GetTakeInfo(animstackname);
+//
+//		//開始時間取得
+//		animeData.startTime = animeData.takeinfo->mLocalTimeSpan.GetStart();
+//		//終了時間取得
+//		animeData.endTime = animeData.takeinfo->mLocalTimeSpan.GetStop();
+//		//開始時間に合わせる
+//		animeData.currentTime = animeData.startTime;
+//
+//		animeDatas_.push_back(animeData);
+//	}
+//}
