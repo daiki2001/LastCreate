@@ -30,7 +30,9 @@ void GameScene::Init()
 	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("sphere");
+	player = std::make_unique<Player>();
+	player->Init();
+
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -41,7 +43,7 @@ void GameScene::Update()
 	lightGroup->Update();
 	if (sceneChange_->GetinEndFlag())
 	{
-		if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
+		/*if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
 		{
 			sceneChange_->SceneChangeStart("");
 		}
@@ -49,9 +51,10 @@ void GameScene::Update()
 		{
 			BaseScene* scene = new ResultScene();
 			sceneManager_->SetNextScene(scene);
-		}
+		}*/
 	}
 
+	player->Update();
 	sceneChange_->Update();
 }
 
@@ -59,7 +62,7 @@ void GameScene::Draw()
 {
 	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
 
-	Object::Draw(object, Vec3(), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	player->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();
