@@ -91,7 +91,7 @@ public://メンバ関数
 	/// アニメーション開始
 	/// </summary>
 	/// <param name="Loop">ループ再生させるかどうか</param>
-	void PlayAnimation(bool Loop);
+	void PlayAnimation(int num, bool Loop);
 	/// <summary>
 	/// アニメーションの停止
 	/// </summary>
