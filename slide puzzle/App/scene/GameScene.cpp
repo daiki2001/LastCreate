@@ -41,6 +41,10 @@ void GameScene::Init()
 	m_fbx->SetModel(m_model.get());
 	m_fbx->SetScale(Vec3(0.005f, 0.005f, 0.005f));
 	m_fbx->SetPosition(Vec3(0, 0, 0));
+	
+	//player
+	player = std::make_unique<Player>();
+	player->Init();
 
 	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -52,7 +56,7 @@ void GameScene::Update()
 	lightGroup->Update();
 	if (sceneChange_->GetinEndFlag())
 	{
-		if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
+		/*if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
 		{
 			sceneChange_->SceneChangeStart("");
 		}
@@ -60,10 +64,15 @@ void GameScene::Update()
 		{
 			BaseScene* scene = new ResultScene();
 			sceneManager_->SetNextScene(scene);
-		}
+		}*/
 	}
+<<<<<<< HEAD
 	m_fbx->PlayAnimation(true);
 	m_fbx->Update();
+=======
+
+	player->Update();
+>>>>>>> master
 	sceneChange_->Update();
 }
 
@@ -71,7 +80,7 @@ void GameScene::Draw()
 {
 	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
 
-	Object::Draw(object, Vec3(), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	player->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();

@@ -1,6 +1,7 @@
 #pragma once
 #include"BaseScene.h"
 #include"../slide puzzle/SceneChange.h"
+#include"../slide puzzle/Player.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -39,6 +40,8 @@ private:
 private://定義
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
+
+	std::unique_ptr<Player>player;
 	
 	SpriteData back;
 	ObjectData object;
