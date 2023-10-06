@@ -31,6 +31,17 @@ void GameScene::Init()
 
 	//オブジェクト生成
 	object = Shape::CreateOBJ("sphere");
+
+	//FBX関連
+	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	m_model = std::make_unique<Model>();
+	m_model = std::unique_ptr<Model>(model1);
+	m_fbx = std::make_unique<FBXObject3d>();
+	m_fbx->Initialize();
+	m_fbx->SetModel(m_model.get());
+	m_fbx->SetScale(Vec3(0.005f, 0.005f, 0.005f));
+	m_fbx->SetPosition(Vec3(0, 0, 0));
+
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -51,7 +62,8 @@ void GameScene::Update()
 			sceneManager_->SetNextScene(scene);
 		}
 	}
-
+	m_fbx->PlayAnimation(true);
+	m_fbx->Update();
 	sceneChange_->Update();
 }
 
@@ -63,6 +75,7 @@ void GameScene::Draw()
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();
+	m_fbx->Draw(true);
 }
 
 void GameScene::ShadowDraw()

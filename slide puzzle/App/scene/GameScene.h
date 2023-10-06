@@ -42,4 +42,7 @@ private://定義
 	
 	SpriteData back;
 	ObjectData object;
+
+	std::unique_ptr<Model> m_model;		  //ペンギンモデル
+	std::unique_ptr<FBXObject3d>  m_fbx;//ペンギンFBX
 };
