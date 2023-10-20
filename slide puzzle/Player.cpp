@@ -27,7 +27,7 @@ void Player::Init()
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	
-	m_fbx->PlayAnimation(1, true);
+	m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 }
 
 void Player::Update()

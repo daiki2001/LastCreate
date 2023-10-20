@@ -458,7 +458,6 @@ void FBXObject3d::Update()
 	}
 	m_constBufferSkin->Unmap(0, nullptr);
 
-
 }
 
 void FBXObject3d::Draw(bool shadowFlag)
@@ -512,6 +511,7 @@ void FBXObject3d::PlayAnimation(int num, bool Loop)
 	scene->SetCurrentAnimationStack(animeDatas_[num].animeStack);
 	//ループフラグを変更する
 	m_isLoop = Loop;
+	armatureNo = num;
 }
 
 void FBXObject3d::StopAnimation()
@@ -544,4 +544,27 @@ void FBXObject3d::LoadAnumation()
 
 		animeDatas_.push_back(animeData);
 	}
+}
+
+int FBXObject3d::GetArmature(std::string name)
+{
+	std::string path = "Armature|";
+	//アニメーション取得
+	int animeStackCount = scene->GetSrcObjectCount<FbxAnimStack>();
+
+	for (int i = 0; i < animeStackCount; i++)
+	{
+		AnimationData animeData;
+		//i番目のアニメーション取得
+		animeData.animeStack = scene->GetSrcObject<FbxAnimStack>(i);
+		//アニメーションの名前取得
+		const char* animstackname = animeData.animeStack->GetName();
+
+		if (animstackname == path + name)
+		{
+			int number = i;
+			return number;
+		}
+	}
+	return -1;
 }
