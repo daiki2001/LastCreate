@@ -23,11 +23,11 @@ void Player::Init()
 	m_model = std::unique_ptr<Model>(model1);
 	m_fbx = std::make_unique<FBXObject3d>();
 	m_fbx->Initialize();
-	m_fbx->LoadAnumation();
 	m_fbx->SetModel(m_model.get());
+	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	
-	m_fbx->PlayAnimation(0, true);
+	m_fbx->PlayAnimation(1, true);
 }
 
 void Player::Update()
