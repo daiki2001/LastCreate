@@ -218,6 +218,7 @@
     </ClCompile>
     <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Ball.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -375,6 +376,7 @@
     </ClInclude>
     <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Ball.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">

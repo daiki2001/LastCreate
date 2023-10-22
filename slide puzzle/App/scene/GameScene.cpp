@@ -33,6 +33,9 @@ void GameScene::Init()
 	player = std::make_unique<Player>();
 	player->Init();
 
+	ball = std::make_unique<Ball>();
+	ball->Init();
+
 	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -54,7 +57,10 @@ void GameScene::Update()
 		}*/
 	}
 
+	BallHave();
+
 	player->Update();
+	ball->Update();
 	sceneChange_->Update();
 }
 
@@ -63,6 +69,7 @@ void GameScene::Draw()
 	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
 
 	player->Draw();
+	ball->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();
@@ -76,5 +83,13 @@ void GameScene::ShadowDraw()
 void GameScene::Finalize()
 {
 	Texture::Get()->Delete();
+}
+
+void GameScene::BallHave()
+{
+	if (ball->HaveHit(player->GetPosition()) && !ball->GetHaveFlag())
+	{
+		player->SetBall(ball.get());
+	}
 }
 

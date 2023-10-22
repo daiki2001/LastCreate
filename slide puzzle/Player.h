@@ -7,6 +7,7 @@
 #include <array>
 #include <algorithm>
 #include <functional>
+#include"../slide puzzle/Ball.h"
 
 class Player
 {
@@ -30,6 +31,11 @@ public:
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	const Vec3 GetPosition() { return position; }
+
+	void SetBall(Ball* ball);
+
 private:
 	/// <summary>
 	/// 移動
@@ -52,6 +58,8 @@ private:
 	ObjectData pObject;                         //プレイヤーオブジェクト
 	Vec3 position = {};                         //位置
 	Vec3 rotation = {};
+
+	Ball* ball_ = nullptr;
 
 	//接地フラグ
 	bool onGround_ = true;
