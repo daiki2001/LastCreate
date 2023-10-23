@@ -41,4 +41,6 @@ private://’è‹`
 	
 	ObjectData object;
 	SpriteData back;
+
+	ObjectData floor;
 };
