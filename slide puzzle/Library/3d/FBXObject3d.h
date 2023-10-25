@@ -32,6 +32,7 @@ private://静的メンバ変数
 public://定数
 	//ボーンの最大数
 	static const int MAX_BONES = 32;
+	static bool shadowFlag;
 public://サブクラス
 
 		//定数バッファ用データ構造体(座標変換行列用)
@@ -60,6 +61,10 @@ public://メンバ関数
 	static void CreateGraphicsPipeline();
 	static void CreateShadowPipeline();
 
+	static void InitShadow();
+
+	static void InitDraw();
+
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
@@ -67,7 +72,7 @@ public://メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(bool shadowFlag=false);
+	void Draw();
 
 	/// <summary>
 	/// モデルのセット

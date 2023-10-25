@@ -78,7 +78,7 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, bool shadowFlag)
 	cmdList->IASetVertexBuffers(0, 1, &m_vbView);
 	// インデックスバッファをセット(IBV)
 	cmdList->IASetIndexBuffer(&m_ibView);
-	if (shadowFlag)
+	if (shadowFlag==false)
 	{
 		// デスクリプタヒープのセット
 		ID3D12DescriptorHeap* ppHeaps[] = { Texture::Get()->GetDescHeap() };
