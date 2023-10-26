@@ -30,6 +30,9 @@ void GameScene::Init()
 	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
 	//オブジェクト生成
+	object = Shape::CreateOBJ("sphere");
+
+	//player
 	player = std::make_unique<Player>();
 	player->Init();
 
@@ -55,6 +58,7 @@ void GameScene::Update()
 	}
 
 	player->Update();
+
 	sceneChange_->Update();
 }
 

@@ -44,4 +44,7 @@ private://’è‹`
 	std::unique_ptr<Player>player;
 	
 	SpriteData back;
+	ObjectData object;
+
+	
 };

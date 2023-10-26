@@ -7,6 +7,9 @@
 #include <array>
 #include <algorithm>
 #include <functional>
+#include "Model.h"
+#include "FbxLoader.h"
+#include "FBXObject3d.h"
 
 class Player
 {
@@ -47,6 +50,9 @@ private:
 	/// 捕る
 	/// </summary>
 	void BallCatch();
+private:
+	std::unique_ptr<Model> m_model;		  //モデル
+	std::unique_ptr<FBXObject3d>  m_fbx;//FBX
 
 private:
 	ObjectData pObject;                         //プレイヤーオブジェクト

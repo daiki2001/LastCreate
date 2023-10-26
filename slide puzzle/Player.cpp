@@ -5,6 +5,7 @@
 #include<random>
 #include<Input.h>
 
+
 Player::Player()
 {
 }
@@ -16,17 +17,31 @@ Player::~Player()
 void Player::Init()
 {
 	pObject = Shape::CreateOBJ("sphere");
+	//FBXŠÖ˜A
+	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	m_model = std::make_unique<Model>();
+	m_model = std::unique_ptr<Model>(model1);
+	m_fbx = std::make_unique<FBXObject3d>();
+	m_fbx->Initialize();
+	m_fbx->SetModel(m_model.get());
+	m_fbx->LoadAnumation();
+	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
+	
+	m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 }
 
 void Player::Update()
 {
 	Move();
 	Jump();
+	m_fbx->Update();
 }
 
 void Player::Draw()
 {
-	Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	m_fbx->Draw(true);
+	m_fbx->SetPosition(position);
 }
 
 void Player::Move()
