@@ -73,12 +73,6 @@
     <FxCompile Include="Resources\shaders\ShadowMapVS.hlsl">
       <Filter>HLSL\Sprite</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\ShadowMap\ShadowMapVS.hlsl">
-      <Filter>HLSL\Sprite</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\ShadowMapPS.hlsl">
-      <Filter>HLSL\Sprite</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\shaders\ShadowMap\ShadowMapPS.hlsl">
       <Filter>HLSL\Sprite</Filter>
     </FxCompile>
@@ -102,9 +96,6 @@
     <ClCompile Include="App\scene\BaseScene.cpp">
       <Filter>ソースファイル\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Library\3d\Camera.cpp">
-      <Filter>Library\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Library\Audio\Audio.cpp">
       <Filter>Library\Audio</Filter>
     </ClCompile>
@@ -122,12 +113,6 @@
     </ClCompile>
     <ClCompile Include="Library\Helper\Easing.cpp">
       <Filter>Library\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\3d\FbxLoader.cpp">
-      <Filter>Library\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\3d\FBXObject3d.cpp">
-      <Filter>Library\3D</Filter>
     </ClCompile>
     <ClCompile Include="Library\base\Fps.cpp">
       <Filter>Library\DirectXCommon</Filter>
@@ -168,12 +153,6 @@
     <ClCompile Include="Library\Helper\LoadJson.cpp">
       <Filter>Library\Helper</Filter>
     </ClCompile>
-    <ClCompile Include="Library\3d\Model.cpp">
-      <Filter>Library\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\3d\Particle3D.cpp">
-      <Filter>Library\3D</Filter>
-    </ClCompile>
     <ClCompile Include="Library\3d\ParticleManager.cpp">
       <Filter>Library\2D</Filter>
     </ClCompile>
@@ -188,9 +167,6 @@
     </ClCompile>
     <ClCompile Include="Library\2d\ShadowMap.cpp">
       <Filter>Library\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Library\3d\Shape.cpp">
-      <Filter>Library\3D</Filter>
     </ClCompile>
     <ClCompile Include="Library\Texture\Texture.cpp">
       <Filter>Library\Texture</Filter>
@@ -218,6 +194,24 @@
     </ClCompile>
     <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Library\3d\FbxLoader.cpp">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\3d\FBXObject3d.cpp">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\3d\Model.cpp">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\3d\Camera.cpp">
+      <Filter>Library\3D\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\3d\Shape.cpp">
+      <Filter>Library\3D\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Library\3d\Particle3D.cpp">
+      <Filter>Library\3D\Particle</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -241,9 +235,6 @@
     <ClInclude Include="App\scene\BaseScene.h">
       <Filter>ソースファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Library\3d\Camera.h">
-      <Filter>Library\3D</Filter>
-    </ClInclude>
     <ClInclude Include="Library\Audio\Audio.h">
       <Filter>Library\Audio</Filter>
     </ClInclude>
@@ -264,12 +255,6 @@
     </ClInclude>
     <ClInclude Include="Library\Helper\Easing.h">
       <Filter>Library\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\3d\FBXObject3d.h">
-      <Filter>Library\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\3d\FbxLoader.h">
-      <Filter>Library\3D</Filter>
     </ClInclude>
     <ClInclude Include="Library\base\Fps.h">
       <Filter>Library\DirectXCommon</Filter>
@@ -312,12 +297,6 @@
     </ClInclude>
     <ClInclude Include="Library\Helper\LoadCSV.h">
       <Filter>Library\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\3d\Model.h">
-      <Filter>Library\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Library\3d\Particle3D.h">
-      <Filter>Library\3D</Filter>
     </ClInclude>
     <ClInclude Include="Library\3d\ParticleManager.h">
       <Filter>Library\2D</Filter>
@@ -375,6 +354,21 @@
     </ClInclude>
     <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Library\3d\FbxLoader.h">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\3d\FBXObject3d.h">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\3d\Model.h">
+      <Filter>Library\3D\Fbx</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\3d\Camera.h">
+      <Filter>Library\3D\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\3d\Particle3D.h">
+      <Filter>Library\3D\Particle</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">
@@ -411,9 +405,6 @@
       <Filter>HLSL\Sprite</Filter>
     </None>
     <None Include="Resources\shaders\ShadowMap.hlsli">
-      <Filter>HLSL\Sprite</Filter>
-    </None>
-    <None Include="Resources\shaders\ShadowMap\ShadowMap.hlsli">
       <Filter>HLSL\Sprite</Filter>
     </None>
   </ItemGroup>
@@ -477,6 +468,15 @@
     </Filter>
     <Filter Include="Library\3D\Object">
       <UniqueIdentifier>{a444fb09-5e6f-4a28-abd6-8bf657c7a942}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\3D\Fbx">
+      <UniqueIdentifier>{70f53846-b0d5-48df-b7dc-c0e43ce677af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\3D\Camera">
+      <UniqueIdentifier>{fd325777-25a5-4ed4-80b2-e922202e081a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\3D\Particle">
+      <UniqueIdentifier>{96d5ef07-05ca-455e-9585-dbbd8ee0bcb0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

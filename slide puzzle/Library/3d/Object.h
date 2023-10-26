@@ -150,6 +150,8 @@ public:
 public://オブジェクト関連
 	//オブジェクト描画前
 	static void InitDraw();
+
+	static void InitShadow();
 	//定数バッファ設定
 	static void OBJConstantBuffer();
 	/// <summary>
@@ -208,4 +210,5 @@ public://オブジェクト関連
 
 public:
 	static size_t OBJNum;//OBJ読み込みの数
+	static bool shadowFlag;
 };

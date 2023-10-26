@@ -110,14 +110,14 @@ void SceneManager::Draw()
 {
 	//‰e[“x’lŽæ“¾
 	m_shadowMapFar.PreDraw(DirectXBase::Get()->GetCmandList());
-	Object::InitDraw();
+	Object::InitShadow(), Sprite::Get()->PreShadowDraw(),FBXObject3d::InitShadow();
 	//‰e•`‰æ
-	scene_->ShadowDraw();
+	scene_->Draw();
 	m_shadowMapFar.PostDraw(DirectXBase::Get()->GetCmandList());
 
 
 	PostEffect::Get()->PreDrawScene(DirectXBase::Get()->GetCmandList());
-	Object::InitDraw(), Sprite::Get()->PreDraw();
+	Object::InitDraw(), Sprite::Get()->PreDraw(), FBXObject3d::InitDraw();
 	//ƒJƒƒ‰–Úü‚Ì•`‰æ
 	scene_->Draw();
 	DebugText::Get()->DrawAll();

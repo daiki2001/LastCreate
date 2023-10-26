@@ -46,9 +46,9 @@ private:
 	//定数バッファ
 	ComPtr<ID3D12Resource> m_constBuff;
 	//画像横幅
-	const int c_texture_width = 2500;	
+	const int c_texture_width = 5000;
 	//画像縦幅
-	const int c_texture_height = 2500;	
+	const int c_texture_height = 5000;	
 public:
 	/// <summary>
 	/// コンストラクタ

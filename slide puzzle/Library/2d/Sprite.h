@@ -90,6 +90,7 @@ public:
 public:
 	static ID3D12Device* dev;
 	static ID3D12GraphicsCommandList* cmdList;
+	static bool shadowFlag;
 	//スプライト共通データ
 	SpriteCommon spriteCommon;
 public://静的関数
@@ -123,6 +124,10 @@ public:
 	/// 描画前処理
 	/// </summary>
 	void PreDraw();
+	/// <summary>
+	/// 影描画前
+	/// </summary>
+	void PreShadowDraw();
 	/// <summary>
 	/// コンストバッファ作成
 	/// </summary>

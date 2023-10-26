@@ -8,6 +8,7 @@
 ID3D12Device* FBXObject3d::device = nullptr;
 LightGroup* FBXObject3d::lightGroup = nullptr;
 ID3D12GraphicsCommandList* FBXObject3d::cmdList = nullptr;
+bool FBXObject3d::shadowFlag = false;
 #include<d3dcompiler.h>
 #pragma comment(lib,"d3dcompiler.lib")
 
@@ -379,6 +380,16 @@ void FBXObject3d::CreateShadowPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
+void FBXObject3d::InitShadow()
+{
+	shadowFlag = true;
+}
+
+void FBXObject3d::InitDraw()
+{
+	shadowFlag = false;
+}
+
 void FBXObject3d::Update()
 {
 	//アニメーション
@@ -460,7 +471,7 @@ void FBXObject3d::Update()
 
 }
 
-void FBXObject3d::Draw(bool shadowFlag)
+void FBXObject3d::Draw()
 {
 	//モデルの割り当てがなければ描画しない
 	if (model == nullptr)
@@ -468,7 +479,7 @@ void FBXObject3d::Draw(bool shadowFlag)
 		return;
 	}
 	Pipeline::SetPipeline(PipelineFBX);
-	if (shadowFlag)
+	if (shadowFlag==false)
 	{
 		//パイプライトステートの設定
 		cmdList->SetPipelineState(pipelinestate.Get());
@@ -485,7 +496,7 @@ void FBXObject3d::Draw(bool shadowFlag)
 
 	//プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	if (shadowFlag) {
+	if (shadowFlag==false) {
 		//定数バッファビューをセット
 		cmdList->SetGraphicsRootConstantBufferView(0, m_constBuffTransform->GetGPUVirtualAddress());
 		//定数バッファビューをセット
@@ -501,7 +512,7 @@ void FBXObject3d::Draw(bool shadowFlag)
 		cmdList->SetGraphicsRootConstantBufferView(1, m_constBufferSkin->GetGPUVirtualAddress());
 	}
 	//モデル描画
-	model->Draw(cmdList, shadowFlag);
+	model->Draw(cmdList,shadowFlag);
 }
 
 void FBXObject3d::PlayAnimation(int num, bool Loop)
