@@ -40,7 +40,7 @@ void Player::Update()
 void Player::Draw()
 {
 	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
-	m_fbx->Draw(true);
+	m_fbx->Draw();
 	m_fbx->SetPosition(position);
 }
 
