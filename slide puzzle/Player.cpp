@@ -17,7 +17,7 @@ Player::~Player()
 void Player::Init()
 {
 	pObject = Shape::CreateOBJ("sphere");
-	//FBX�֘A
+
 	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
 	m_model = std::make_unique<Model>();
 	m_model = std::unique_ptr<Model>(model1);
@@ -86,24 +86,20 @@ void Player::Move()
 
 void Player::Jump()
 {
-	// ��������
 	if (!onGround_)
 	{
-		// �����������x
 		const float fallAcc = -0.01f;
 		const float fallVYMin = -0.5f;
-		// ����
 		fallV_.y = max(fallV_.y + fallAcc, fallVYMin);
-		// �ړ�
 		position.x += fallV_.x;
 		position.y += fallV_.y;
 		position.z += fallV_.z;
 	}
-	// �W�����v����
+
 	else if (Input::Get()->KeybordTrigger(DIK_SPACE))
 	{
 		onGround_ = false;
-		const float jumpVYFist = 0.2f; //�W�����v�����������
+		const float jumpVYFist = 0.2f;
 		fallV_ = { 0, jumpVYFist, 0 };
 	}
 
