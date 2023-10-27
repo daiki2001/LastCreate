@@ -57,9 +57,9 @@ void LightGroup::Initialize()
 	TransferConstBuffer();
 
 	m_shadowProjection = XMMatrixOrthographicOffCenterLH(
-		-500.0f, 500.0f,
-		-500.0f, 500.0f,
-		-800.0f, 800.0f);//前端　奥端
+		-100.0f, 100.0f,
+		-100.0f, 100.0f,
+		-400.0f, 400.0f);//前端　奥端
 }
 
 void LightGroup::Update()
