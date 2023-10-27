@@ -17,7 +17,7 @@ Player::~Player()
 void Player::Init()
 {
 	pObject = Shape::CreateOBJ("sphere");
-	//FBXŠÖ˜A
+	//FBXï¿½Ö˜A
 	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
 	m_model = std::make_unique<Model>();
 	m_model = std::unique_ptr<Model>(model1);
@@ -28,6 +28,8 @@ void Player::Init()
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	
 	m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
+
+	position = { 10.0f, 0.0f, 0.0f };
 }
 
 void Player::Update()
@@ -35,6 +37,8 @@ void Player::Update()
 	Move();
 	Jump();
 	m_fbx->Update();
+	BallThrow();
+	TargetLockOn();
 }
 
 void Player::Draw()
@@ -44,86 +48,62 @@ void Player::Draw()
 	m_fbx->SetPosition(position);
 }
 
+void Player::SetBall(Ball* ball)
+{
+	if (ball_ != nullptr) { return; }
+
+	ball_ = ball;
+	ball_->SetHaveFlag(true);
+}
+
 void Player::Move()
 {
-	bool dashFlag = false;
+	//
+	float speed = 0.0f;
 
+	
+
+	if (Input::Get()->KeybordPush(DIK_W) || Input::Get()->KeybordPush(DIK_D))
+	{
+		speed = speed + 0.5f;
+	}
+	else if (Input::Get()->KeybordPush(DIK_S) || Input::Get()->KeybordPush(DIK_A))
+	{
+		speed = speed - 0.5f;
+	}
+
+	//
 	if (Input::Get()->KeybordPush(DIK_LSHIFT))
 	{
-		dashFlag = true;
+		speed *= 1.5f;
 	}
 
-	float a = 1.0f;
-	float b = 0.5f;
+	XMFLOAT2 playerAngle_ = { rotation.x, rotation.y };
 
-
-	if (Input::Get()->KeybordPush(DIK_W))
-	{
-		if (dashFlag)
-		{
-			position.z += a;
-		}
-		else
-		{
-			position.z += b;
-		}
-	}
-	else if (Input::Get()->KeybordPush(DIK_S))
-	{
-		if (dashFlag)
-		{
-			position.z -= a;
-		}
-		else
-		{
-			position.z -= b;
-		}
-	}
-
-	if (Input::Get()->KeybordPush(DIK_A))
-	{
-		if (dashFlag)
-		{
-			position.x -= a;
-		}
-		else
-		{
-			position.x -= b;
-		}
-	}
-	else if (Input::Get()->KeybordPush(DIK_D))
-	{
-		if (dashFlag)
-		{
-			position.x += a;
-		}
-		else
-		{
-			position.x += b;
-		}
-	}
+	position.x +=  cosf((playerAngle_.y * 3.14f) / 180.0f) * speed;
+	position.z += -sinf((playerAngle_.y * 3.14f) / 180.0f) * speed;
 }
 
 void Player::Jump()
 {
-	// —Ž‰ºˆ—
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (!onGround_)
 	{
-		// ‰ºŒü‚«‰Á‘¬“x
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x
 		const float fallAcc = -0.01f;
 		const float fallVYMin = -0.5f;
-		// ‰Á‘¬
+		// ï¿½ï¿½ï¿½ï¿½
 		fallV_.y = max(fallV_.y + fallAcc, fallVYMin);
-		// ˆÚ“®
+		// ï¿½Ú“ï¿½
 		position.x += fallV_.x;
 		position.y += fallV_.y;
 		position.z += fallV_.z;
 	}
-	// ƒWƒƒƒ“ƒv‘€ì
+	// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
 	else if (Input::Get()->KeybordTrigger(DIK_SPACE))
 	{
 		onGround_ = false;
-		const float jumpVYFist = 0.2f; //ƒWƒƒƒ“ƒvŽžãŒü‚«‰‘¬
+		const float jumpVYFist = 0.2f; //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		fallV_ = { 0, jumpVYFist, 0 };
 	}
 
@@ -137,9 +117,15 @@ void Player::Jump()
 
 void Player::BallThrow()
 {
+	if (ball_ == nullptr) { return; }
+
+	ball_->SetChainPosition(position);
+
 	if (Input::Get()->MouseTriggerLeft())
 	{
-
+		ball_->SetThrowFlag(true);
+		ball_->SetHaveFlag(false);
+		ball_ = nullptr;
 	}
 }
 
@@ -153,4 +139,24 @@ void Player::BallCatch()
 		catchFlag_ = false;
 		catchTimer_ = 0;
 	}
+}
+
+void Player::TargetLockOn(Vec3 pos)
+{
+	Vec3 vector = { pos.x - position.x, pos.y - position.y, pos.z - position.z };
+	Vec3 playerRot = rotation;
+
+	playerRot.y = -atan2(vector.z - 0.0f, vector.x - 0.0f) * (ANGLE / PI);
+	XMMATRIX  rotM = XMMatrixIdentity();
+	rotM *= XMMatrixRotationY(XMConvertToRadians(-playerRot.y));
+	float w = vector.x * rotM.r[0].m128_f32[3] + vector.y * rotM.r[1].m128_f32[3] + vector.z * rotM.r[2].m128_f32[3] + rotM.r[3].m128_f32[3];
+	XMFLOAT3 result
+	{
+		(vector.x * rotM.r[0].m128_f32[0] + vector.y * rotM.r[1].m128_f32[0] + vector.z * rotM.r[2].m128_f32[0] + rotM.r[3].m128_f32[0]) / w,
+		(vector.x * rotM.r[0].m128_f32[1] + vector.y * rotM.r[1].m128_f32[1] + vector.z * rotM.r[2].m128_f32[1] + rotM.r[3].m128_f32[1]) / w,
+		(vector.x * rotM.r[0].m128_f32[2] + vector.y * rotM.r[1].m128_f32[2] + vector.z * rotM.r[2].m128_f32[2] + rotM.r[3].m128_f32[2]) / w,
+	};
+	playerRot.z = atan2(result.y - 0.0f, result.x - 0.0f) * (ANGLE / PI);
+
+	rotation = playerRot;
 }

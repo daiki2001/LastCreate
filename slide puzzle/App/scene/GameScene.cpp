@@ -30,11 +30,16 @@ void GameScene::Init()
 	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("sphere");
-
-	//player
 	player = std::make_unique<Player>();
 	player->Init();
+
+	ball = std::make_unique<Ball>();
+	ball->Init();
+	ball->SetPosition({ 5.0f,0.0f,0.0f });
+
+	ball2 = std::make_unique<Ball>();
+	ball2->Init();
+	ball2->SetPosition({ 0.0f,0.0f,0.0f });
 
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -57,8 +62,12 @@ void GameScene::Update()
 		}*/
 	}
 
+	BallHave();
+	
 	player->Update();
-
+	CameraMove();
+	ball->Update();
+	ball2->Update();
 	sceneChange_->Update();
 }
 
@@ -67,6 +76,11 @@ void GameScene::Draw()
 	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
 
 	player->Draw();
+
+	ball2->Draw();
+
+	ball->Draw();
+	
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();
@@ -80,5 +94,31 @@ void GameScene::ShadowDraw()
 void GameScene::Finalize()
 {
 	Texture::Get()->Delete();
+}
+
+void GameScene::BallHave()
+{
+	if (ball->HaveHit(player->GetPosition()) && !ball->GetHaveFlag())
+	{
+		player->SetBall(ball.get());
+	}
+}
+
+void GameScene::CameraMove()
+{
+	//半径は-10
+	XMVECTOR v0 = { 0, 0, -10, 0 };
+	XMMATRIX  rotM = XMMatrixIdentity();
+	rotM *= XMMatrixRotationX(XMConvertToRadians(30.0f));
+	rotM *= XMMatrixRotationY(XMConvertToRadians(player->GetRotation().y + 90));
+	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
+	XMVECTOR target = { player->GetPosition().x, player->GetPosition().y, player->GetPosition().z };
+	XMVECTOR v3 = target + v;
+	Vec3 f = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
+	Vec3 center = { target.m128_f32[0], target.m128_f32[1], target.m128_f32[2] };
+	Vec3 pos = f;
+
+	//カメラ位置をセット
+	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
 }
 

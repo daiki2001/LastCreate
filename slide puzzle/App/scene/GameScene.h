@@ -2,6 +2,7 @@
 #include"BaseScene.h"
 #include"../slide puzzle/SceneChange.h"
 #include"../slide puzzle/Player.h"
+#include"../slide puzzle/Ball.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -34,6 +35,10 @@ public:
 	void ShadowDraw()override;
 	
 	void Finalize()override;
+
+	void BallHave();
+
+	void CameraMove();
 private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<Audio> audio;
@@ -42,6 +47,9 @@ private://’è‹`
 	std::unique_ptr<SceneChange> sceneChange_;
 
 	std::unique_ptr<Player>player;
+
+	std::unique_ptr<Ball> ball;
+	std::unique_ptr<Ball> ball2;
 	
 	SpriteData back;
 	ObjectData object;

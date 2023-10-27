@@ -10,61 +10,77 @@
 #include "Model.h"
 #include "FbxLoader.h"
 #include "FBXObject3d.h"
+#include"../slide puzzle/Ball.h"
 
 class Player
 {
 private:
-	
+
+
+private: // ï¿½è”
+	// ï¿½Ê“xï¿½@
+	const float PI = 3.14159265359f;
+	// ï¿½xï¿½ï¿½ï¿½@
+	const float ANGLE = 180.0f;
 
 public:
-	//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	Player();
-	//ƒfƒXƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	//ï¿½fï¿½Xï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	~Player();
 	/// <summary>
-	/// ‰Šú‰»
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	/// </summary>
 	void Init();
 	/// <summary>
-	/// XV
+	/// ï¿½Xï¿½V
 	/// </summary>
 	void Update();
 	/// <summary>
-	/// •`‰æ
+	/// ï¿½`ï¿½ï¿½
 	/// </summary>
 	void Draw();
+
+	const Vec3 GetPosition() { return position; }
+	const Vec3 GetRotation() { return rotation; }
+	void SetBall(Ball* ball);
+
 private:
 	/// <summary>
-	/// ˆÚ“®
+	/// ï¿½Ú“ï¿½
 	/// </summary>
 	void Move();
 	/// <summary>
-	/// ƒWƒƒƒ“ƒv
+	/// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½v
 	/// </summary>
 	void Jump();
 	/// <summary>
-	/// “Š‚°‚é
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	/// </summary>
 	void BallThrow();
 	/// <summary>
-	/// •ß‚é
+	/// ï¿½ß‚ï¿½
 	/// </summary>
 	void BallCatch();
 private:
-	std::unique_ptr<Model> m_model;		  //ƒ‚ƒfƒ‹
+	std::unique_ptr<Model> m_model;		  //ï¿½ï¿½ï¿½fï¿½ï¿½
 	std::unique_ptr<FBXObject3d>  m_fbx;//FBX
 
+	void TargetLockOn(Vec3 pos = {});
+
 private:
-	ObjectData pObject;                         //ƒvƒŒƒCƒ„[ƒIƒuƒWƒFƒNƒg
-	Vec3 position = {};                         //ˆÊ’u
+	ObjectData pObject;                         //ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g
+	Vec3 position = {};                         //ï¿½Ê’u
 	Vec3 rotation = {};
 
-	//Ú’nƒtƒ‰ƒO
+	Ball* ball_ = nullptr;
+
+	//ï¿½Ú’nï¿½tï¿½ï¿½ï¿½O
 	bool onGround_ = true;
-	// —‰ºƒxƒNƒgƒ‹
+	// ï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Nï¿½gï¿½ï¿½
 	Vec3 fallV_ = {};
 
-	// ƒLƒƒƒbƒ`ŠÖŒW
+	// ï¿½Lï¿½ï¿½ï¿½bï¿½`ï¿½ÖŒW
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
 };

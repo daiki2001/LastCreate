@@ -279,6 +279,7 @@
     <ClInclude Include="App\scene\SceneManager.h" />
     <ClInclude Include="App\scene\StageSelect.h" />
     <ClInclude Include="App\scene\TitleScene.h" />
+    <ClInclude Include="Ball.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
     <ClInclude Include="Library\2d\PostEffect.h" />
     <ClInclude Include="Library\2d\ShadowMap.h" />
@@ -334,6 +335,7 @@
     <ClCompile Include="App\scene\SceneManager.cpp" />
     <ClCompile Include="App\scene\StageSelect.cpp" />
     <ClCompile Include="App\scene\TitleScene.cpp" />
+    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />
     <ClCompile Include="Library\2d\PostEffect.cpp" />
     <ClCompile Include="Library\2d\ShadowMap.cpp" />
