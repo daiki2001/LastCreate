@@ -37,6 +37,8 @@ public:
 	void Finalize()override;
 
 	void BallHave();
+
+	void CameraMove();
 private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<Audio> audio;
@@ -47,6 +49,7 @@ private://’è‹`
 	std::unique_ptr<Player>player;
 
 	std::unique_ptr<Ball> ball;
+	std::unique_ptr<Ball> ball2;
 	
 	SpriteData back;
 };

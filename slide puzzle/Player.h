@@ -12,7 +12,13 @@
 class Player
 {
 private:
-	
+
+
+private: // 定数
+	// 弧度法
+	const float PI = 3.14159265359f;
+	// 度数法
+	const float ANGLE = 180.0f;
 
 public:
 	//コンストラクタ
@@ -33,7 +39,7 @@ public:
 	void Draw();
 
 	const Vec3 GetPosition() { return position; }
-
+	const Vec3 GetRotation() { return rotation; }
 	void SetBall(Ball* ball);
 
 private:
@@ -53,6 +59,8 @@ private:
 	/// 捕る
 	/// </summary>
 	void BallCatch();
+
+	void TargetLockOn(Vec3 pos = {});
 
 private:
 	ObjectData pObject;                         //プレイヤーオブジェクト

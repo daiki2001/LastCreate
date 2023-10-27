@@ -26,7 +26,8 @@ public:
 	bool HaveHit(Vec3 pos);
 
 	// à íuÇÃê›íË
-	void SetPosition(Vec3 pos);
+	void SetChainPosition(Vec3 pos);
+	void SetPosition(Vec3 pos) { position = pos; }
 	//
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
 	//

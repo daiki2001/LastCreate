@@ -37,7 +37,7 @@ bool Ball::HaveHit(Vec3 pos)
 	return false;
 }
 
-void Ball::SetPosition(Vec3 pos)
+void Ball::SetChainPosition(Vec3 pos)
 {
 	if (!haveFlag_ && !throwFlag_) { return; }
 
