@@ -52,4 +52,7 @@ private://’è‹`
 	std::unique_ptr<Ball> ball2;
 	
 	SpriteData back;
+	ObjectData object;
+
+	
 };

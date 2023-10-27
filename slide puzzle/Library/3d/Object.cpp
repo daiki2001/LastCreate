@@ -7,6 +7,7 @@ ID3D12Device* Object::dev = nullptr;
 ID3D12GraphicsCommandList* Object::cmdList = nullptr;
 LightGroup* Object::lightGroup = nullptr;
 size_t Object::OBJNum = 0;
+bool Object::shadowFlag = false;
 std::vector<Object::OBJBuffer*> Object::OBJbuffer;
 
 
@@ -98,6 +99,13 @@ void Object::MatWord(const ObjectData& polygon, const Vec3& position, const Vec3
 void Object::InitDraw()
 {
 	OBJNum = 0;
+	shadowFlag = false;
+}
+
+void Object::InitShadow()
+{
+	OBJNum = 0;
+	shadowFlag = true;
 }
 
 void Object::OBJConstantBuffer()
@@ -144,21 +152,27 @@ void Object::Draw(const ObjectData& polygon, const Vec3& position, const Vec3& s
 		//定数バッファ
 		OBJConstantBuffer();
 	}
-	if (Pipeline::SetPipeline(PipelineNormal))
-	{
-		//プリミティブ形状の設定コマンド（三角形リスト）
-		cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-		////デスクリプタヒープをセット
-		ID3D12DescriptorHeap* ppHeaps[] = { Texture::Get()->GetDescHeap() };
-		cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-		if (Pipeline::OBJPipeline.pipelinestate == nullptr || Pipeline::OBJPipeline.rootsignature == nullptr)
-		{
-			assert(0);
-		}
 
+	//プリミティブ形状の設定コマンド（三角形リスト）
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	////デスクリプタヒープをセット
+	ID3D12DescriptorHeap* ppHeaps[] = { Texture::Get()->GetDescHeap() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	if (Pipeline::OBJPipeline.pipelinestate == nullptr || Pipeline::OBJPipeline.rootsignature == nullptr)
+	{
+		assert(0);
+	}
+	if (shadowFlag == false)
+	{
 		cmdList->SetPipelineState(Pipeline::OBJPipeline.pipelinestate.Get());
 		cmdList->SetGraphicsRootSignature(Pipeline::OBJPipeline.rootsignature.Get());
 	}
+	else
+	{
+		cmdList->SetPipelineState(Pipeline::ShadowMapPipeline.pipelinestate.Get());
+		cmdList->SetGraphicsRootSignature(Pipeline::ShadowMapPipeline.rootsignature.Get());
+	}
+
 	//更新
 
 	MatWord(polygon, position, scale, rotation, uv);
@@ -172,28 +186,28 @@ void Object::Draw(const ObjectData& polygon, const Vec3& position, const Vec3& s
 	//ヒープの先頭にあるCBVをルートパラメータ０番に設定
 	cmdList->SetGraphicsRootConstantBufferView(0, Object::OBJbuffer[OBJNum]->constBuffB0->GetGPUVirtualAddress());
 	cmdList->SetGraphicsRootConstantBufferView(1, Object::OBJbuffer[OBJNum]->constBuffB1->GetGPUVirtualAddress());
-
-	if (graph.s_texNum > 0)
+	if (shadowFlag == false)
 	{
-		//ヒープの２番目にあるSRVをルートパラメータ１番に設定
-		cmdList->SetGraphicsRootDescriptorTable(2, graph.gpuDescHandleSRV);
+		if (graph.s_texNum > 0)
+		{
+			//ヒープの２番目にあるSRVをルートパラメータ１番に設定
+			cmdList->SetGraphicsRootDescriptorTable(2, graph.gpuDescHandleSRV);
+		}
+		else if (polygon.OBJTexture.s_texNum == 0)
+		{
+			//ヒープの２番目にあるSRVをルートパラメータ１番に設定//白画像を設定
+			cmdList->SetGraphicsRootDescriptorTable(2, Texture::Get()->GetWhite().gpuDescHandleSRV);
+		}
+		else
+		{
+			//ヒープの２番目にあるSRVをルートパラメータ１番に設定
+			cmdList->SetGraphicsRootDescriptorTable(2, polygon.OBJTexture.gpuDescHandleSRV);
+		}
+		//ライトの描画
+		lightGroup->Draw(cmdList, 3);
+		//影画像
+		cmdList->SetGraphicsRootDescriptorTable(4, Texture::Get()->GetShadowTexture().gpuDescHandleSRV);
 	}
-	else if (polygon.OBJTexture.s_texNum == 0)
-	{
-		//ヒープの２番目にあるSRVをルートパラメータ１番に設定//白画像を設定
-		cmdList->SetGraphicsRootDescriptorTable(2, Texture::Get()->GetWhite().gpuDescHandleSRV);
-	}
-	else
-	{
-		//ヒープの２番目にあるSRVをルートパラメータ１番に設定
-		cmdList->SetGraphicsRootDescriptorTable(2, polygon.OBJTexture.gpuDescHandleSRV);
-	}
-	//ライトの描画
-	lightGroup->Draw(cmdList, 3);
-	//影画像
-	cmdList->SetGraphicsRootDescriptorTable(4, Texture::Get()->GetShadowTexture().gpuDescHandleSRV);
-
-
 	//描画コマンド          //頂点数				//インスタンス数	//開始頂点番号		//インスタンスごとの加算番号
 	cmdList->DrawIndexedInstanced((UINT)polygon.indicesNum, 1, 0, 0, 0);
 	OBJNum++;

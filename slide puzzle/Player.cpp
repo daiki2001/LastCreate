@@ -5,6 +5,7 @@
 #include<random>
 #include<Input.h>
 
+
 Player::Player()
 {
 }
@@ -16,6 +17,17 @@ Player::~Player()
 void Player::Init()
 {
 	pObject = Shape::CreateOBJ("sphere");
+	//FBXï¿½Ö˜A
+	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
+	m_model = std::make_unique<Model>();
+	m_model = std::unique_ptr<Model>(model1);
+	m_fbx = std::make_unique<FBXObject3d>();
+	m_fbx->Initialize();
+	m_fbx->SetModel(m_model.get());
+	m_fbx->LoadAnumation();
+	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
+	
+	m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 
 	position = { 10.0f, 0.0f, 0.0f };
 }
@@ -24,13 +36,16 @@ void Player::Update()
 {
 	Move();
 	Jump();
+	m_fbx->Update();
 	BallThrow();
 	TargetLockOn();
 }
 
 void Player::Draw()
 {
-	Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	m_fbx->Draw();
+	m_fbx->SetPosition(position);
 }
 
 void Player::SetBall(Ball* ball)
@@ -71,24 +86,24 @@ void Player::Move()
 
 void Player::Jump()
 {
-	// —‰ºˆ—
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	if (!onGround_)
 	{
-		// ‰ºŒü‚«‰Á‘¬“x
+		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½x
 		const float fallAcc = -0.01f;
 		const float fallVYMin = -0.5f;
-		// ‰Á‘¬
+		// ï¿½ï¿½ï¿½ï¿½
 		fallV_.y = max(fallV_.y + fallAcc, fallVYMin);
-		// ˆÚ“®
+		// ï¿½Ú“ï¿½
 		position.x += fallV_.x;
 		position.y += fallV_.y;
 		position.z += fallV_.z;
 	}
-	// ƒWƒƒƒ“ƒv‘€ì
+	// ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½
 	else if (Input::Get()->KeybordTrigger(DIK_SPACE))
 	{
 		onGround_ = false;
-		const float jumpVYFist = 0.2f; //ƒWƒƒƒ“ƒvãŒü‚«‰‘¬
+		const float jumpVYFist = 0.2f; //ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		fallV_ = { 0, jumpVYFist, 0 };
 	}
 

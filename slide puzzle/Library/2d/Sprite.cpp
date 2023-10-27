@@ -3,6 +3,7 @@
 #include<Texture.h>
 ID3D12Device* Sprite::dev = nullptr;
 ID3D12GraphicsCommandList* Sprite::cmdList = nullptr;
+bool Sprite::shadowFlag = false;
 
 Sprite::Sprite()
 {}
@@ -173,6 +174,13 @@ void Sprite::SpriteTransferVertexBuffer(const SpriteData& sprite)
 void Sprite::PreDraw()
 {
 	spriteNum = 0;
+	shadowFlag = false;
+}
+
+void Sprite::PreShadowDraw()
+{
+	spriteNum = 0;
+	shadowFlag = true;
 }
 
 void Sprite::CreateConstBuffer()
@@ -226,7 +234,7 @@ void Sprite::SpriteCommonBeginDraw()
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
 }
 //スプライト単体更新
-void Sprite::Update(SpriteData& sprite, const Vec2 &position, float width, float height, const Vec2 &anchorpoint, const Vec4 &color, bool isFlipX, bool isFlipY)
+void Sprite::Update(SpriteData& sprite, const Vec2& position, float width, float height, const Vec2& anchorpoint, const Vec4& color, bool isFlipX, bool isFlipY)
 {
 
 	if (sprite.size.x != width || sprite.size.y != height ||
@@ -303,8 +311,9 @@ void Sprite::Update(SpriteData& sprite, const Vec2 &position, float width, float
 }
 
 //スプライト単体描画
-void Sprite::Draw(SpriteData& sprite, const Vec2 &position, const float width, const float height, const Vec2 &anchorpoint, const Vec4 &color, const bool isFlipX, const bool isFlipY)
+void Sprite::Draw(SpriteData& sprite, const Vec2& position, const float width, const float height, const Vec2& anchorpoint, const Vec4& color, const bool isFlipX, const bool isFlipY)
 {
+	if (shadowFlag == true) { return; }
 	SpriteCommonBeginDraw();
 
 	if (constBuffer.size() <= spriteNum)
@@ -352,6 +361,7 @@ void Sprite::DebugUpdate(SpriteData& sprite)
 //スプライト単体描画
 void Sprite::DebugDraw(SpriteData& sprite)
 {
+	if (shadowFlag == true) { return; }
 	SpriteCommonBeginDraw();
 
 	if (constBuffer.size() <= spriteNum)
@@ -378,7 +388,7 @@ void Sprite::DebugDraw(SpriteData& sprite)
 	spriteNum++;
 }
 
-void Sprite::PostEffectDraw(ID3D12DescriptorHeap* descHeap, SpriteData& sprite, const Vec2 &position, float width, float height, const Vec2 &anchorpoint, const Vec4 &color, bool isFlipX, bool isFlipY)
+void Sprite::PostEffectDraw(ID3D12DescriptorHeap* descHeap, SpriteData& sprite, const Vec2& position, float width, float height, const Vec2& anchorpoint, const Vec4& color, bool isFlipX, bool isFlipY)
 {
 	//パイプラインステートの設定
 	cmdList->SetPipelineState(spriteCommon.pipelineSet.pipelinestate.Get());

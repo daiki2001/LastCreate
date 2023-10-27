@@ -32,6 +32,7 @@ private://静的メンバ変数
 public://定数
 	//ボーンの最大数
 	static const int MAX_BONES = 32;
+	static bool shadowFlag;
 public://サブクラス
 
 		//定数バッファ用データ構造体(座標変換行列用)
@@ -49,6 +50,18 @@ public://サブクラス
 		XMMATRIX bones[MAX_BONES];
 	};
 
+	struct AnimationData
+	{
+		FbxTakeInfo* takeinfo;
+		FbxAnimStack* animeStack;
+		//アニメーション開始時間
+		FbxTime startTime;
+		//アニメーション終了時間
+		FbxTime endTime;
+		//現在時間(アニメーション)
+		FbxTime currentTime;
+	};
+
 public://メンバ関数
 	/// <summary>
 	/// 初期化
@@ -60,6 +73,10 @@ public://メンバ関数
 	static void CreateGraphicsPipeline();
 	static void CreateShadowPipeline();
 
+	static void InitShadow();
+
+	static void InitDraw();
+
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
@@ -67,7 +84,7 @@ public://メンバ関数
 	/// <summary>
 	/// 描画
 	/// </summary>
-	void Draw(bool shadowFlag=false);
+	void Draw();
 
 	/// <summary>
 	/// モデルのセット
@@ -79,15 +96,21 @@ public://メンバ関数
 	/// アニメーション開始
 	/// </summary>
 	/// <param name="Loop">ループ再生させるかどうか</param>
-	void PlayAnimation(bool Loop);
+	void PlayAnimation(int num, bool Loop);
 	/// <summary>
 	/// アニメーションの停止
 	/// </summary>
 	void StopAnimation();
+	/// <summary>
+	/// アニメーションロード
+	/// </summary>
+	void LoadAnumation();
 
 	void SetPosition(const Vec3 &pos) { m_position = pos; }
 	void SetScale(const Vec3 &scale) { m_scale = scale; }
 	void SetRotation(const Vec3 &rotation) { m_rotation = rotation; }
+	//アーマチュアの番号検索
+	int GetArmature(std::string name);
 protected://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource>m_constBuffTransform;
@@ -126,4 +149,14 @@ protected://メンバ変数
 	bool m_isPlay = false;
 	//アニメーションをループさせるかどうか
 	bool m_isLoop = false;
+	//複数アニメーション用
+	std::vector<AnimationData> animeDatas_ = {};
+	//シーン
+	FbxScene* scene;
+	//アーマチュア番号
+	int armatureNo = 0;
+	//アニメーション名前
+	const char* animstackname;
+	//アニメーションの数
+	int animeStackCount;
 };

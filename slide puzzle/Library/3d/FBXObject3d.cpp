@@ -8,6 +8,7 @@
 ID3D12Device* FBXObject3d::device = nullptr;
 LightGroup* FBXObject3d::lightGroup = nullptr;
 ID3D12GraphicsCommandList* FBXObject3d::cmdList = nullptr;
+bool FBXObject3d::shadowFlag = false;
 #include<d3dcompiler.h>
 #pragma comment(lib,"d3dcompiler.lib")
 
@@ -379,24 +380,33 @@ void FBXObject3d::CreateShadowPipeline()
 	if (FAILED(result)) { assert(0); }
 }
 
+void FBXObject3d::InitShadow()
+{
+	shadowFlag = true;
+}
+
+void FBXObject3d::InitDraw()
+{
+	shadowFlag = false;
+}
+
 void FBXObject3d::Update()
 {
 	//アニメーション
 	if (m_isPlay)
 	{
 		//1フレーム進める
-		m_currentTime += m_frameTime;
-		m_currentTime += m_frameTime;
+		animeDatas_[armatureNo].currentTime += m_frameTime;
 		//最後まで再生したら先頭に戻す
-		if (m_currentTime > m_endTime)
+		if (animeDatas_[armatureNo].currentTime > animeDatas_[armatureNo].endTime)
 		{
 			if (!m_isLoop)
 			{
-				m_currentTime = m_endTime;
+				animeDatas_[armatureNo].currentTime = animeDatas_[armatureNo].endTime;
 			}
 			else
 			{
-				m_currentTime = m_startTime;
+				animeDatas_[armatureNo].currentTime = animeDatas_[armatureNo].startTime;
 			}
 		}
 	}
@@ -447,7 +457,7 @@ void FBXObject3d::Update()
 		//今の姿勢行列
 		XMMATRIX matCurrentPose;
 		//今の姿勢行列を取得
-		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(m_currentTime);
+		FbxAMatrix fbxCurrentPose = bones[i].fbxCluster->GetLink()->EvaluateGlobalTransform(animeDatas_[armatureNo].currentTime);
 		//XMMATRIXに変換
 		FbxLoader::ConvertMatrixFromFbx(&matCurrentPose, fbxCurrentPose);
 
@@ -459,10 +469,9 @@ void FBXObject3d::Update()
 	}
 	m_constBufferSkin->Unmap(0, nullptr);
 
-
 }
 
-void FBXObject3d::Draw(bool shadowFlag)
+void FBXObject3d::Draw()
 {
 	//モデルの割り当てがなければ描画しない
 	if (model == nullptr)
@@ -470,7 +479,7 @@ void FBXObject3d::Draw(bool shadowFlag)
 		return;
 	}
 	Pipeline::SetPipeline(PipelineFBX);
-	if (shadowFlag)
+	if (shadowFlag==false)
 	{
 		//パイプライトステートの設定
 		cmdList->SetPipelineState(pipelinestate.Get());
@@ -487,7 +496,7 @@ void FBXObject3d::Draw(bool shadowFlag)
 
 	//プリミティブ形状を設定
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	if (shadowFlag) {
+	if (shadowFlag==false) {
 		//定数バッファビューをセット
 		cmdList->SetGraphicsRootConstantBufferView(0, m_constBuffTransform->GetGPUVirtualAddress());
 		//定数バッファビューをセット
@@ -503,33 +512,70 @@ void FBXObject3d::Draw(bool shadowFlag)
 		cmdList->SetGraphicsRootConstantBufferView(1, m_constBufferSkin->GetGPUVirtualAddress());
 	}
 	//モデル描画
-	model->Draw(cmdList, shadowFlag);
+	model->Draw(cmdList,shadowFlag);
 }
 
-void FBXObject3d::PlayAnimation(bool Loop)
+void FBXObject3d::PlayAnimation(int num, bool Loop)
 {
-	FbxScene* fbxScene = model->GetFbxScene();
-	//0番のアニメーション取得
-	FbxAnimStack* animstack = fbxScene->GetSrcObject<FbxAnimStack>(0);
-	//アニメーション取得
-	const char* animstackname = animstack->GetName();
-	//アニメーションの時間情報
-	FbxTakeInfo* takeinfo = fbxScene->GetTakeInfo(animstackname);
-
-	//開始時間取得
-	m_startTime = takeinfo->mLocalTimeSpan.GetStart();
-
-	//終了時間取得
-	m_endTime = takeinfo->mLocalTimeSpan.GetStop();
-	//開始時間に合わせる
-	m_currentTime = m_startTime;
 	//再生中状態にする
 	m_isPlay = true;
+	scene->SetCurrentAnimationStack(animeDatas_[num].animeStack);
 	//ループフラグを変更する
 	m_isLoop = Loop;
+	armatureNo = num;
 }
 
 void FBXObject3d::StopAnimation()
 {
 	m_isPlay = false;
+}
+
+void FBXObject3d::LoadAnumation()
+{
+	scene = model->GetFbxScene();
+	//アニメーション取得
+	int animeStackCount = scene->GetSrcObjectCount<FbxAnimStack>();
+
+	for (int i = 0; i < animeStackCount; i++)
+	{
+		AnimationData animeData;
+		//i番目のアニメーション取得
+		animeData.animeStack = scene->GetSrcObject<FbxAnimStack>(i);
+		//アニメーションの名前取得
+		const char* animstackname = animeData.animeStack->GetName();
+		//アニメーションの時間情報
+		animeData.takeinfo = scene->GetTakeInfo(animstackname);
+
+		//開始時間取得
+		animeData.startTime = animeData.takeinfo->mLocalTimeSpan.GetStart();
+		//終了時間取得
+		animeData.endTime = animeData.takeinfo->mLocalTimeSpan.GetStop();
+		//開始時間に合わせる
+		animeData.currentTime = animeData.startTime;
+
+		animeDatas_.push_back(animeData);
+	}
+}
+
+int FBXObject3d::GetArmature(std::string name)
+{
+	std::string path = "Armature|";
+	//アニメーション取得
+	int animeStackCount = scene->GetSrcObjectCount<FbxAnimStack>();
+
+	for (int i = 0; i < animeStackCount; i++)
+	{
+		AnimationData animeData;
+		//i番目のアニメーション取得
+		animeData.animeStack = scene->GetSrcObject<FbxAnimStack>(i);
+		//アニメーションの名前取得
+		const char* animstackname = animeData.animeStack->GetName();
+
+		if (animstackname == path + name)
+		{
+			int number = i;
+			return number;
+		}
+	}
+	return -1;
 }
