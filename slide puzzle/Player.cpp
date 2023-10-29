@@ -26,8 +26,9 @@ void Player::Init()
 	m_fbx->SetModel(m_model.get());
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
+	m_fbx->SetRotation(Vec3(0, 90, 0));
 	
-	m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
+	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
 	position = { 10.0f, 0.0f, 0.0f };
 }
