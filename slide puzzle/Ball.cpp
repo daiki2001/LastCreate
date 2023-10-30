@@ -11,7 +11,7 @@ Ball::~Ball()
 
 void Ball::Init()
 {
-	pObject = Shape::CreateOBJ("sphere");
+	pObject = Shape::CreateOBJ("Ball");
 }
 
 void Ball::Update()
