@@ -1,10 +1,15 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include<Shape.h>
 #include<Collision.h>
 #include"Easing.h"
 #include<random>
 #include<Input.h>
+#include"GameInputManager.h"
 
+namespace
+{
+auto* input = GameInputManager::Get();
+}
 
 Player::Player()
 {
@@ -63,17 +68,17 @@ void Player::Move()
 
 	
 
-	if (Input::Get()->KeybordPush(DIK_W) || Input::Get()->KeybordPush(DIK_D))
+	if (input->IsForward() || input->IsRight())
 	{
 		speed = speed + 0.5f;
 	}
-	else if (Input::Get()->KeybordPush(DIK_S) || Input::Get()->KeybordPush(DIK_A))
+	else if (input->IsBack() || input->IsLeft())
 	{
 		speed = speed - 0.5f;
 	}
 
 	//
-	if (Input::Get()->KeybordPush(DIK_LSHIFT))
+	if (input->IsDash())
 	{
 		speed *= 1.5f;
 	}
@@ -96,7 +101,7 @@ void Player::Jump()
 		position.z += fallV_.z;
 	}
 
-	else if (Input::Get()->KeybordTrigger(DIK_SPACE))
+	else if (input->IsJamp())
 	{
 		onGround_ = false;
 		const float jumpVYFist = 0.2f;
@@ -117,7 +122,7 @@ void Player::BallThrow()
 
 	ball_->SetChainPosition(position);
 
-	if (Input::Get()->MouseTriggerLeft())
+	if (input->IsThrow())
 	{
 		ball_->SetThrowFlag(true);
 		ball_->SetHaveFlag(false);

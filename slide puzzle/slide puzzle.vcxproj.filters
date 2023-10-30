@@ -213,6 +213,7 @@
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="GameInputManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -371,6 +372,7 @@
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="GameInputManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">
