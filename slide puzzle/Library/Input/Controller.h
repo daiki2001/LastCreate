@@ -26,6 +26,8 @@ enum ButtonKind
 	ButtonRT,
 	ButtonLT,
 	ButtonMenu,
+	LButtonPush,//左スティック押し込み
+	RButtonPush,//右スティック押し込み
 	ButtonKindMax,
 };
 

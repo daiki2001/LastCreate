@@ -327,7 +327,7 @@ void UpdateGamePad()
 		return;
 	}
 
-	DIJOYSTATE pad_data={};
+	DIJOYSTATE pad_data = {};
 
 	// デバイス取得
 	HRESULT hr = g_GamePadDevice->GetDeviceState(sizeof(DIJOYSTATE), &pad_data);
@@ -366,15 +366,9 @@ void UpdateGamePad()
 	{
 		is_push[ButtonKind::LButtonDown] = true;
 	}
-	//右スティック
-	if (pad_data.lRx < -unresponsive_range)
-	{
-		is_push[ButtonKind::RButtonLeft] = true;
-	}
-	else if (pad_data.lRx > unresponsive_range)
-	{
-		is_push[ButtonKind::RButtonRight] = true;
-	}
+
+
+
 	//右スティック
 	if (pad_data.lRx < -unresponsive_range)
 	{
@@ -452,7 +446,7 @@ void UpdateGamePad()
 			is_push[ButtonKind::LButtonDown] = true;
 		}
 	}
-
+	int o = 0;
 	// ボタン判定
 	for (int i = 0; i < 32; i++)
 	{
@@ -483,6 +477,14 @@ void UpdateGamePad()
 			break;
 		case 7:
 			is_push[ButtonKind::ButtonMenu] = true;
+			break;
+		case 8:
+			is_push[ButtonKind::LButtonPush] = true;
+			break;
+		case 9:
+			is_push[ButtonKind::RButtonPush] = true;
+			break;
+		default:
 			break;
 		}
 	}
