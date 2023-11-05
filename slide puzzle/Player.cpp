@@ -4,6 +4,7 @@
 #include"Easing.h"
 #include<random>
 #include"GameInputManager.h"
+#include "Input.h"
 
 namespace
 {
@@ -64,29 +65,43 @@ void Player::SetBall(Ball* ball)
 void Player::Move()
 {
 	//
-	float speed = 0.0f;
+	XMFLOAT2 speed = {};
 
-	
-
-	if (input->IsForward() || input->IsRight())
+	if (Input::Get()->KeybordPush(DIK_W))
 	{
-		speed = speed + 0.5f;
+		speed.y = speed.y + 0.5f;
 	}
-	else if (input->IsBack() || input->IsLeft())
+	else if (Input::Get()->KeybordPush(DIK_S))
 	{
-		speed = speed - 0.5f;
+		speed.y = speed.y - 0.5f;
+	}
+
+	if (Input::Get()->KeybordPush(DIK_D))
+	{
+		speed.x = speed.x - 0.5f;
+	}
+	else if (Input::Get()->KeybordPush(DIK_A))
+	{
+		speed.x = speed.x + 0.5f;
 	}
 
 	//
-	if (input->IsDash())
+	if (Input::Get()->KeybordPush(DIK_LSHIFT))
 	{
-		speed *= 1.5f;
+		speed.x *= 1.5f;
+		speed.y *= 1.5f;
 	}
 
-	XMFLOAT2 playerAngle_ = { rotation.x, rotation.y };
-
-	position.x +=  cosf((playerAngle_.y * 3.14f) / 180.0f) * speed;
-	position.z += -sinf((playerAngle_.y * 3.14f) / 180.0f) * speed;
+	if (speed.y != 0.0f)
+	{
+		position.x += cosf((rotation.y * 3.14f) / 180.0f) * speed.y;
+		position.z += -sinf((rotation.y * 3.14f) / 180.0f) * speed.y;
+	}
+	if (speed.x != 0.0f)
+	{
+		position.x += sinf((rotation.y * 3.14f) / 180.0f) * speed.x;
+		position.z += cosf((rotation.y * 3.14f) / 180.0f) * speed.x;
+	}
 }
 
 void Player::Jump()
