@@ -27,8 +27,6 @@ void Ball::Draw()
 
 bool Ball::HaveHit(Vec3 pos)
 {
-
-
 	if (pos == position)
 	{
 		return true;
