@@ -493,7 +493,6 @@ ObjectData Shape::CreateOBJ(const std::string &filename, bool smoothing, const s
 	OBJCreateModel(polygon);
 
 	polygon.indicesNum = (UINT)polygon.indices.size();
-
 	return polygon;
 }
 

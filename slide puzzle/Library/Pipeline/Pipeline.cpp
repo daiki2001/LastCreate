@@ -1,17 +1,14 @@
 #include"Pipeline.h"
 #include<ShaderManager.h>
-Pipeline::PipelineSet Pipeline::OBJPipeline;
-Pipeline::PipelineSet Pipeline::NoShadowOBJPipeline;
-Pipeline::PipelineSet Pipeline::ShadowMapPipeline;
-Pipeline::PipelineSet Pipeline::NormalMapPipeline;
-Pipeline::PipelineSet Pipeline::DepthOfFieldPipeline;
+PipelineSet Pipeline::OBJPipeline;
+PipelineSet Pipeline::NoShadowOBJPipeline;
+PipelineSet Pipeline::ShadowMapPipeline;
+PipelineSet Pipeline::DepthOfFieldPipeline;
 int Pipeline::pipelineType;
 void Pipeline::CreatePipeline(ID3D12Device* dev)
 {
 	OBJPipeline = OBJCreateGraphicsPipeline(dev, ShaderManager::objShader);
-	NoShadowOBJPipeline = NoShadowOBJCreateGraphicsPipeline(dev, ShaderManager::noShadowOBJShader);
 	ShadowMapPipeline = ShadowCreateGraphicsPipeline(dev, ShaderManager::ShadowMapShader);
-	NormalMapPipeline = NormalMapCreatePipeline(dev, ShaderManager::normalMapShader);
 	DepthOfFieldPipeline = DepthOfFieldPipelineCreateGraphicesPipeline(dev, ShaderManager::DepthOfFieldShader);
 }
 
@@ -31,7 +28,7 @@ bool Pipeline::SetPipeline(int type)
 	return false;
 }
 
-Pipeline::PipelineSet  Pipeline::SpriteCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet  Pipeline::SpriteCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result;
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -146,7 +143,7 @@ Pipeline::PipelineSet  Pipeline::SpriteCreateGraphicsPipeline(ID3D12Device* dev,
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet  Pipeline::OBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet  Pipeline::OBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -265,7 +262,7 @@ Pipeline::PipelineSet  Pipeline::OBJCreateGraphicsPipeline(ID3D12Device* dev, co
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::ShadowCreateGraphicsPipeline(ID3D12Device* dev, const Shader& shader)
+PipelineSet Pipeline::ShadowCreateGraphicsPipeline(ID3D12Device* dev, const Shader& shader)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -374,7 +371,7 @@ Pipeline::PipelineSet Pipeline::ShadowCreateGraphicsPipeline(ID3D12Device* dev, 
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::NoShadowOBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet Pipeline::NoShadowOBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -491,7 +488,7 @@ Pipeline::PipelineSet Pipeline::NoShadowOBJCreateGraphicsPipeline(ID3D12Device* 
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::NormalMapCreatePipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet Pipeline::NormalMapCreatePipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
@@ -610,7 +607,7 @@ Pipeline::PipelineSet Pipeline::NormalMapCreatePipeline(ID3D12Device* dev, const
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::ParticleCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet Pipeline::ParticleCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result = S_FALSE;
 
@@ -727,7 +724,7 @@ Pipeline::PipelineSet Pipeline::ParticleCreateGraphicsPipeline(ID3D12Device* dev
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::PostNormalCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet Pipeline::PostNormalCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result;
 #pragma region//頂点シェーダーの読み込みとコンパイル
@@ -844,7 +841,7 @@ Pipeline::PipelineSet Pipeline::PostNormalCreateGraphicsPipeline(ID3D12Device* d
 	return pipelineSet;
 }
 
-Pipeline::PipelineSet Pipeline::DepthOfFieldPipelineCreateGraphicesPipeline(ID3D12Device* dev, const Shader &shader)
+PipelineSet Pipeline::DepthOfFieldPipelineCreateGraphicesPipeline(ID3D12Device* dev, const Shader &shader)
 {
 	HRESULT result;
 #pragma region//頂点シェーダーの読み込みとコンパイル

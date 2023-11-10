@@ -441,3 +441,9 @@ void Object::NoShadowDraw(const ObjectData& polygon, PSR& psr, const Vec3& posit
 	cmdList->DrawIndexedInstanced((UINT)polygon.indicesNum, 1, 0, 0, 0);
 	OBJNum++;
 }
+
+void ObjectData::SetPipeline(PipelineSet pipelineType)
+{
+
+	pipelineSet = pipelineType;
+}

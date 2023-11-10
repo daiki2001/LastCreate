@@ -17,20 +17,20 @@ enum PipelineType
 	PipelineFBX,
 };
 
+//構造体
+struct PipelineSet
+{
+	//パイプラインステートオブジェクト
+	ComPtr<ID3D12PipelineState>pipelinestate;
+	//ルートシグネチャ
+	ComPtr <ID3D12RootSignature>rootsignature;
+};
 /// <summary>
 /// パイプラインクラス
 /// </summary>
 class Pipeline
 {
 public:
-	//構造体
-	struct PipelineSet
-	{
-		//パイプラインステートオブジェクト
-		ComPtr<ID3D12PipelineState>pipelinestate;
-		//ルートシグネチャ
-		ComPtr <ID3D12RootSignature>rootsignature;
-	};
 	//スプライト
 	static PipelineSet  SpriteCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
 	//OBJ読み込み
@@ -70,4 +70,6 @@ public:
 	static int pipelineType;
 
 	static bool SetPipeline(int type);
+
+	//PipelineSet SetPipeline(int type);
 };

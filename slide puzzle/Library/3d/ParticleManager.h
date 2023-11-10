@@ -133,7 +133,7 @@ private: // 静的メンバ変数
 	//Y軸回りビルボード行列
 	static XMMATRIX matBillboardY;
 	//パイプライン設定
-	static Pipeline::PipelineSet PartclePipelineSet;
+	static PipelineSet PartclePipelineSet;
 
 private:// 静的メンバ関数
 	/// <summary>
