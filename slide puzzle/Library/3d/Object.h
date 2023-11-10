@@ -75,14 +75,14 @@ struct ObjectData
 	Material material;
 
 	int indicesNum = 0;
-	
-	PipelineSet pipelineSet;
 
 	//ワールド変換
 	XMMATRIX matWorld;
 	//親クラス
 	ObjectData* parent = nullptr;
-
+	//パイプライン設定
+	PipelineSet pipelineSet;
+public:
 	void SetPipeline(PipelineSet pipelineType);
 };
 /// <summary>

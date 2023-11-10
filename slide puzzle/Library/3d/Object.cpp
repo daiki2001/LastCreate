@@ -164,8 +164,8 @@ void Object::Draw(const ObjectData& polygon, const Vec3& position, const Vec3& s
 	}
 	if (shadowFlag == false)
 	{
-		cmdList->SetPipelineState(Pipeline::OBJPipeline.pipelinestate.Get());
-		cmdList->SetGraphicsRootSignature(Pipeline::OBJPipeline.rootsignature.Get());
+		cmdList->SetPipelineState(polygon.pipelineSet.pipelinestate.Get());
+		cmdList->SetGraphicsRootSignature(polygon.pipelineSet.rootsignature.Get());
 	}
 	else
 	{
@@ -444,6 +444,5 @@ void Object::NoShadowDraw(const ObjectData& polygon, PSR& psr, const Vec3& posit
 
 void ObjectData::SetPipeline(PipelineSet pipelineType)
 {
-
 	pipelineSet = pipelineType;
 }
