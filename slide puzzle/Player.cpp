@@ -43,7 +43,7 @@ void Player::Update()
 	Move();
 	Jump();
 	BallThrow();
-	TargetLockOn();
+	TargetLockOn(Vec3{0.0f, 0.0f, 0.0f});
 	m_fbx->Update();
 }
 
@@ -135,7 +135,7 @@ void Player::BallThrow()
 {
 	if (ball_ == nullptr) { return; }
 
-	ball_->SetChainPosition(position);
+	//ball_->SetChainPosition(position);
 
 	if (input->IsThrow())
 	{
