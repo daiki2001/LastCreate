@@ -66,7 +66,7 @@ public://構造体
 	struct SpriteCommon
 	{
 		//パイプラインセット
-		Pipeline::PipelineSet pipelineSet;
+		PipelineSet  pipelineSet;
 		////射影行列
 		XMMATRIX matProjection{};
 	};

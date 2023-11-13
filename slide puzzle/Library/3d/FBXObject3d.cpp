@@ -478,7 +478,7 @@ void FBXObject3d::Draw()
 	{
 		return;
 	}
-	Pipeline::SetPipeline(PipelineFBX);
+	
 	if (shadowFlag==false)
 	{
 		//パイプライトステートの設定

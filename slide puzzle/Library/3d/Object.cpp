@@ -164,8 +164,8 @@ void Object::Draw(const ObjectData& polygon, const Vec3& position, const Vec3& s
 	}
 	if (shadowFlag == false)
 	{
-		cmdList->SetPipelineState(Pipeline::OBJPipeline.pipelinestate.Get());
-		cmdList->SetGraphicsRootSignature(Pipeline::OBJPipeline.rootsignature.Get());
+		cmdList->SetPipelineState(polygon.pipelineSet.pipelinestate.Get());
+		cmdList->SetGraphicsRootSignature(polygon.pipelineSet.rootsignature.Get());
 	}
 	else
 	{
@@ -440,4 +440,9 @@ void Object::NoShadowDraw(const ObjectData& polygon, PSR& psr, const Vec3& posit
 	//描画コマンド          //頂点数				//インスタンス数	//開始頂点番号		//インスタンスごとの加算番号
 	cmdList->DrawIndexedInstanced((UINT)polygon.indicesNum, 1, 0, 0, 0);
 	OBJNum++;
+}
+
+void ObjectData::SetPipeline(PipelineSet pipelineType)
+{
+	pipelineSet = pipelineType;
 }
