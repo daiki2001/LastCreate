@@ -31,6 +31,15 @@ void GameInputManager::DebugDraw()
 	ball->DrawGraph();
 }
 
+bool GameInputManager::IsDecide() const
+{
+	bool result = false;
+	result |= input->KeybordTrigger(DIK_SPACE);
+	result |= input->ControllerUp(ButtonKind::ButtonA);
+	result |= ball->GetFlagTriger();
+	return result;
+}
+
 bool GameInputManager::IsForward() const
 {
 	bool result = false;
@@ -76,6 +85,7 @@ bool GameInputManager::IsJamp() const
 	bool result = false;
 	result |= input->KeybordTrigger(DIK_SPACE);
 	result |= input->ControllerUp(ButtonKind::ButtonA);
+	result |= ball->GetFlagTriger();
 	return result;
 }
 

@@ -7,8 +7,9 @@
 class GameInputManager : public Singleton<GameInputManager>
 {
 	friend Singleton<GameInputManager>;
-private: //メンバ変数
+private:
 	BallController* ball = nullptr;
+
 public: //メンバ関数
 	GameInputManager() = default;
 	GameInputManager(const GameInputManager&) = delete;
@@ -19,6 +20,8 @@ public: //メンバ関数
 	void Update();
 	void DebugDraw();
 
+	// 決定
+	bool IsDecide() const;
 	// 前進
 	bool IsForward() const;
 	// 後進
