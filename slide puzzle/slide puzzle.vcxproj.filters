@@ -192,8 +192,6 @@
     <ClCompile Include="main.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneChange.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Library\3d\FbxLoader.cpp">
       <Filter>Library\3D\Fbx</Filter>
     </ClCompile>
@@ -212,8 +210,27 @@
     <ClCompile Include="Library\3d\Particle3D.cpp">
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Ball.cpp" />
-    <ClCompile Include="GameInputManager.cpp" />
+    <ClCompile Include="Ball.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInputManager.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneChange.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BallController\Serial.cpp">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
+    <ClCompile Include="BallController\Ini.cpp">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
+    <ClCompile Include="BallController\BallController.cpp">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -354,8 +371,6 @@
     <ClInclude Include="Library\3d\Shape.h">
       <Filter>Library\3D\Object</Filter>
     </ClInclude>
-    <ClInclude Include="SceneChange.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Library\3d\FbxLoader.h">
       <Filter>Library\3D\Fbx</Filter>
     </ClInclude>
@@ -371,8 +386,27 @@
     <ClInclude Include="Library\3d\Particle3D.h">
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Ball.h" />
-    <ClInclude Include="GameInputManager.h" />
+    <ClInclude Include="GameInputManager.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneChange.h">
+      <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BallController\Serial.h">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
+    <ClInclude Include="BallController\Ini.h">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
+    <ClInclude Include="BallController\BallController.h">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">
@@ -481,6 +515,9 @@
     </Filter>
     <Filter Include="Library\3D\Particle">
       <UniqueIdentifier>{96d5ef07-05ca-455e-9585-dbbd8ee0bcb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\BallController">
+      <UniqueIdentifier>{267f69ba-37a1-4835-acab-581976f139bd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

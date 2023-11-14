@@ -1,16 +1,23 @@
 ﻿#pragma once
 #include"Singleton.h"
+#include "./BallController/BallController.h"
 
 // 各種入力デバイスの操作をゲーム用にまとめたクラス
 // ※仕様から消えた操作も有ります
 class GameInputManager : public Singleton<GameInputManager>
 {
 	friend Singleton<GameInputManager>;
+private: //メンバ変数
+	BallController* ball = nullptr;
 public: //メンバ関数
 	GameInputManager() = default;
 	GameInputManager(const GameInputManager&) = delete;
-	~GameInputManager() = default;
+	~GameInputManager();
 	GameInputManager& operator=(const GameInputManager&) = delete;
+
+	void Init();
+	void Update();
+	void DebugDraw();
 
 	// 前進
 	bool IsForward() const;

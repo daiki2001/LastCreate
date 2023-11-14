@@ -280,6 +280,9 @@
     <ClInclude Include="App\scene\StageSelect.h" />
     <ClInclude Include="App\scene\TitleScene.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="BallController\BallController.h" />
+    <ClInclude Include="BallController\Ini.h" />
+    <ClInclude Include="BallController\Serial.h" />
     <ClInclude Include="GameInputManager.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
     <ClInclude Include="Library\2d\PostEffect.h" />
@@ -337,6 +340,9 @@
     <ClCompile Include="App\scene\StageSelect.cpp" />
     <ClCompile Include="App\scene\TitleScene.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BallController\BallController.cpp" />
+    <ClCompile Include="BallController\Ini.cpp" />
+    <ClCompile Include="BallController\Serial.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />
     <ClCompile Include="Library\2d\PostEffect.cpp" />
