@@ -13,7 +13,7 @@ using namespace Microsoft::WRL;
 /// </summary>
 ID3D12Device* ParticleManager::device = nullptr;
 ID3D12GraphicsCommandList* ParticleManager::cmdList = nullptr;
-Pipeline::PipelineSet ParticleManager::PartclePipelineSet;
+PipelineSet ParticleManager::PartclePipelineSet;
 XMMATRIX ParticleManager::matBillboard = XMMatrixIdentity();
 XMMATRIX ParticleManager::matBillboardY = XMMatrixIdentity();
 

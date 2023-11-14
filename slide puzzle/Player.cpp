@@ -41,9 +41,9 @@ void Player::Update()
 {
 	Move();
 	Jump();
-	m_fbx->Update();
 	BallThrow();
-	TargetLockOn();
+	TargetLockOn(Vec3{0.0f, 0.0f, 0.0f});
+	m_fbx->Update();
 }
 
 void Player::Draw()
@@ -135,7 +135,7 @@ void Player::BallThrow()
 {
 	if (ball_ == nullptr) { return; }
 
-	ball_->SetChainPosition(position);
+	//ball_->SetChainPosition(position);
 
 	if (input->IsThrow())
 	{
@@ -175,4 +175,6 @@ void Player::TargetLockOn(Vec3 pos)
 	playerRot.z = atan2(result.y - 0.0f, result.x - 0.0f) * (ANGLE / PI);
 
 	rotation = playerRot;
+	playerRot.y += 90.0f;
+	m_fbx->SetRotation(Vec3(-playerRot.z, playerRot.y, playerRot.x));
 }

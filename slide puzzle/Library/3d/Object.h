@@ -80,6 +80,10 @@ struct ObjectData
 	XMMATRIX matWorld;
 	//親クラス
 	ObjectData* parent = nullptr;
+	//パイプライン設定
+	PipelineSet pipelineSet;
+public:
+	void SetPipeline(PipelineSet pipelineType);
 };
 /// <summary>
 /// 3Dオブジェクトクラス

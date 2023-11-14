@@ -283,6 +283,7 @@
     <ClInclude Include="BallController\BallController.h" />
     <ClInclude Include="BallController\Ini.h" />
     <ClInclude Include="BallController\Serial.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameInputManager.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
     <ClInclude Include="Library\2d\PostEffect.h" />
@@ -343,6 +344,7 @@
     <ClCompile Include="BallController\BallController.cpp" />
     <ClCompile Include="BallController\Ini.cpp" />
     <ClCompile Include="BallController\Serial.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />
     <ClCompile Include="Library\2d\PostEffect.cpp" />
