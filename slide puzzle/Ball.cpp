@@ -1,4 +1,5 @@
-#include "Ball.h"
+ï»¿#include "Ball.h"
+#include "GameInputManager.h"
 #include "Input.h"
 #include <Shape.h>
 
@@ -9,11 +10,11 @@ Ball::~Ball() {}
 void Ball::Init() { pObject = Shape::CreateOBJ("Ball"); }
 
 void Ball::Update(Vec3 playerPos, Vec3 playerRotation) {
-	// ƒ{[ƒ‹‰ñû
+	// ãƒœãƒ¼ãƒ«å›å
 	if (HaveHit(playerPos) && !isThrow) {
 		SetChainPosition(playerPos);
-		// “Š‚°‚ç‚ê‚½ƒtƒ‰ƒO
-		if (Input::Get()->KeybordPush(DIK_B)) {
+		// æŠ•ã’ã‚‰ã‚ŒãŸãƒ•ãƒ©ã‚°
+		if (GameInputManager::Get()->IsThrow() || Input::Get()->KeybordPush(DIK_B)) {
 			isThrow = true;
 		}
 	}
@@ -32,12 +33,12 @@ bool Ball::HaveHit(Vec3 pos) {
 	Vec3 axyz = (position - pos) * (position - pos);
 	float ar = (ballR + playerR) * (ballR + playerR);
 
-	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
+	// ãƒœãƒ¼ãƒ«ã«å½“ãŸã£ãŸ
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		return true;
 	}
 
-	// “–‚½‚Á‚Ä‚È‚¢
+	// å½“ãŸã£ã¦ãªã„
 	return false;
 }
 
@@ -48,7 +49,7 @@ void Ball::SetChainPosition(Vec3 pos) {
 }
 
 void Ball::ThrowAct() {
-	// “Š‚°‚½‹““®
+	// æŠ•ã’ãŸæŒ™å‹•
 	if (isThrow) {
 		Vec3 enemyPos = Vec3(-10.0f, 0.0f, 0.01f);
 		vector = {enemyPos.x - position.x, enemyPos.y - position.y, enemyPos.z - position.z};
@@ -63,7 +64,7 @@ void Ball::HaveAct() {
 		return;
 	}
 
-	// ƒ^[ƒQƒbƒg‚ÌˆÊ’u
+	// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®ä½ç½®
 	targetPos_ = {};
 }
 
@@ -75,7 +76,7 @@ bool Ball::BallHitFlag() {
 	Vec3 axyz = (position - enemyPos) * (position - enemyPos);
 	float ar = (ballR + enemyR) * (ballR + enemyR);
 
-	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
+	// ãƒœãƒ¼ãƒ«ã«å½“ãŸã£ãŸ
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		return true;
 	}
@@ -98,7 +99,7 @@ void Ball::BallReflectBound(Vec3 playerPos) {
 		t5 = 0;
 		t6 = 0;
 	}
-	// ƒ{[ƒ‹‚ª“G‚É“–‚½‚Á‚½ƒtƒ‰ƒO
+	// ãƒœãƒ¼ãƒ«ãŒæ•µã«å½“ãŸã£ãŸãƒ•ãƒ©ã‚°
 	else {
 		isThrow = false;
 		ReflectCalculation(playerPos);
@@ -165,10 +166,10 @@ void Ball::ReflectCalculation(Vec3 playerPos) {
 }
 
 Vec3 Ball::BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos) {
-	// ‹“_ŒvZ
+	// è¦–ç‚¹è¨ˆç®—
 	XMVECTOR v0 = {fallPos.x, fallPos.y, fallPos.z, 0};
 
-	// angleƒ‰ƒWƒAƒ“‚¾‚¯y²‚Ü‚í‚è‚É‰ñ“]B”¼Œa‚Í-5
+	// angleãƒ©ã‚¸ã‚¢ãƒ³ã ã‘yè»¸ã¾ã‚ã‚Šã«å›è»¢ã€‚åŠå¾„ã¯-5
 	XMMATRIX rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(180.0f));
