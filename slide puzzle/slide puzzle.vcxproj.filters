@@ -214,6 +214,8 @@
     </ClCompile>
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -373,6 +375,8 @@
     </ClInclude>
     <ClInclude Include="Ball.h" />
     <ClInclude Include="GameInputManager.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">
