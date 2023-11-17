@@ -280,6 +280,7 @@
     <ClInclude Include="App\scene\StageSelect.h" />
     <ClInclude Include="App\scene\TitleScene.h" />
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameInputManager.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
@@ -339,6 +340,7 @@
     <ClCompile Include="App\scene\StageSelect.cpp" />
     <ClCompile Include="App\scene\TitleScene.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />

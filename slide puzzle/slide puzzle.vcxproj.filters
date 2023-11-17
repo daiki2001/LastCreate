@@ -193,7 +193,6 @@
       <Filter>ソースファイル</Filter>
     </ClCompile>
     <ClCompile Include="SceneChange.cpp" />
-    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Library\3d\FbxLoader.cpp">
       <Filter>Library\3D\Fbx</Filter>
     </ClCompile>
@@ -212,10 +211,18 @@
     <ClCompile Include="Library\3d\Particle3D.cpp">
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Ball.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソースファイル\GameObj\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Ball.cpp">
+      <Filter>ソースファイル\GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソースファイル\GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -357,7 +364,6 @@
       <Filter>Library\3D\Object</Filter>
     </ClInclude>
     <ClInclude Include="SceneChange.h" />
-    <ClInclude Include="Player.h" />
     <ClInclude Include="Library\3d\FbxLoader.h">
       <Filter>Library\3D\Fbx</Filter>
     </ClInclude>
@@ -373,10 +379,18 @@
     <ClInclude Include="Library\3d\Particle3D.h">
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="Ball.h" />
     <ClInclude Include="GameInputManager.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="Enemy.h">
+      <Filter>ソースファイル\GameObj\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>ソースファイル\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソースファイル\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">
@@ -485,6 +499,12 @@
     </Filter>
     <Filter Include="Library\3D\Particle">
       <UniqueIdentifier>{96d5ef07-05ca-455e-9585-dbbd8ee0bcb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GameObj">
+      <UniqueIdentifier>{96edb64c-a6f3-4e3b-b474-a81dcdc55c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GameObj\Enemy">
+      <UniqueIdentifier>{e9734f8d-836d-458f-aefa-939598278903}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

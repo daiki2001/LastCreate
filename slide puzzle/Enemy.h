@@ -15,26 +15,23 @@
 class Enemy
 {
 public:
-	Enemy();
-	~Enemy();
-	void Init(Vec3 pos = {}, Vec3 rot = {});
-	void Update();
-	void Draw();
+	virtual void Init(Vec3 pos = {}, Vec3 rot = {}) = 0;
+	virtual void Update() = 0;
+	virtual void Draw() = 0;
 
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
 	void SetBall(Ball* ball);
 
-private:
-	void Move();
+protected:
 	void BallThrow();
 	void BallCatch();
 
-private:
+protected:
 	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
 
-private:
+protected:
 	ObjectData pObject;
 	Vec3 position = {};
 	Vec3 rotation = {};
