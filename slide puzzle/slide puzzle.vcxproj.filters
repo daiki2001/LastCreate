@@ -212,6 +212,7 @@
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="GameInputManager.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Enemy.cpp">
       <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClCompile>
@@ -379,6 +380,7 @@
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="GameInputManager.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Enemy.h">
       <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClInclude>
