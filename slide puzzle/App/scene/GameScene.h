@@ -3,6 +3,7 @@
 #include"../slide puzzle/SceneChange.h"
 #include"../slide puzzle/Player.h"
 #include"../slide puzzle/Ball.h"
+#include"../slide puzzle/Stage.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -50,6 +51,8 @@ private://’è‹`
 
 	std::unique_ptr<Ball> ball;
 	std::unique_ptr<Ball> ball2;
+
+	std::unique_ptr<Stage>stage;
 	
 	SpriteData back;
 	ObjectData object;

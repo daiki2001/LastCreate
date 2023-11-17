@@ -4,7 +4,6 @@
 #include"Easing.h"
 #include<random>
 #include"GameInputManager.h"
-#include "Input.h"
 
 namespace
 {
@@ -52,6 +51,7 @@ void Player::Draw()
 	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
 	m_fbx->Draw();
 	m_fbx->SetPosition(position);
+	input->DebugDraw();
 }
 
 void Player::SetBall(Ball* ball)
@@ -67,26 +67,26 @@ void Player::Move()
 	//
 	XMFLOAT2 speed = {};
 
-	if (Input::Get()->KeybordPush(DIK_W))
+	if (input->IsForward())
 	{
 		speed.y = speed.y + 0.5f;
 	}
-	else if (Input::Get()->KeybordPush(DIK_S))
+	else if (input->IsBack())
 	{
 		speed.y = speed.y - 0.5f;
 	}
 
-	if (Input::Get()->KeybordPush(DIK_D))
+	if (input->IsLeft())
 	{
 		speed.x = speed.x - 0.5f;
 	}
-	else if (Input::Get()->KeybordPush(DIK_A))
+	else if (input->IsRight())
 	{
 		speed.x = speed.x + 0.5f;
 	}
 
 	//
-	if (Input::Get()->KeybordPush(DIK_LSHIFT))
+	if (input->IsDash())
 	{
 		speed.x *= 1.5f;
 		speed.y *= 1.5f;

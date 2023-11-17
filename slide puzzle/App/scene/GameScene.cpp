@@ -36,6 +36,9 @@ void GameScene::Init()
 	ball = std::make_unique<Ball>();
 	ball->Init();
 
+
+	stage = std::make_unique<Stage>();
+	stage->Init();
 	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -74,6 +77,7 @@ void GameScene::Draw()
 
 	ball->Draw();
 	
+	stage->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
 	sceneChange_->Draw();

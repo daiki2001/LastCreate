@@ -1,6 +1,7 @@
-#include"TitleScene.h"
+ï»¿#include"TitleScene.h"
 #include"StageSelect.h"
 #include"SceneManager.h"
+#include "../../GameInputManager.h"
 TitleScene::TitleScene()
 {}
 TitleScene::~TitleScene()
@@ -8,26 +9,26 @@ TitleScene::~TitleScene()
 
 void TitleScene::Init()
 {
-	// ƒ‰ƒCƒgƒOƒ‹[ƒvƒNƒ‰ƒXì¬
+	// ãƒ©ã‚¤ãƒˆã‚°ãƒ«ãƒ¼ãƒ—ã‚¯ãƒ©ã‚¹ä½œæˆ
 	lightGroup = std::make_unique<LightGroup>();
 	lightGroup->Initialize();
-	// 3DƒIƒuƒGƒNƒg‚Éƒ‰ƒCƒg‚ğƒZƒbƒg
+	// 3Dã‚ªãƒ–ã‚¨ã‚¯ãƒˆã«ãƒ©ã‚¤ãƒˆã‚’ã‚»ãƒƒãƒˆ
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
-	//ƒJƒƒ‰İ’è
+	//ã‚«ãƒ¡ãƒ©è¨­å®š
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
 
-	//ƒXƒvƒ‰ƒCƒg‰æ‘œ“Ç‚İ‚İ
+	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆç”»åƒèª­ã¿è¾¼ã¿
 	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
-	//ƒIƒuƒWƒFƒNƒg¶¬
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç”Ÿæˆ
 	object = Shape::CreateOBJ("sphere",true);
 	floor = Shape::CreateSquare(200.0f, 1.0f, 200.0f);
 
-	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
+	// ã‚·ãƒ¼ãƒ³é·ç§»ã®æ¼”å‡ºã®åˆæœŸåŒ–
 	sceneChange_ = std::make_unique<SceneChange>();
 }
 
@@ -35,7 +36,7 @@ void TitleScene::Update()
 {
 	lightGroup->Update();
 
-	if ((Input::Get()->KeybordTrigger(DIK_SPACE) || Input::Get()->ControllerDown(ButtonA)) && sceneChange_->GetinEndFlag())
+	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
 		sceneChange_->SceneChangeStart("");
 	}
