@@ -17,32 +17,33 @@ enum PipelineType
 	PipelineFBX,
 };
 
+//構造体
+struct PipelineSet
+{
+	//パイプラインステートオブジェクト
+	ComPtr<ID3D12PipelineState>pipelinestate;
+	//ルートシグネチャ
+	ComPtr <ID3D12RootSignature>rootsignature;
+};
 /// <summary>
 /// パイプラインクラス
 /// </summary>
 class Pipeline
 {
-public:
-	//構造体
-	struct PipelineSet
-	{
-		//パイプラインステートオブジェクト
-		ComPtr<ID3D12PipelineState>pipelinestate;
-		//ルートシグネチャ
-		ComPtr <ID3D12RootSignature>rootsignature;
-	};
-	//スプライト
+public://スプライト
+	//通常スプライト
 	static PipelineSet  SpriteCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
-	//OBJ読み込み
+public://OBJ
+	//影ありOBJ読み込み
 	static PipelineSet  OBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
-
+	//影画像生成用
 	static PipelineSet  ShadowCreateGraphicsPipeline(ID3D12Device* dev, const Shader& shader);
 	//影無しOBJ
 	static PipelineSet  NoShadowOBJCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
-	//ノーマルマップ
-	static PipelineSet NormalMapCreatePipeline(ID3D12Device* dev, const Shader &shader);
-	//パーティクル
+public://パーティクル
+	//通常パーティクル
 	static PipelineSet ParticleCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
+public://ポストエフェクト
 	//ポストエフェクト(通常)
 	static PipelineSet PostNormalCreateGraphicsPipeline(ID3D12Device* dev, const Shader &shader);
 	//被写界深度
@@ -56,14 +57,17 @@ public:
 	static PipelineSet SpritePipeline;
 	//パーティクル
 	static PipelineSet ParticlePiepline;
-	//ノーマルマップ２種類
-	static PipelineSet NormalMapPipeline;
 	//ポストエフェクト
 	static PipelineSet PostPipeline;
 	//深度値保存用
 	static PipelineSet ShadowMapPipeline;
 	//被写界深度
 	static PipelineSet DepthOfFieldPipeline;
+
+
+
+
+
 	//パイプライン作成
 	static void CreatePipeline(ID3D12Device* dev);
 

@@ -35,11 +35,6 @@ void GameScene::Init()
 
 	ball = std::make_unique<Ball>();
 	ball->Init();
-	ball->SetPosition({ 5.0f,0.0f,0.0f });
-
-	ball2 = std::make_unique<Ball>();
-	ball2->Init();
-	ball2->SetPosition({ 0.0f,0.0f,0.0f });
 
 	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -66,8 +61,7 @@ void GameScene::Update()
 	
 	player->Update();
 	CameraMove();
-	ball->Update();
-	ball2->Update();
+	ball->Update(player->GetPosition(), player->GetRotation());
 	sceneChange_->Update();
 }
 
@@ -77,7 +71,6 @@ void GameScene::Draw()
 
 	player->Draw();
 
-	ball2->Draw();
 
 	ball->Draw();
 	

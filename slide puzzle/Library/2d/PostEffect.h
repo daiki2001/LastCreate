@@ -81,6 +81,6 @@ private:
 	SpriteData m_sprite;
 
 	//パイプラインセット
-	Pipeline::PipelineSet m_pipelineSet;
+	PipelineSet m_pipelineSet;
 };
 
