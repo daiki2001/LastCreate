@@ -283,6 +283,7 @@
     <ClInclude Include="BallController\BallController.h" />
     <ClInclude Include="BallController\Ini.h" />
     <ClInclude Include="BallController\Serial.h" />
+    <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameInputManager.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
@@ -332,6 +333,7 @@
     <ClInclude Include="Library\Texture\Texture.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChange.h" />
+    <ClInclude Include="Stage.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\scene\BaseScene.cpp" />
@@ -344,6 +346,7 @@
     <ClCompile Include="BallController\BallController.cpp" />
     <ClCompile Include="BallController\Ini.cpp" />
     <ClCompile Include="BallController\Serial.cpp" />
+    <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />
@@ -386,6 +389,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChange.cpp" />
+    <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

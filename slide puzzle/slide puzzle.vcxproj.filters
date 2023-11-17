@@ -192,6 +192,7 @@
     <ClCompile Include="main.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SceneChange.cpp" />
     <ClCompile Include="Library\3d\FbxLoader.cpp">
       <Filter>Library\3D\Fbx</Filter>
     </ClCompile>
@@ -210,29 +211,26 @@
     <ClCompile Include="Library\3d\Particle3D.cpp">
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
-    <ClCompile Include="Ball.cpp">
-      <Filter>ソースファイル</Filter>
+    <ClCompile Include="GameInputManager.cpp" />
+    <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="GameInputManager.cpp">
-      <Filter>ソースファイル</Filter>
+    <ClCompile Include="Ball.cpp">
+      <Filter>ソースファイル\GameObj</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>ソースファイル</Filter>
+      <Filter>ソースファイル\GameObj</Filter>
     </ClCompile>
-    <ClCompile Include="SceneChange.cpp">
-      <Filter>ソースファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BallController\Serial.cpp">
+    <ClCompile Include="BaseEnemy.cpp" />
+    <ClCompile Include="BallController\BallController.cpp">
       <Filter>ソースファイル\BallController</Filter>
     </ClCompile>
     <ClCompile Include="BallController\Ini.cpp">
       <Filter>ソースファイル\BallController</Filter>
     </ClCompile>
-    <ClCompile Include="BallController\BallController.cpp">
+    <ClCompile Include="BallController\Serial.cpp">
       <Filter>ソースファイル\BallController</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソースファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -374,6 +372,7 @@
     <ClInclude Include="Library\3d\Shape.h">
       <Filter>Library\3D\Object</Filter>
     </ClInclude>
+    <ClInclude Include="SceneChange.h" />
     <ClInclude Include="Library\3d\FbxLoader.h">
       <Filter>Library\3D\Fbx</Filter>
     </ClInclude>
@@ -389,29 +388,26 @@
     <ClInclude Include="Library\3d\Particle3D.h">
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
-    <ClInclude Include="GameInputManager.h">
-      <Filter>ソースファイル</Filter>
+    <ClInclude Include="GameInputManager.h" />
+    <ClInclude Include="Stage.h" />
+    <ClInclude Include="Enemy.h">
+      <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Ball.h">
-      <Filter>ソースファイル</Filter>
+      <Filter>ソースファイル\GameObj</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>ソースファイル</Filter>
+      <Filter>ソースファイル\GameObj</Filter>
     </ClInclude>
-    <ClInclude Include="SceneChange.h">
-      <Filter>ソースファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BallController\Serial.h">
+    <ClInclude Include="BaseEnemy.h" />
+    <ClInclude Include="BallController\BallController.h">
       <Filter>ソースファイル\BallController</Filter>
     </ClInclude>
     <ClInclude Include="BallController\Ini.h">
       <Filter>ソースファイル\BallController</Filter>
     </ClInclude>
-    <ClInclude Include="BallController\BallController.h">
+    <ClInclude Include="BallController\Serial.h">
       <Filter>ソースファイル\BallController</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソースファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -522,8 +518,14 @@
     <Filter Include="Library\3D\Particle">
       <UniqueIdentifier>{96d5ef07-05ca-455e-9585-dbbd8ee0bcb0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースファイル\GameObj">
+      <UniqueIdentifier>{96edb64c-a6f3-4e3b-b474-a81dcdc55c96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソースファイル\GameObj\Enemy">
+      <UniqueIdentifier>{e9734f8d-836d-458f-aefa-939598278903}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ソースファイル\BallController">
-      <UniqueIdentifier>{267f69ba-37a1-4835-acab-581976f139bd}</UniqueIdentifier>
+      <UniqueIdentifier>{dd948f64-48fd-4d1c-9f89-acb00a1dd712}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
