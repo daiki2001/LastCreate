@@ -51,6 +51,7 @@ private: //メンバ変数
 	Vec3 oldGyro;
 	bool flag;
 	bool oldFlag;
+	Vec3 angle;
 
 #ifdef _DEBUG
 	SpriteData debugBack;
@@ -64,7 +65,9 @@ public: //メンバ関数
 	void Load();
 	void DrawGraph();
 
-	bool IsBallThrow() const;
+	void AngleUpdate();
+	void AngleReset();
+	bool IsBallThrow();
 
 	Vec3 GetAccelG() const { return accel; }
 	Vec3 GetOldAccelG() const { return oldAccel; }

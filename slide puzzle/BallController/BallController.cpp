@@ -20,7 +20,8 @@ BallController::BallController(const char* serialDevice) :
 	gyro{},
 	oldGyro(gyro),
 	flag(false),
-	oldFlag(false)
+	oldFlag(false),
+	angle(Vec3(0, 0, 0))
 {
 	this->serial = Serial::create(serialDevice);
 }
@@ -102,6 +103,9 @@ int BallController::Update() {
 	const int tailSize = (int)(buf + contentSize - p);
 	memmove(buf, p, tailSize);
 	contentSize = tailSize;
+
+	AngleUpdate();
+
 	return dataCount;
 }
 
@@ -169,7 +173,49 @@ void BallController::DrawGraph()
 	return;
 }
 
-bool BallController::IsBallThrow() const
+void BallController::AngleUpdate()
 {
-	return GetFlagReturn() && gyro.y > 10;
+	if (accel.length() < 1)
+	{
+		return;
+	}
+
+	angle += gyro;
+
+	if (angle.x < -180)
+	{
+		angle.x += 360;
+	}
+	else if (angle.x > +180)
+	{
+		angle.x -= 360;
+	}
+	if (angle.y < -180)
+	{
+		angle.y += 360;
+	}
+	else if (angle.y > +180)
+	{
+		angle.y -= 360;
+	}
+	if (angle.z < -180)
+	{
+		angle.z += 360;
+	}
+	else if (angle.z > +180)
+	{
+		angle.z -= 360;
+	}
+}
+
+void BallController::AngleReset()
+{
+	angle = Vec3(0, 0, 0);
+}
+
+bool BallController::IsBallThrow()
+{
+	bool result = GetFlagReturn() && gyro.y < -10;
+	AngleReset();
+	return result;
 }

@@ -231,6 +231,9 @@
     <ClCompile Include="BallController\BallController.cpp">
       <Filter>ソースファイル\BallController</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -406,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="BallController\BallController.h">
       <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソースファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
