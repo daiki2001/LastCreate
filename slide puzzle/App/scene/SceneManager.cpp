@@ -8,6 +8,7 @@
 #include"TitleScene.h"
 #include"StageSelect.h"
 #include"ResultScene.h"
+#include "../../GameInputManager.h"
 SceneManager::SceneManager()
 {}
 SceneManager::~SceneManager()
@@ -28,6 +29,7 @@ void SceneManager::Initialize()
 	DirectXBase::Get()->Initilize();
 	//入力の初期化
 	Input::Get()->Initialize();
+	GameInputManager::Get()->Init();
 	//シェーダーの読み込み
 	ShaderManager::LoadShaders();
 	//ライト静的初期化
@@ -76,6 +78,7 @@ void SceneManager::Initialize()
 void SceneManager::Update()
 {
 	Input::Get()->Update();
+	GameInputManager::Get()->Update();
 
 	//シーンチェンジ
 	SceneChange();
