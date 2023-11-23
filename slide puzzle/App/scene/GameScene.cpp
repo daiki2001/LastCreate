@@ -64,7 +64,7 @@ void GameScene::Update()
 	
 	player->Update();
 	CameraMove();
-	ball->Update(player->GetPosition(), player->GetRotation());
+	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{0.0f, 0.0f, 0.0f});
 	sceneChange_->Update();
 }
 
