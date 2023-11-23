@@ -1,13 +1,12 @@
 #pragma once
-#include"Object.h"
-#include<memory>
+#include "Object.h"
+#include <memory>
 
-class Ball
-{
+class Ball {
 public:
-	//コンストラクタ
+	// コンストラクタ
 	Ball();
-	//デスコンストラクタ
+	// デスコンストラクタ
 	~Ball();
 	/// <summary>
 	/// 初期化
@@ -16,7 +15,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 playerPos, Vec3 playerRotation);
+	void Update(Vec3 playerPos, Vec3 playerRotation, Vec3 enemyPos);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -39,20 +38,26 @@ public:
 
 private:
 	// ボールの挙動
-	void ThrowAct();
+	void ThrowAct(Vec3 enemyPos);
 	// 所持者関係
 	void HaveAct();
 	// ボールが当たったフラグ
-	bool BallHitFlag();
+	bool BallHitFlag(Vec3 enemyPos);
 	// ボールが当たって反射
-	void BallReflectBound(Vec3 playerPos);
+	void BallReflectBound(Vec3 playerPos, Vec3 enemyPos);
 	// 　跳ね返る方向計算
 	void ReflectCalculation(Vec3 playerPos);
 	// ボールの落ちる位置
 	Vec3 BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos);
+	// 投げる強さ調整
+	void ThrowPowerChange();
+	// 滞空時間調整
+	void FlyTimeChange(Vec3 playerPos, Vec3 enemyPos);
+	// 飛ぶ向きのランダム化
+	void FlyVectorCal();
 
 private:
-	ObjectData pObject;                         //プレイヤーオブジェクト
+	ObjectData pObject;                 // プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
 	Vec3 rotation = {};
 
@@ -70,9 +75,10 @@ private:
 	bool ballThrow = false;
 
 	Vec3 reflectVector = {0.0f, 0.0f, 0.0f};
+
 	bool isThrow = false;
 	bool isHit = false;
-	float baseReflectSpped = 0.5f;
+	float baseReflectSpped = 0.25f;
 	float baseBound = 4.0f;
 	float basetime = 0.05f;
 	float t = 0;
@@ -81,5 +87,10 @@ private:
 	float t4 = 0;
 	float t5 = 0;
 	float t6 = 0;
+	float fallPosition = 0.0f;
+	Vec3 fallPositionCal = {0.0f, 0.0f, 0.0f};
+	float throwPower = 0;
+	bool chargeFlag = false;
+	bool trigerFlag = false;
+	float flyVectorRandum = 0.0f;
 };
-

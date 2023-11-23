@@ -92,7 +92,7 @@ bool GameInputManager::IsJamp() const
 bool GameInputManager::IsThrow() const
 {
 	bool result = false;
-	result |= input->MouseTriggerLeft();
+	result |= input->MousePushLeft();
 	result |= input->ControllerUp(ButtonKind::ButtonRT);
 	result |= ball->IsBallThrow();
 	return result;
