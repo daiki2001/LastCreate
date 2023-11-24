@@ -47,6 +47,8 @@ public://メンバ関数
 	/// <returns>トリガーか</returns>
 	bool TriggerMouseLeft()const;
 
+	bool ReleaseMouseLeft()const;
+
 	/// <summary>
 	/// キーの中ボタントリガーをチェック
 	/// </summary>
