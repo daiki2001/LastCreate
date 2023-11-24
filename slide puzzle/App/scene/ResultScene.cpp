@@ -1,6 +1,7 @@
 #include "ResultScene.h"
 #include"TitleScene.h"
 #include"SceneManager.h"
+#include "../../GameInputManager.h"
 ResultScene::ResultScene()
 {}
 ResultScene::~ResultScene()
@@ -31,7 +32,7 @@ void ResultScene::Init()
 void ResultScene::Update()
 {
 
-	if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
+	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
 		sceneChange_->SceneChangeStart("");
 	}

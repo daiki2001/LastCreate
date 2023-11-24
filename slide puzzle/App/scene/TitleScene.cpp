@@ -25,7 +25,7 @@ void TitleScene::Init()
 	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("sphere",true);
+	object = Shape::CreateOBJ("titleStage",true);
 	floor = Shape::CreateSquare(200.0f, 1.0f, 200.0f);
 
 	// シーン遷移の演出の初期化
@@ -55,7 +55,7 @@ void TitleScene::Draw()
 	
 	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
 
-	Object::Draw(object, Vec3(), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3(0,45,0));
 
 	Object::Draw(floor, Vec3(0.0f,-5.0f,0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
 	DebugText::Get()->Print(10, 20, 3, "Title");

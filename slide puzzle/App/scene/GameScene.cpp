@@ -2,6 +2,7 @@
 #include"StageSelect.h"
 #include "ResultScene.h"
 #include"SceneManager.h"
+#include "../../GameInputManager.h"
 GameScene::GameScene()
 {}
 GameScene::~GameScene()
@@ -22,7 +23,7 @@ void GameScene::Init()
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
 	//音データ読み込み
-	
+
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
 	//スプライト画像読み込み
@@ -49,7 +50,7 @@ void GameScene::Update()
 	lightGroup->Update();
 	if (sceneChange_->GetinEndFlag())
 	{
-		/*if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
+		/*if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 		{
 			sceneChange_->SceneChangeStart("");
 		}
@@ -61,10 +62,10 @@ void GameScene::Update()
 	}
 
 	BallHave();
-	
-	player->Update();
+
+	player->Update(stage->GetStageSize());
 	CameraMove();
-	ball->Update(player->GetPosition(), player->GetRotation());
+	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{ 0.0f, 0.0f, 0.0f }, stage->GetStageSize());
 	sceneChange_->Update();
 }
 
@@ -76,7 +77,7 @@ void GameScene::Draw()
 
 
 	ball->Draw();
-	
+
 	stage->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
@@ -95,7 +96,7 @@ void GameScene::Finalize()
 
 void GameScene::BallHave()
 {
-	if (ball->HaveHit(player->GetPosition()) && !ball->GetHaveFlag())
+	if (ball->GetHaveFlag())
 	{
 		player->SetBall(ball.get());
 	}

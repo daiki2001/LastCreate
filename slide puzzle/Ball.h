@@ -1,13 +1,13 @@
 #pragma once
-#include"Object.h"
-#include<memory>
+#include "Object.h"
+#include <memory>
+#include <array>
 
-class Ball
-{
+class Ball {
 public:
-	//コンストラクタ
+	// コンストラクタ
 	Ball();
-	//デスコンストラクタ
+	// デスコンストラクタ
 	~Ball();
 	/// <summary>
 	/// 初期化
@@ -16,17 +16,17 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 playerPos, Vec3 playerRotation);
+	void Update(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_, const float stageSize);
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
 
 	//
-	bool HaveHit(Vec3 pos);
+	void HaveAct(Vec3 havePos_);
 
 	// 位置の設定
-	void SetChainPosition(Vec3 pos);
+	void SetChainPosition(Vec3 havePos_);
 	void SetPosition(Vec3 pos) { position = pos; }
 	//
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
@@ -36,50 +36,62 @@ public:
 	void SetThrowFlag(bool flag) { throwFlag_ = flag; }
 	//
 	bool GetThrowFlag() { return throwFlag_; }
+	//
+	void SetChargeFlag(bool flag) { chargeFlag_ = flag; }
+	//
+	bool GetChargeFlag() { return chargeFlag_; }
+
 
 private:
 	// ボールの挙動
-	void ThrowAct();
-	// 所持者関係
-	void HaveAct();
+	void ThrowAct(Vec3 targetPos_);
 	// ボールが当たったフラグ
-	bool BallHitFlag();
+	bool BallHitFlag(Vec3 targetPos);
 	// ボールが当たって反射
-	void BallReflectBound(Vec3 playerPos);
+	void BallReflectBound(Vec3 havePos_, Vec3 targetPos_);
 	// 　跳ね返る方向計算
-	void ReflectCalculation(Vec3 playerPos);
+	void ReflectCalculation(Vec3 havePos_);
 	// ボールの落ちる位置
-	Vec3 BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos);
+	void BallFallPoint(Vec3 havePos_, Vec3 playerRotation);
+	// 投げる強さ調整
+	void ThrowPowerChange();
+	// 滞空時間調整
+	void FlyTimeChange(Vec3 havePos_, Vec3 targetPos_);
+	// 飛ぶ向きのランダム化
+	void FlyVectorCal();
+	// チャージ中の処理
+	void StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_);
+	//　ステージの壁当たり判定
+	void StageCollision(const float stageSize);
 
 private:
-	ObjectData pObject;                         //プレイヤーオブジェクト
+	ObjectData pObject;                 // プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
 	Vec3 rotation = {};
 
-	// 所持者の位置
-	Vec3 havePos_ = {};
-	// ターゲットの位置
-	Vec3 targetPos_ = {};
-	// ボールの飛ぶベクトル
-	Vec3 vector = {};
 	// 所持しているか
 	bool haveFlag_ = false;
 	// 投げているか
 	bool throwFlag_ = false;
+	// チャージしてるか
+	bool chargeFlag_ = false;
 
-	bool ballThrow = false;
+	bool isHit = false; // 当たったかどうかのフラグ
 
-	Vec3 reflectVector = {0.0f, 0.0f, 0.0f};
-	bool isThrow = false;
-	bool isHit = false;
-	float baseReflectSpped = 0.5f;
-	float baseBound = 4.0f;
-	float basetime = 0.05f;
-	float t = 0;
-	float t2 = 0;
-	float t3 = 0;
-	float t4 = 0;
-	float t5 = 0;
-	float t6 = 0;
+	// 跳ね返り方向
+	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
+
+	float speed = 0.25f;            // ボールのスピード
+	float baseReflectSpped = 0.25f; // 反射スピード
+	float baseBound = 4.0f;         // バウンドの高さ
+	float baseTime = 0.05f;         // バウンドの時間
+
+	std::array<float, 6> time = {0, 0, 0, 0, 0, 0}; // タイム
+
+	Vec3 fallPositionCal = {0.0f, 0.0f, 0.0f}; // ボールの跳ね返る座標
+
+	float maxReflectSpeed = 4.0f; // 跳ね返りのスピードの最大値
+	float chargeValue = 0.005f;   // チャージの速さ
+
+	float flyVectorRandum = 0.0f; // 跳ね変える方向のランダム数値
 };
-
