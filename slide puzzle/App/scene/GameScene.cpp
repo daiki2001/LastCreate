@@ -2,6 +2,7 @@
 #include"StageSelect.h"
 #include "ResultScene.h"
 #include"SceneManager.h"
+#include "../../GameInputManager.h"
 GameScene::GameScene()
 {}
 GameScene::~GameScene()
@@ -49,7 +50,7 @@ void GameScene::Update()
 	lightGroup->Update();
 	if (sceneChange_->GetinEndFlag())
 	{
-		/*if (Input::Get()->KeybordTrigger(DIK_SPACE) && sceneChange_->GetinEndFlag())
+		/*if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 		{
 			sceneChange_->SceneChangeStart("");
 		}

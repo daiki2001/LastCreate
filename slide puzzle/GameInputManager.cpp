@@ -92,8 +92,8 @@ bool GameInputManager::IsJamp() const
 bool GameInputManager::IsThrow() const
 {
 	bool result = false;
-	result |= input->MousePushLeft();
-	result |= input->ControllerUp(ButtonKind::ButtonRT);
+	result |= input->MouseTriggerLeft();
+	result |= input->ControllerDown(ButtonKind::ButtonRT);
 	result |= ball->IsBallThrow();
 	return result;
 }
@@ -101,8 +101,18 @@ bool GameInputManager::IsThrow() const
 bool GameInputManager::IsCatch() const
 {
 	bool result = false;
-	result |= input->MouseTriggerLeft();
-	result |= input->ControllerUp(ButtonKind::ButtonRT);
-	result |= ball->IsBallThrow();
+	result = IsThrow();
+	//result |= input->MouseTriggerLeft();
+	//result |= input->ControllerUp(ButtonKind::ButtonRT);
+	//result |= ball->IsBallThrow();
+	return result;
+}
+
+bool GameInputManager::IsCharge() const
+{
+	bool result = false;
+	result |= input->MousePushLeft();
+	result |= input->ControllerPush(ButtonKind::ButtonRT);
+	result |= ball->GetFlag();
 	return result;
 }

@@ -38,4 +38,6 @@ public: //メンバ関数
 	bool IsThrow() const;
 	// キャッチ（中身はIsThrowと同じ）
 	bool IsCatch() const;
+	// チャージ
+	bool IsCharge() const;
 };
