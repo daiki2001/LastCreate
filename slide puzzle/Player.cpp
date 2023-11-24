@@ -134,13 +134,13 @@ void Player::BallThrow()
 {
 	if (ball_ == nullptr) { return; }
 
-	//ball_->SetChainPosition(position);
-
-	if (input->IsThrow())
-	{
+	//溜める
+	if (GameInputManager::Get()->IsCharge()) {
+		ball_->SetChargeFlag(true);
+	}
+	//投げる
+	if (GameInputManager::Get()->IsThrow()) {
 		ball_->SetThrowFlag(true);
-		ball_->SetHaveFlag(false);
-		ball_ = nullptr;
 	}
 }
 

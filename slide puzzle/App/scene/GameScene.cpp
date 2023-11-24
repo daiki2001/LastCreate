@@ -96,7 +96,7 @@ void GameScene::Finalize()
 
 void GameScene::BallHave()
 {
-	if (ball->HaveHit(player->GetPosition()) && !ball->GetHaveFlag())
+	if (ball->GetHaveFlag())
 	{
 		player->SetBall(ball.get());
 	}

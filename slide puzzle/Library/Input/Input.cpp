@@ -119,6 +119,11 @@ bool Input::MouseTriggerLeft()
 	return m_mouse.TriggerMouseLeft();
 }
 
+bool Input::MouseReleaseLeft()
+{
+	return m_mouse.ReleaseMouseLeft();
+}
+
 bool Input::MouseTriggerMiddle()
 {
 	return m_mouse.TriggerMouseMiddle();

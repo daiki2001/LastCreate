@@ -75,6 +75,12 @@ public://マウス
 	bool MouseTriggerLeft();
 
 	/// <summary>
+	/// キーの左ボタントリガーをチェック
+	/// </summary>
+	/// <returns>トリガーか</returns>
+	bool MouseReleaseLeft();
+
+	/// <summary>
 	/// キーの中ボタントリガーをチェック
 	/// </summary>
 	/// <returns>トリガーか</returns>
