@@ -26,6 +26,7 @@ public:
 protected:
 	void BallThrow();
 	void BallCatch();
+	void DamageHit(Vec3 pos);
 
 protected:
 	std::unique_ptr<Model> m_model;
@@ -40,5 +41,6 @@ protected:
 
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
+	int hp_ = 0;
 };
 

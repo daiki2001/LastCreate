@@ -15,3 +15,18 @@ void Enemy::BallThrow()
 void Enemy::BallCatch()
 {
 }
+
+void Enemy::DamageHit(Vec3 pos)
+{
+	// UŒ‚‚ª“–‚½‚Á‚½‚ç
+	const float playerR = 1.0f;
+	const float ballR = 1.0f;
+
+	Vec3 axyz = (position - pos) * (position - pos);
+	float ar = (ballR + playerR) * (ballR + playerR);
+
+	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
+	if (axyz.x + axyz.y + axyz.z <= ar) {
+		hp_ -= 1;
+	}
+}
