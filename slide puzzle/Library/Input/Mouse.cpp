@@ -82,6 +82,15 @@ bool  Mouse::TriggerMouseLeft()const
 	return false;
 }
 
+bool Mouse::ReleaseMouseLeft() const
+{
+	// 前回が0で、今回が0でなければトリガー
+	if (m_mouseStatePre.rgbButtons[0] && !m_mouseState.rgbButtons[0]) {
+		return true;
+	}
+	return false;
+}
+
 bool  Mouse::TriggerMouseMiddle()const
 {
 	// 前回が0で、今回が0でなければトリガー
