@@ -11,7 +11,6 @@
 #include "FbxLoader.h"
 #include "FBXObject3d.h"
 #include"../slide puzzle/Ball.h"
-
 class Player
 {
 private:
@@ -25,7 +24,7 @@ public:
 	Player();
 	~Player();
 	void Init();
-	void Update();
+	void Update(const float stageSize);
 	void Draw();
 
 	const Vec3 GetPosition() { return position; }
@@ -37,6 +36,7 @@ private:
 	void Jump();
 	void BallThrow();
 	void BallCatch();
+	void StageCollision(const float stageSize);
 private:
 	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;

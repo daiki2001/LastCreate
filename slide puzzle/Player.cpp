@@ -4,10 +4,9 @@
 #include"Easing.h"
 #include<random>
 #include"GameInputManager.h"
-
 namespace
 {
-auto* input = GameInputManager::Get();
+	auto* input = GameInputManager::Get();
 }
 
 Player::Player()
@@ -31,18 +30,19 @@ void Player::Init()
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	m_fbx->SetRotation(Vec3(0, 90, 0));
-	
+
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
 	position = { 10.0f, 0.0f, 0.0f };
 }
 
-void Player::Update()
+void Player::Update(float stageSize)
 {
 	Move();
 	Jump();
 	BallThrow();
-	TargetLockOn(Vec3{0.0f, 0.0f, 0.0f});
+	TargetLockOn(Vec3{ 0.0f, 0.0f, 0.0f });
+	StageCollision(stageSize);
 	m_fbx->Update();
 }
 
@@ -66,7 +66,6 @@ void Player::Move()
 {
 	//
 	XMFLOAT2 speed = {};
-
 	if (input->IsForward())
 	{
 		speed.y = speed.y + 0.5f;
@@ -154,6 +153,18 @@ void Player::BallCatch()
 	{
 		catchFlag_ = false;
 		catchTimer_ = 0;
+	}
+}
+
+void Player::StageCollision(const float stageSize)
+{
+	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	{
+		float length = sqrt(position.x * position.x + position.z * position.z);
+		float  difference = length - stageSize;
+		Vec2 normalize = { position.x / length,position.z / length };
+		position.x -= normalize.x * difference;
+		position.z -= normalize.y * difference;
 	}
 }
 

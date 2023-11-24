@@ -212,7 +212,6 @@
       <Filter>Library\3D\Particle</Filter>
     </ClCompile>
     <ClCompile Include="GameInputManager.cpp" />
-    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Enemy.cpp">
       <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClCompile>
@@ -233,6 +232,9 @@
     </ClCompile>
     <ClCompile Include="BallController\Serial.cpp">
       <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>ソースファイル\GameObj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,7 +393,6 @@
       <Filter>Library\3D\Particle</Filter>
     </ClInclude>
     <ClInclude Include="GameInputManager.h" />
-    <ClInclude Include="Stage.h" />
     <ClInclude Include="Enemy.h">
       <Filter>ソースファイル\GameObj\Enemy</Filter>
     </ClInclude>
@@ -412,6 +413,9 @@
     </ClInclude>
     <ClInclude Include="BallController\Serial.h">
       <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>ソースファイル\GameObj</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

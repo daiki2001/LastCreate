@@ -22,7 +22,7 @@ void GameScene::Init()
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
 	//音データ読み込み
-	
+
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
 	//スプライト画像読み込み
@@ -61,10 +61,10 @@ void GameScene::Update()
 	}
 
 	BallHave();
-	
-	player->Update();
+
+	player->Update(stage->GetStageSize());
 	CameraMove();
-	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{0.0f, 0.0f, 0.0f});
+	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{ 0.0f, 0.0f, 0.0f }, stage->GetStageSize());
 	sceneChange_->Update();
 }
 
@@ -76,7 +76,7 @@ void GameScene::Draw()
 
 
 	ball->Draw();
-	
+
 	stage->Draw();
 
 	DebugText::Get()->Print(10, 20, 3, "GameScene");
