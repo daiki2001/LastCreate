@@ -123,6 +123,7 @@ void SceneManager::Draw()
 	Object::InitDraw(), Sprite::Get()->PreDraw(), FBXObject3d::InitDraw();
 	//ƒJƒƒ‰–Úü‚Ì•`‰æ
 	scene_->Draw();
+	scene_->ShadowDraw();
 	DebugText::Get()->DrawAll();
 	PostEffect::Get()->PostDrawScene(DirectXBase::Get()->GetCmandList());
 
