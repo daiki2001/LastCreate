@@ -195,19 +195,19 @@ void Ball::ThrowPowerChange() {
 void Ball::FlyTimeChange(Vec3 havePos_, Vec3 targetPos_) {
 	// 敵との距離計算
 	Vec3 axyz = (targetPos_ - havePos_) * (targetPos_ - havePos_);
-	float r = 22.5f * 22.5f;
+	float r = boundChangeR * boundChangeR;
 
 	// ボールに当たった
 	if (axyz.x + axyz.z <= r) // 近い時
 	{
 		// 時間短い
-		baseBound_ = 4.0f;
-		baseTime_ = 0.01625f;
+		baseBound_ = nearBound_;
+		baseTime_ = nearTime_;
 	} else // 遠い時
 	{
 		// 時間長い
-		baseBound_ = 6.0f;
-		baseTime_ = 0.0125f;
+		baseBound_ = farBound_;
+		baseTime_ = farTime_;
 	}
 }
 
@@ -215,8 +215,8 @@ void Ball::FlyVectorCal() {
 	// 跳ね返る方向のランダム数値
 	std::random_device rnd;
 	std::mt19937 mt(rnd());
-	std::uniform_int_distribution<> rand2(0, 10);
-	flyVectorRandom_ = float(rand2(mt)) - 5.0f; // -5 ~ +5の範囲
+	std::uniform_int_distribution<> rand2(minFlyVectorRandom_, maxFlyVectorRandom_);
+	flyVectorRandom_ = float(rand2(mt)); // -5 ~ +5の範囲
 }
 
 void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_){
