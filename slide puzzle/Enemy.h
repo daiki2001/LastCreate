@@ -26,7 +26,7 @@ public:
 protected:
 	void BallThrow();
 	void BallCatch();
-	void DamageHit(Vec3 pos);
+	void DamageHit(Vec3 pos, int comboCount_);
 
 protected:
 	std::unique_ptr<Model> m_model;

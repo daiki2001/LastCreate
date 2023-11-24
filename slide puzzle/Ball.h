@@ -40,7 +40,14 @@ public:
 	void SetChargeFlag(bool flag) { chargeFlag_ = flag; }
 	//
 	bool GetChargeFlag() { return chargeFlag_; }
-
+	//
+	void SetComboUpFlag(bool flag) { comboUpFlag_ = flag; }
+	//
+	bool GetComboUpFlag() { return comboUpFlag_; }
+	//
+	void SetComboMissFlag(bool flag) { comboMissFlag_ = flag; }
+	//
+	bool GetComboMissFlag() { return comboMissFlag_; }
 
 private:
 	// ボールの挙動
@@ -75,23 +82,30 @@ private:
 	bool throwFlag_ = false;
 	// チャージしてるか
 	bool chargeFlag_ = false;
-
-	bool isHit = false; // 当たったかどうかのフラグ
-
+	// 当たったかどうかのフラグ
+	bool hitFlag_ = false; 
 	// 跳ね返り方向
 	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
-
-	float speed = 0.25f;            // ボールのスピード
-	float baseReflectSpped = 0.25f; // 反射スピード
-	float baseBound = 4.0f;         // バウンドの高さ
-	float baseTime = 0.05f;         // バウンドの時間
-
-	std::array<float, 6> time = {0, 0, 0, 0, 0, 0}; // タイム
-
-	Vec3 fallPositionCal = {0.0f, 0.0f, 0.0f}; // ボールの跳ね返る座標
-
-	float maxReflectSpeed = 4.0f; // 跳ね返りのスピードの最大値
-	float chargeValue = 0.005f;   // チャージの速さ
-
-	float flyVectorRandum = 0.0f; // 跳ね変える方向のランダム数値
+	// ボールのスピード
+	float speed_ = 0.25f;
+	// 反射スピード
+	float baseReflectSpped_ = 0.25f;
+	// バウンドの高さ
+	float baseBound_ = 4.0f;
+	// バウンドの時間
+	float baseTime_ = 0.05f;
+	// タイム
+	std::array<float, 6> time_ = {0, 0, 0, 0, 0, 0};
+	// ボールの跳ね返る座標
+	Vec3 fallPositionCal_ = {0.0f, 0.0f, 0.0f}; 
+	// 跳ね返りのスピードの最大値
+	float maxReflectSpeed_ = 4.0f; 
+	// チャージの速さ
+	float chargeValue_ = 0.005f;   
+	// 跳ね変える方向のランダム数値
+	float flyVectorRandom_ = 0.0f; 
+	//コンボアップフラグ
+	bool comboUpFlag_ = false;
+	// コンボミスフラグ
+	bool comboMissFlag_ = false;
 };

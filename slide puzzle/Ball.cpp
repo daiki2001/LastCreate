@@ -69,7 +69,7 @@ void Ball::ThrowAct(Vec3 targetPos) {
 	// 投げた挙動
 	if (throwFlag_) {
 		vector_ = {targetPos.x - position.x, targetPos.y - position.y, targetPos.z - position.z};
-		vector_ = vector_.normalize() * speed;
+		vector_ = vector_.normalize() * speed_;
 		position += vector_;
 	}
 }
@@ -94,12 +94,13 @@ bool Ball::BallHitFlag(Vec3 targetPos) {
 void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 	Vec3 startPos = {};
 	if (BallHitFlag(targetPos_)) {
-		isHit = true;
+		comboUpFlag_ = true;
+		hitFlag_ = true;
 	}
 
-	if (!isHit) {
+	if (!hitFlag_) {
 		Vec3 startPos = position;
-		for (auto& t : time) {
+		for (auto& t : time_) {
 			t = 0;
 		}
 	}
@@ -110,65 +111,66 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 		}
 		throwFlag_ = false;
 		chargeFlag_ = false;
-		if (time[0] < 1) {
-			time[0] += baseTime;
-			float y = time[0] * (2 - time[0]);
+		if (time_[0] < 1) {
+			time_[0] += baseTime_;
+			float y = time_[0] * (2 - time_[0]);
 			position.x -= reflectVector_.x * 0.5f;
-			position.y = startPos.y * (1.0f - y) + baseBound * y;
+			position.y = startPos.y * (1.0f - y) + baseBound_ * y;
 			position.z -= reflectVector_.z * 0.5f;
-		} else if (1 <= time[0] && time[1] < 1) {
-			time[1] += baseTime;
-			float y = time[1] * time[1];
+		} else if (1 <= time_[0] && time_[1] < 1) {
+			time_[1] += baseTime_;
+			float y = time_[1] * time_[1];
 			position.x -= reflectVector_.x * 0.5f;
-			position.y = baseBound * (1.0f - y) + 0.0f * y;
+			position.y = baseBound_ * (1.0f - y) + 0.0f * y;
 			position.z -= reflectVector_.z * 0.5f;
-		} else if (1 <= time[1] && time[2] < 1) {
-			time[2] += baseTime * 2;
-			float y = time[2] * (2 - time[2]);
+		} else if (1 <= time_[1] && time_[2] < 1) {
+			comboMissFlag_ = true;
+			time_[2] += baseTime_ * 2;
+			float y = time_[2] * (2 - time_[2]);
 			position.x -= reflectVector_.x * 0.25f;
-			position.y = startPos.y * (1.0f - y) + (baseBound / 2) * y;
+			position.y = startPos.y * (1.0f - y) + (baseBound_ / 2) * y;
 			position.z -= reflectVector_.z * 0.25f;
-		} else if (1 <= time[2] && time[3] < 1) {
-			time[3] += baseTime * 2;
-			float y = time[3] * time[3];
+		} else if (1 <= time_[2] && time_[3] < 1) {
+			time_[3] += baseTime_ * 2;
+			float y = time_[3] * time_[3];
 			position.x -= reflectVector_.x * 0.25f;
-			position.y = (baseBound / 2) * (1.0f - y) + 0.0f * y;
+			position.y = (baseBound_ / 2) * (1.0f - y) + 0.0f * y;
 			position.z -= reflectVector_.z * 0.25f;
-		} else if (1 <= time[3] && time[4] < 1) {
-			time[4] += baseTime * 4;
-			float y = time[4] * (2 - time[4]);
+		} else if (1 <= time_[3] && time_[4] < 1) {
+			time_[4] += baseTime_ * 4;
+			float y = time_[4] * (2 - time_[4]);
 			position.x -= reflectVector_.x * 0.125f;
-			position.y = startPos.y * (1.0f - y) + (baseBound / 4) * y;
+			position.y = startPos.y * (1.0f - y) + (baseBound_ / 4) * y;
 			position.z -= reflectVector_.z * 0.125f;
-		} else if (1 <= time[4] && time[5] < 1) {
-			time[5] += baseTime * 4;
-			float y = time[5] * time[5];
+		} else if (1 <= time_[4] && time_[5] < 1) {
+			time_[5] += baseTime_ * 4;
+			float y = time_[5] * time_[5];
 			position.x -= reflectVector_.x * 0.125f;
-			position.y = (baseBound / 4) * (1.0f - y) + 0.0f * y;
+			position.y = (baseBound_ / 4) * (1.0f - y) + 0.0f * y;
 			position.z -= reflectVector_.z * 0.125f;
 		}
 
-		if (1 <= time[5]) {
-			baseReflectSpped = 0.25f;
-			isHit = false;
-		} else if (haveFlag_ && 0 <= time[0]) {
-			baseReflectSpped = 0.25f;
+		if (1 <= time_[5]) {
+			baseReflectSpped_ = 0.25f;
+			hitFlag_ = false;
+		} else if (haveFlag_ && 0 <= time_[0]) {
+			baseReflectSpped_ = 0.25f;
 			SetChainPosition(havePos_);
-			isHit = false;
+			hitFlag_ = false;
 		}
 	}
 }
 
 void Ball::ReflectCalculation(Vec3 havePos_) {
 	// 跳ね返り向きの計算
-	Vec3 refVec = position - fallPositionCal;
+	Vec3 refVec = position - fallPositionCal_;
 	float v = sqrtf((refVec.x * refVec.x) + (refVec.y * refVec.y) + (refVec.z * refVec.z));
-	reflectVector_ = (refVec / v) * baseReflectSpped;
+	reflectVector_ = (refVec / v) * baseReflectSpped_;
 }
 
 void Ball::BallFallPoint(Vec3 havePos_, Vec3 playerRotation) {
 	// 跳ね返る方向の座標決定
-	XMVECTOR v0 = {0.0f, 0.0f, flyVectorRandum, 0};
+	XMVECTOR v0 = {0.0f, 0.0f, flyVectorRandom_, 0};
 
 	// プレイヤーの左右のどちらかに座標を指定
 	XMMATRIX rotM = XMMatrixIdentity();
@@ -177,21 +179,21 @@ void Ball::BallFallPoint(Vec3 havePos_, Vec3 playerRotation) {
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
 	XMVECTOR cameraPos = {havePos_.x, havePos_.y, havePos_.z};
 	XMVECTOR v3 = cameraPos + v;
-	fallPositionCal = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+	fallPositionCal_ = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
 }
 
 void Ball::ThrowPowerChange() {
 	//跳ね返り距離チャージ
-	baseReflectSpped += chargeValue;
+	baseReflectSpped_ += chargeValue_;
 
 	// マックスに到達したらそれ以上上がらない
-	if (maxReflectSpeed <= baseReflectSpped) {
-		baseReflectSpped = maxReflectSpeed;
+	if (maxReflectSpeed_ <= baseReflectSpped_) {
+		baseReflectSpped_ = maxReflectSpeed_;
 	}
 }
 
 void Ball::FlyTimeChange(Vec3 havePos_, Vec3 targetPos_) {
-	// 　敵との距離計算
+	// 敵との距離計算
 	Vec3 axyz = (targetPos_ - havePos_) * (targetPos_ - havePos_);
 	float r = 22.5f * 22.5f;
 
@@ -199,13 +201,13 @@ void Ball::FlyTimeChange(Vec3 havePos_, Vec3 targetPos_) {
 	if (axyz.x + axyz.z <= r) // 近い時
 	{
 		// 時間短い
-		baseBound = 4.0f;
-		baseTime = 0.01625f;
+		baseBound_ = 4.0f;
+		baseTime_ = 0.01625f;
 	} else // 遠い時
 	{
 		// 時間長い
-		baseBound = 6.0f;
-		baseTime = 0.0125f;
+		baseBound_ = 6.0f;
+		baseTime_ = 0.0125f;
 	}
 }
 
@@ -214,7 +216,7 @@ void Ball::FlyVectorCal() {
 	std::random_device rnd;
 	std::mt19937 mt(rnd());
 	std::uniform_int_distribution<> rand2(0, 10);
-	flyVectorRandum = float(rand2(mt)) - 5.0f; // -5 ~ +5の範囲
+	flyVectorRandom_ = float(rand2(mt)) - 5.0f; // -5 ~ +5の範囲
 }
 
 void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_){
