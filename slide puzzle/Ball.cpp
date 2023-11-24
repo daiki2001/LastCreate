@@ -2,6 +2,7 @@
 #include "GameInputManager.h"
 #include "Input.h"
 #include <Shape.h>
+#include <Collision.h>
 
 Ball::Ball() {}
 
@@ -9,7 +10,7 @@ Ball::~Ball() {}
 
 void Ball::Init() { pObject = Shape::CreateOBJ("Ball"); }
 
-void Ball::Update(Vec3 playerPos, Vec3 playerRotation) {
+void Ball::Update(Vec3 playerPos, Vec3 playerRotation, float stageSize) {
 	// ボール回収
 	if (HaveHit(playerPos) && !isThrow) {
 		SetChainPosition(playerPos);
@@ -18,7 +19,7 @@ void Ball::Update(Vec3 playerPos, Vec3 playerRotation) {
 			isThrow = true;
 		}
 	}
-	BallFallPoint(playerPos, playerRotation, Vec3{-5.0f, 0.0f, 0.0f});
+	BallFallPoint(playerPos, playerRotation, Vec3{ -5.0f, 0.0f, 0.0f });
 	HaveAct();
 	ThrowAct();
 	BallReflectBound(playerPos);
@@ -52,7 +53,7 @@ void Ball::ThrowAct() {
 	// 投げた挙動
 	if (isThrow) {
 		Vec3 enemyPos = Vec3(-10.0f, 0.0f, 0.01f);
-		vector = {enemyPos.x - position.x, enemyPos.y - position.y, enemyPos.z - position.z};
+		vector = { enemyPos.x - position.x, enemyPos.y - position.y, enemyPos.z - position.z };
 		float speed = 0.25f;
 		vector = vector.normalize() * speed;
 		position += vector;
@@ -158,24 +159,40 @@ void Ball::BallReflectBound(Vec3 playerPos) {
 }
 
 void Ball::ReflectCalculation(Vec3 playerPos) {
-	Vec3 refVec = {position.x - playerPos.x, position.y - playerPos.y, position.z - playerPos.z};
+	Vec3 refVec = { position.x - playerPos.x, position.y - playerPos.y, position.z - playerPos.z };
 	float v = sqrtf((refVec.x * refVec.x) + (refVec.y * refVec.y) + (refVec.z * refVec.z));
 	reflectVector = {
-	    (refVec.x / v) * baseReflectSpped, (refVec.y / v) * baseReflectSpped,
-	    (refVec.z / v) * baseReflectSpped};
+		(refVec.x / v) * baseReflectSpped, (refVec.y / v) * baseReflectSpped,
+		(refVec.z / v) * baseReflectSpped };
 }
 
 Vec3 Ball::BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos) {
 	// 視点計算
-	XMVECTOR v0 = {fallPos.x, fallPos.y, fallPos.z, 0};
+	XMVECTOR v0 = { fallPos.x, fallPos.y, fallPos.z, 0 };
 
 	// angleラジアンだけy軸まわりに回転。半径は-5
 	XMMATRIX rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
-	XMVECTOR cameraPos = {playerPos.x, playerPos.y, playerPos.z};
+	XMVECTOR cameraPos = { playerPos.x, playerPos.y, playerPos.z };
 	XMVECTOR v3 = cameraPos + v;
-	Vec3 f = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+	Vec3 f = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
 	return f;
+}
+
+void Ball::StageCollision(const float stageSize)
+{
+	if (!haveFlag_) {
+		return;
+	}
+	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	{
+		float length = sqrt(position.x * position.x + position.z * position.z);
+		//差
+		float  difference = length - stageSize;
+		Vec2 normalize = { position.x / length,position.z / length };
+		position.x -= normalize.x * difference;
+		position.z -= normalize.y * difference;
+	}
 }

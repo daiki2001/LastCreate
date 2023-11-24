@@ -62,9 +62,9 @@ void GameScene::Update()
 
 	BallHave();
 	
-	player->Update();
+	player->Update(stage->GetStageSize());
 	CameraMove();
-	ball->Update(player->GetPosition(), player->GetRotation());
+	ball->Update(player->GetPosition(), player->GetRotation(),stage->GetStageSize());
 	sceneChange_->Update();
 }
 

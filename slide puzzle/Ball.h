@@ -1,7 +1,6 @@
 #pragma once
 #include"Object.h"
 #include<memory>
-
 class Ball
 {
 public:
@@ -16,7 +15,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 playerPos, Vec3 playerRotation);
+	void Update(Vec3 playerPos, Vec3 playerRotation,const float stageSize);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -50,7 +49,8 @@ private:
 	void ReflectCalculation(Vec3 playerPos);
 	// ボールの落ちる位置
 	Vec3 BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos);
-
+	//当たり判定
+	void StageCollision(const float stageSize);
 private:
 	ObjectData pObject;                         //プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
