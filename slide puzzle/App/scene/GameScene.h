@@ -13,6 +13,11 @@ extern const int window_height;
 class GameScene:public BaseScene
 {
 public:
+	struct LoadStatus
+	{
+		Vec3 position = {};
+		Vec3 rotation = {};
+	};
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -41,6 +46,9 @@ public:
 
 	void CameraMove();
 private:
+	//スポーンエネミー
+	void SpawnEnemy();
+private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<Audio> audio;
 private://定義
@@ -56,6 +64,4 @@ private://定義
 	
 	SpriteData back;
 	ObjectData object;
-
-	
 };

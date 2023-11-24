@@ -2,6 +2,7 @@
 #include"StageSelect.h"
 #include "ResultScene.h"
 #include"SceneManager.h"
+#include <LoadJson.h>
 GameScene::GameScene()
 {}
 GameScene::~GameScene()
@@ -117,5 +118,20 @@ void GameScene::CameraMove()
 
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
+}
+
+void GameScene::SpawnEnemy()
+{
+	LevelData* levelData = nullptr;
+	std::vector<LoadStatus*>loadStatus;
+	std::string filepath = "";
+	levelData = LoadJson::Load(filepath);
+	for (auto& loadData : levelData->objects)
+	{
+		LoadStatus* loadstatus = new LoadStatus();
+		loadstatus->position = loadData.translation;
+		loadstatus->rotation = loadData.rotation;
+		loadStatus.push_back(loadstatus);
+	}
 }
 
