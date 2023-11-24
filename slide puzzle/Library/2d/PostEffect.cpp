@@ -4,7 +4,7 @@ using namespace DirectX;
 extern const int window_width;
 extern const int window_height;
 
-const float PostEffect::clearColor[4] = { 0.2f,0.2f,0.4f,0.0f };//óŒÇ¡Ç€Ç¢êF
+const float PostEffect::clearColor[4] = { 0.3f,0.3f,0.8f,0.0f };//óŒÇ¡Ç€Ç¢êF
 ID3D12Device* PostEffect::dev = nullptr;
 PostEffect::PostEffect()
 {}

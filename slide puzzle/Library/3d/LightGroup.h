@@ -240,6 +240,7 @@ public: // メンバ関数
 
 	XMMATRIX GetLightMatProjection()const { return m_lightMatViewProjection; }
 
+	void SetShadowProjection(const Vec4 shadowLRBT, const Vec2 shadowFN);
 private: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> m_constBuff;
@@ -271,6 +272,8 @@ private: // メンバ変数
 	XMMATRIX m_lightMatViewProjection;
 
 	XMMATRIX m_shadowProjection;
+	Vec4 m_shadowLRBT = {-100.0f,100.0f,-80.0f,80.0f};
+	Vec2 m_shadowFN = {-80.0f,80.0f};
 
 	Vec3 m_shadowDir = { 1,1,0 };
 
