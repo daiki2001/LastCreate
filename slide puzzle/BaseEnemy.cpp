@@ -7,6 +7,8 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 	rotation = rot;
 	pObject = Shape::CreateOBJ("sphere");
 
+	hp_ = 10;
+
 	BallCatch();
 }
 
