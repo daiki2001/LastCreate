@@ -27,6 +27,7 @@ public:
 	// à íuÇÃê›íË
 	void SetChainPosition(Vec3 pos);
 	void SetPosition(Vec3 pos) { position = pos; }
+	const Vec3 GetPosition() { return position; }
 	//
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
 	//
