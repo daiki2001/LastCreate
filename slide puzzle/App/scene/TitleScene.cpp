@@ -16,11 +16,11 @@ void TitleScene::Init()
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
-	lightGroup->SetShadowProjection(Vec4(-20.0f, 20.0f, -20.0f, 20.0f), Vec2(-20.0f, 20.0f));
+	lightGroup->SetShadowProjection(Vec4(-15.0f, 15.0f, -15.0f, 15.0f), Vec2(-15.0f, 15.0f));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
 	//カメラ設定
-	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
+	Camera::Get()->SetCamera(Vec3{ 0,1,-1 }, Vec3{ -1.6f, 1.5f, 0 }, Vec3{ 0, 1, 0 });
 
 	//スプライト画像読み込み
 
@@ -48,11 +48,22 @@ void TitleScene::Update()
 	}
 
 	sceneChange_->Update();
+	TitleDirection();
 }
 
 void TitleScene::Draw()
 {
-	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3(0, 45, 0));
+	/*Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
+
+
+	DebugText::Get()->Print(10, 20, 3, "Title");
+
+	sceneChange_->Draw();*/
+}
+
+void TitleScene::ShadowDraw()
+{
+	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
 
 
 	DebugText::Get()->Print(10, 20, 3, "Title");
@@ -60,12 +71,13 @@ void TitleScene::Draw()
 	sceneChange_->Draw();
 }
 
-void TitleScene::ShadowDraw()
-{
-}
-
 
 void TitleScene::Finalize()
 {
 	Texture::Get()->Delete();
+}
+
+void TitleScene::TitleDirection()
+{
+	sAngle.y += 0.05f;
 }
