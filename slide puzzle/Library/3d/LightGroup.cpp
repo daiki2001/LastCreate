@@ -82,6 +82,10 @@ void LightGroup::Update()
 	if (m_dirty) {
 		TransferConstBuffer();
 		m_dirty = false;
+		m_shadowProjection = XMMatrixOrthographicOffCenterLH(
+			m_shadowLRBT.x, m_shadowLRBT.y,
+			m_shadowLRBT.z, m_shadowLRBT.w,
+			m_shadowFN.x, m_shadowFN.y);//前端　奥端
 	}
 }
 
@@ -332,4 +336,11 @@ void LightGroup::SetCircleShadowFactorAngle(int index, const Vec2& lightFactorAn
 void LightGroup::SetShadowDir(const Vec3 shadowDir)
 {
 	m_shadowDir = shadowDir;
+}
+
+void LightGroup::SetShadowProjection(const Vec4 shadowLRBT, const Vec2 shadowFN)
+{
+	m_shadowLRBT = shadowLRBT;
+	m_shadowFN = shadowFN;
+	m_dirty = true;
 }

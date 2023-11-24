@@ -34,13 +34,15 @@ public:
 
 	void Finalize()override;
 private:
+	void TitleDirection();
+private:
 	std::unique_ptr<LightGroup>lightGroup;
 private://定義
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
 	
 	ObjectData object;
-	SpriteData back;
-
-	ObjectData floor;
+	SpriteData button;
+	ObjectData stageObj;
+	Vec3 sAngle={};
 };
