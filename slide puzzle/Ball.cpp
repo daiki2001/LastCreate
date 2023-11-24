@@ -3,13 +3,14 @@
 #include "Input.h"
 #include <Shape.h>
 #include <random>
+#include <Collision.h>
 Ball::Ball() {}
 
 Ball::~Ball() {}
 
 void Ball::Init() { pObject = Shape::CreateOBJ("Ball"); }
 
-void Ball::Update(Vec3 playerPos, Vec3 playerRotation, Vec3 enemyPos) {
+void Ball::Update(Vec3 playerPos, Vec3 playerRotation, Vec3 enemyPos, float stageSize) {
 	// ボール回収
 	if (HaveHit(playerPos) && !isThrow) {
 		SetChainPosition(playerPos);
@@ -171,8 +172,8 @@ void Ball::ReflectCalculation(Vec3 playerPos) {
 	    position.z - fallPositionCal.z};
 	float v = sqrtf((refVec.x * refVec.x) + (refVec.y * refVec.y) + (refVec.z * refVec.z));
 	reflectVector = {
-	    (refVec.x / v) * baseReflectSpped, (refVec.y / v) * baseReflectSpped,
-	    (refVec.z / v) * baseReflectSpped};
+		(refVec.x / v) * baseReflectSpped, (refVec.y / v) * baseReflectSpped,
+		(refVec.z / v) * baseReflectSpped };
 }
 
 Vec3 Ball::BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos) {
@@ -184,9 +185,9 @@ Vec3 Ball::BallFallPoint(Vec3 playerPos, Vec3 playerRotation, Vec3 fallPos) {
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
-	XMVECTOR cameraPos = {playerPos.x, playerPos.y, playerPos.z};
+	XMVECTOR cameraPos = { playerPos.x, playerPos.y, playerPos.z };
 	XMVECTOR v3 = cameraPos + v;
-	Vec3 f = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+	Vec3 f = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
 	return f;
 }
 
@@ -217,4 +218,20 @@ void Ball::FlyVectorCal() {
 	std::mt19937 mt(rnd());
 	std::uniform_int_distribution<> rand2(0, 10); // 0~2の範囲
 	flyVectorRandum = float(rand2(mt));
+}
+
+void Ball::StageCollision(const float stageSize)
+{
+	if (!haveFlag_) {
+		return;
+	}
+	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	{
+		float length = sqrt(position.x * position.x + position.z * position.z);
+		//差
+		float  difference = length - stageSize;
+		Vec2 normalize = { position.x / length,position.z / length };
+		position.x -= normalize.x * difference;
+		position.z -= normalize.y * difference;
+	}
 }

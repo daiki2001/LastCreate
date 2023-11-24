@@ -15,7 +15,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 playerPos, Vec3 playerRotation, Vec3 enemyPos);
+	void Update(Vec3 playerPos, Vec3 playerRotation, Vec3 enemyPos, const float stageSize);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -56,7 +56,8 @@ private:
 	void FlyTimeChange(Vec3 playerPos, Vec3 enemyPos);
 	// 飛ぶ向きのランダム化
 	void FlyVectorCal();
-
+	//当たり判定
+	void StageCollision(const float stageSize);
 private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
