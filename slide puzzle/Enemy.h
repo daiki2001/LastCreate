@@ -27,6 +27,7 @@ protected:
 	void BallThrow();
 	void BallCatch();
 	void DamageHit(Vec3 pos, int comboCount_);
+	void StageCollision(const float stageSize);
 
 protected:
 	std::unique_ptr<Model> m_model;
