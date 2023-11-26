@@ -55,18 +55,12 @@ void TitleScene::Draw()
 {
 	/*Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
 
-
-	DebugText::Get()->Print(10, 20, 3, "Title");
-
 	sceneChange_->Draw();*/
 }
 
 void TitleScene::ShadowDraw()
 {
 	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
-
-
-	DebugText::Get()->Print(10, 20, 3, "Title");
 
 	sceneChange_->Draw();
 }

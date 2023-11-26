@@ -5,7 +5,7 @@
 LevelData* LoadJson::Load(const std::string& fileName)
 {
 	//連結してフルパスを得る
-	const std::string fullpath = std::string("Resources/levels/") + fileName + ".json";
+	const std::string fullpath = std::string("Resources/json/") + fileName + ".json";
 
 	//ファイルストリーム
 	std::ifstream file;
