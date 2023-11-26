@@ -30,12 +30,15 @@ public:
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
 	void SetBall(Ball* ball);
+	int GetComboCount() { return comboCount_; };
+	void SetComboCount(int combo) { comboCount_ = combo; }
 
 private:
 	void Move();
 	void Jump();
 	void BallThrow();
 	void BallCatch();
+	void ComboCalculation();
 	void StageCollision(const float stageSize);
 private:
 	std::unique_ptr<Model> m_model;
@@ -55,5 +58,8 @@ private:
 
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
+
+	int maxComboCount_ = 10;
+	int comboCount_ = 0;
 };
 

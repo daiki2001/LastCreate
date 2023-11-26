@@ -16,7 +16,7 @@ void Enemy::BallCatch()
 {
 }
 
-void Enemy::DamageHit(Vec3 pos)
+void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 {
 	// UŒ‚‚ª“–‚½‚Á‚½‚ç
 	const float playerR = 1.0f;
@@ -27,6 +27,6 @@ void Enemy::DamageHit(Vec3 pos)
 
 	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
 	if (axyz.x + axyz.y + axyz.z <= ar) {
-		hp_ -= 1;
+		hp_ -= 1 * comboCount_;
 	}
 }

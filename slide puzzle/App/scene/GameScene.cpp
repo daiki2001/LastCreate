@@ -3,6 +3,8 @@
 #include "ResultScene.h"
 #include"SceneManager.h"
 #include "../../GameInputManager.h"
+#include <LoadJson.h>
+#include <random>
 GameScene::GameScene()
 {}
 GameScene::~GameScene()
@@ -40,6 +42,8 @@ void GameScene::Init()
 
 	stage = std::make_unique<Stage>();
 	stage->Init();
+
+	LoadSpawnStatus();
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -63,8 +67,14 @@ void GameScene::Update()
 
 	BallHave();
 
+	SpawnEnemy();
+
 	player->Update(stage->GetStageSize());
 	CameraMove();
+	for (int i = 0; i < enemys.size(); i++)
+	{
+		enemys[i]->Update();
+	}
 	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{ 0.0f, 0.0f, 0.0f }, stage->GetStageSize());
 	sceneChange_->Update();
 }
@@ -77,6 +87,11 @@ void GameScene::Draw()
 
 
 	ball->Draw();
+
+	for (int i = 0; i < enemys.size(); i++)
+	{
+		enemys[i]->Draw();
+	}
 
 	stage->Draw();
 
@@ -91,6 +106,7 @@ void GameScene::ShadowDraw()
 
 void GameScene::Finalize()
 {
+	enemys.clear();
 	Texture::Get()->Delete();
 }
 
@@ -118,5 +134,50 @@ void GameScene::CameraMove()
 
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
+}
+
+void GameScene::LoadSpawnStatus()
+{
+	LevelData* levelData = nullptr;
+	std::string filepath = "stage";
+	levelData = LoadJson::Load(filepath);
+	for (auto& loadData : levelData->objects)
+	{
+		LoadStatus* load = new LoadStatus();
+		load->position = loadData.translation;
+		load->rotation = loadData.rotation;
+		loadStatus.push_back(load);
+	}
+}
+
+void GameScene::SpawnEnemy()
+{
+
+	//最大数かどうか　クールタイムで測る
+	if (enemys.size() < enemyMax && spwnCoolTime <= 0)
+	{
+		spwnCoolTime = spwnCoolTimeMax;
+		//敵の種類によって分かれる
+		Enemy* enemy = new BaseEnemy();
+
+		//ランダムで出現位置
+		if (loadStatus.size() == 0) { return; }
+		std::random_device rnd;
+		std::mt19937 mt(rnd());
+		std::uniform_int_distribution<> rand2(0, (int)loadStatus.size() - 1);
+		int spawn = rand2(mt);
+
+		if (spawn < 0 || spawn>3)
+		{
+			int i = 0;
+		}
+		enemy->Init(loadStatus[spawn]->position, loadStatus[spawn]->rotation);
+		enemys.push_back(enemy);
+	}
+
+	if (spwnCoolTime > 0)
+	{
+		spwnCoolTime--;
+	}
 }
 

@@ -16,17 +16,17 @@ void TitleScene::Init()
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
+	lightGroup->SetShadowProjection(Vec4(-15.0f, 15.0f, -15.0f, 15.0f), Vec2(-15.0f, 15.0f));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
 	//カメラ設定
-	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
+	Camera::Get()->SetCamera(Vec3{ 0,1,-1 }, Vec3{ -1.6f, 1.5f, 0 }, Vec3{ 0, 1, 0 });
 
 	//スプライト画像読み込み
-	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("titleStage",true);
-	floor = Shape::CreateSquare(200.0f, 1.0f, 200.0f);
+	object = Shape::CreateOBJ("titleStage", true);
+
 
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -48,27 +48,30 @@ void TitleScene::Update()
 	}
 
 	sceneChange_->Update();
+	TitleDirection();
 }
 
 void TitleScene::Draw()
 {
-	
-	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
+	/*Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
 
-	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3(0,45,0));
-
-	Object::Draw(floor, Vec3(0.0f,-5.0f,0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
-	DebugText::Get()->Print(10, 20, 3, "Title");
-
-	sceneChange_->Draw();
+	sceneChange_->Draw();*/
 }
 
 void TitleScene::ShadowDraw()
 {
+	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
+
+	sceneChange_->Draw();
 }
 
 
 void TitleScene::Finalize()
 {
 	Texture::Get()->Delete();
+}
+
+void TitleScene::TitleDirection()
+{
+	sAngle.y += 0.05f;
 }
