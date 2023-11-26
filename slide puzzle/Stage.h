@@ -14,6 +14,7 @@ public:
 	float GetStageSize() { return SCALE; }
 private:
 	ObjectData stageObj;
+	ObjectData sky;
 
 	Vec3 position = {};
 	const float SCALE = 40.0f;
