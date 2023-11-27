@@ -46,6 +46,9 @@ public:
 	void BallHave();
 
 	void CameraMove();
+
+	void NearEnemyCheck();
+
 private:
 	//出現位置のロード
 	void LoadSpawnStatus();
@@ -73,4 +76,6 @@ private://定義
 	int enemyMax = 3;                  //敵最大数
 	int spwnCoolTime = 0;              //現在のクールタイム
 	int spwnCoolTimeMax = 500;         //クールタイム最大
+
+	int forcusEnemyNum = 0;
 };
