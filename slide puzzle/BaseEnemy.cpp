@@ -14,7 +14,9 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 
 void BaseEnemy::Update()
 {
+
 	StageCollision(40.0f);
+
 }
 
 void BaseEnemy::Draw()

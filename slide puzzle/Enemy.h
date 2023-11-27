@@ -38,6 +38,12 @@ protected:
 	Vec3 position = {};
 	Vec3 rotation = {};
 
+	/*-----hpŠÖ˜A-----*/
+	ObjectData hpObj;
+	Vec3 hpPosition = {};
+	Vec3 hpScale = { 0.3f,0.2f,0.3f };
+	/*---------------*/
+
 	Ball* ball_ = nullptr;
 
 	bool catchFlag_ = false;
