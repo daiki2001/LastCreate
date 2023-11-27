@@ -41,5 +41,6 @@ void Enemy::StageCollision(const float stageSize)
 		Vec2 normalize = { position.x / length,position.z / length };
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
+		actFlag_ = false;
 	}
 }

@@ -42,7 +42,7 @@ void Player::Update(float stageSize)
 	Jump();
 	BallThrow();
 	ComboCalculation(); 
-	TargetLockOn(Vec3{ 0.0f, 0.0f, 0.0f });
+	//TargetLockOn(Vec3{ 0.0f, 0.0f, 0.0f });
 	StageCollision(stageSize);
 	m_fbx->Update();
 }

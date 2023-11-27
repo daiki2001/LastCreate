@@ -27,7 +27,6 @@ private:
 private:
 	int maxTime_ = 0;
 	int timer_ = 0;
-	bool actFlag_ = false;
 	MoveAct act;
 };
 
