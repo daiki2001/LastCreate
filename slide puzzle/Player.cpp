@@ -42,7 +42,6 @@ void Player::Update(float stageSize)
 	Jump();
 	BallThrow();
 	ComboCalculation(); 
-	//TargetLockOn(Vec3{ 0.0f, 0.0f, 0.0f });
 	StageCollision(stageSize);
 	m_fbx->Update();
 }
@@ -141,6 +140,7 @@ void Player::BallThrow()
 	// 溜める
 	if (GameInputManager::Get()->IsCharge()) {
 		ball_->SetChargeFlag(true);
+		oldBall_ = nullptr;
 	}
 	// 投げる
 	if (GameInputManager::Get()->IsThrow()) {
@@ -175,14 +175,12 @@ void Player::ComboCalculation()
 			comboCount_++;
 		}
 		oldBall_->SetComboUpFlag(false);
-		// oldBall_ = nullptr;
 	}
 
 	// コンボ失敗
 	if (oldBall_->GetComboMissFlag()) {
 		comboCount_ = 0;
 		oldBall_->SetComboMissFlag(false);
-		// oldBall_ = nullptr;
 	}
 }
 
