@@ -215,5 +215,6 @@ void Player::TargetLockOn(Vec3 pos)
 
 	rotation = playerRot;
 	playerRot.y += 90.0f;
+	playerRot.z = 0.0f;
 	m_fbx->SetRotation(Vec3(-playerRot.z, playerRot.y, playerRot.x));
 }

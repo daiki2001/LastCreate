@@ -49,6 +49,10 @@ public:
 
 	void NearEnemyCheck();
 
+	void EnemyDeath();
+
+	void TargetReset();
+
 private:
 	//出現位置のロード
 	void LoadSpawnStatus();
