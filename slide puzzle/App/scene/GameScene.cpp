@@ -74,7 +74,7 @@ void GameScene::Update()
 		NearEnemyCheck();
 		enemys[oldForcusNum]->SetForcusChangeFlag(false);
 	}
-	
+	enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 	player->TargetLockOn(enemys[forcusEnemyNum]->GetPosition());
 	player->Update(stage->GetStageSize());
 	CameraMove();
