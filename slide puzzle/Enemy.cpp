@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include<Collision.h>
 
 void Enemy::SetBall(Ball* ball)
 {
@@ -28,5 +29,17 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 	// É{Å[ÉãÇ…ìñÇΩÇ¡ÇΩ
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		hp_ -= 1 * comboCount_;
+	}
+}
+
+void Enemy::StageCollision(const float stageSize)
+{
+	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	{
+		float length = sqrt(position.x * position.x + position.z * position.z);
+		float  difference = length - stageSize;
+		Vec2 normalize = { position.x / length,position.z / length };
+		position.x -= normalize.x * difference;
+		position.z -= normalize.y * difference;
 	}
 }
