@@ -30,7 +30,7 @@ void GameScene::Init()
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
 	//スプライト画像読み込み
 
-	back = Sprite::Get()->SpriteCreate(L"Resources/gutitubo.png");
+	
 
 	//オブジェクト生成
 	player = std::make_unique<Player>();
@@ -82,7 +82,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	Sprite::Get()->Draw(back, Vec2(), static_cast<float>(window_width), static_cast<float>(window_height));
+	
 
 	player->Draw();
 
@@ -96,7 +96,7 @@ void GameScene::Draw()
 
 	stage->Draw();
 
-	DebugText::Get()->Print(10, 20, 3, "GameScene");
+	
 	sceneChange_->Draw();
 }
 
