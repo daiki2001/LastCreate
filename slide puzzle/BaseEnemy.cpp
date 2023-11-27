@@ -6,7 +6,6 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 	position = pos;
 	rotation = rot;
 	pObject = Shape::CreateOBJ("sphere");
-	hpObj = Shape::CreateOBJ("hp");
 
 	hp_ = 10;
 
@@ -15,17 +14,11 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 
 void BaseEnemy::Update()
 {
-	/*-----HPŠÖ˜A-----*/
-	hpPosition = position;
-	hpPosition.y = position.y + 2.0f;
-	hpScale.x = hpScale.x / 10 * hp_;
-	/*---------------*/
 
 }
 
 void BaseEnemy::Draw()
 {
-	Object::Draw(hpObj, hpPosition, hpScale, rotation);
 	Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
 }
 
