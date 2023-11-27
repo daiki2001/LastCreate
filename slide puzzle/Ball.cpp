@@ -10,7 +10,7 @@ Ball::~Ball() {}
 
 void Ball::Init() { pObject = Shape::CreateOBJ("Ball"); }
 
-void Ball::Update(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_, const float stageSize) {
+void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	// ボール回収
 	HaveAct(havePos_);
 
@@ -64,6 +64,16 @@ void Ball::SetChainPosition(Vec3 havePos_) {
 	position = havePos_;
 }
 
+bool Ball::GetHitFlag()
+{
+	if (BallHitFlag(targetPos_)) {
+		throwFlag_ = false;
+		return true;
+	}
+
+	return false;
+}
+
 void Ball::ThrowAct(Vec3 targetPos) {
 	// ボールの飛ぶベクトル
 	Vec3 vector_ = {};
@@ -112,7 +122,7 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 			ReflectCalculation(havePos_);
 			oldThrowPos = position;
 		}
-		throwFlag_ = false;
+		
 		chargeFlag_ = false;
 		if (time_[0] < 1) {
 			time_[0] += baseTime_;

@@ -25,6 +25,8 @@ public:
 	bool GetForcusChangeFlag() { return forcusChangeFlag_; };
 	void SetForcusChangeFlag(bool changeFlag_) { forcusChangeFlag_ = changeFlag_; }
 
+	int GetHp() { return hp_; }
+
 	void DamageHit(Vec3 pos, int comboCount_);
 protected:
 	void BallThrow();

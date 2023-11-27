@@ -16,7 +16,7 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_, const float stageSize);
+	void Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize);
 	/// <summary>
 	/// 描画
 	/// </summary>
@@ -50,6 +50,10 @@ public:
 	// コンボ失敗フラグゲット
 	bool GetComboMissFlag() { return comboMissFlag_; }
 
+	void SetTargetPos(Vec3 pos) { targetPos_ = pos; }
+
+	bool GetHitFlag();
+
 private:
 	// ボールの挙動
 	void ThrowAct(Vec3 targetPos_);
@@ -82,6 +86,8 @@ private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
 	Vec3 rotation = {};                 // 回転軸
+
+	Vec3 targetPos_ = {};
 
 	// 所持しているか
 	bool haveFlag_ = false;

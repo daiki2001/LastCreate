@@ -69,22 +69,19 @@ void GameScene::Update()
 
 	SpawnEnemy();
 
-	if (enemys[forcusEnemyNum]->GetForcusChangeFlag()) {
-		int oldForcusNum = forcusEnemyNum;
-		NearEnemyCheck();
-		enemys[oldForcusNum]->SetForcusChangeFlag(false);
-	}
-	enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
-	player->TargetLockOn(enemys[forcusEnemyNum]->GetPosition());
+	TargetReset();
+	
 	player->Update(stage->GetStageSize());
 	CameraMove();
 	for (int i = 0; i < enemys.size(); i++){
 		enemys[i]->Update();
 	}
 	ball->Update(
-	    player->GetPosition(), player->GetRotation(), enemys[forcusEnemyNum]->GetPosition(),
+		player->GetPosition(), player->GetRotation(),
 	    stage->GetStageSize());
 	sceneChange_->Update();
+
+	EnemyDeath();
 }
 
 void GameScene::Draw()
@@ -154,6 +151,9 @@ void GameScene::CameraMove()
 }
 
 void GameScene::NearEnemyCheck() {
+
+	if (enemys.size() == 0) { return; }
+
 	// ƒvƒŒƒCƒ„[‚Éˆê”Ô‹ß‚¢“G‚ğ‹‚ß‚é
 	float farLength = 5000.0f;
 	int ensmysNumber = 0;
@@ -167,6 +167,42 @@ void GameScene::NearEnemyCheck() {
 	}
 
 	forcusEnemyNum = ensmysNumber;
+}
+
+void GameScene::EnemyDeath()
+{
+	if (enemys.size() == 0) { return; }
+
+	for (int i = 0; i < enemys.size(); i++)
+	{
+		if (enemys[i]->GetHp() <= 0)
+		{
+			enemys.erase(enemys.begin() + i);
+		}
+	}
+}
+
+void GameScene::TargetReset()
+{
+	if (enemys.size() == 0) { return; }
+
+	if (enemys[forcusEnemyNum]->GetForcusChangeFlag()) {
+		int oldForcusNum = forcusEnemyNum;
+		NearEnemyCheck();
+		enemys[oldForcusNum]->SetForcusChangeFlag(false);
+	}
+
+	if (ball->GetThrowFlag() && ball->GetHitFlag())
+	{
+		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+	}
+	
+	player->TargetLockOn(enemys[forcusEnemyNum]->GetPosition());
+
+	if (!ball->GetHaveFlag())
+	{
+		ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
+	}
 }
 
 void GameScene::LoadSpawnStatus()
