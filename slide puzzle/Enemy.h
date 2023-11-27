@@ -39,7 +39,7 @@ protected:
 	Vec3 rotation = {};
 
 	Ball* ball_ = nullptr;
-
+	bool actFlag_ = false;
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
 	int hp_ = 0;

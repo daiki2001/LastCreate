@@ -33,6 +33,8 @@ public:
 	int GetComboCount() { return comboCount_; };
 	void SetComboCount(int combo) { comboCount_ = combo; }
 
+	void TargetLockOn(Vec3 pos = {});
+
 private:
 	void Move();
 	void Jump();
@@ -43,8 +45,6 @@ private:
 private:
 	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
-
-	void TargetLockOn(Vec3 pos = {});
 
 private:
 	ObjectData pObject;
