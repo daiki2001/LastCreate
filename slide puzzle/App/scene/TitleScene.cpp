@@ -29,7 +29,7 @@ void TitleScene::Init()
 
 	//スプライト生成
 	title = Sprite::Get()->SpriteCreate(L"Resources/sprite/title.png");
-
+	press = Sprite::Get()->SpriteCreate(L"Resources/sprite/press.png");
 
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -66,9 +66,14 @@ void TitleScene::ShadowDraw()
 	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
 
 	Vec2 size = { 650,650 };
-	float posX = window_width / 2 - size.x / 2;
-	float posY = window_height / 2 - size.y / 2;
+	float posX = static_cast<float>(window_width) / 2 - size.x / 2;
+	float posY = static_cast<float>(window_height) / 2 - size.y / 2;
 	Sprite::Get()->Draw(title, Vec2(posX, posY), size.x, size.y);
+
+	Vec2 preSize = { 450, 250 };
+	float prePosX = static_cast<float>(window_width) - preSize.x;
+	float prePosY = static_cast<float>(window_height) - preSize.y;
+	Sprite::Get()->Draw(press, Vec2(prePosX, prePosY), preSize.x, preSize.y);
 
 	sceneChange_->Draw();
 }
