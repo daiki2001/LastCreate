@@ -2,7 +2,7 @@
 #include "Object.h"
 #include <memory>
 #include <array>
-
+#include <DirectXMath.h>
 class Ball {
 public:
 	// コンストラクタ
@@ -71,6 +71,12 @@ private:
 	void StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_);
 	//　ステージの壁当たり判定
 	void StageCollision(const float stageSize);
+	// 壁跳ね返りの角度計算
+	void AngleCalculation();
+	// 壁跳ね返りの位置情報の送り
+	void WallRefrectCal();
+
+	float Cross(Vec2 a, Vec2 b);
 
 private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
@@ -91,7 +97,7 @@ private:
 	bool comboMissFlag_ = false;
 
 	// ボールのスピード
-	float speed_ = 0.25f;
+	float speed_ = 0.5f;
 	// バウンドの高さ
 	float baseBound_ = 0.0f;
 	// バウンドの高さ(近い時)
@@ -126,5 +132,12 @@ private:
 	int minFlyVectorRandom_ = -5;
 	// 跳ね返る方向のランダム数値
 	float flyVectorRandom_ = 0.0f; 
-	
+	// 壁の向き確認のための座標
+	Vec3 wallPos = {0.0f, 0.0f, 0.0f};
+	// 投げられた場所のポジション
+	Vec3 oldThrowPos = {0.0f, 0.0f, 0.0f};
+	//
+	float wallRefVec = 0.0f;
+	bool refflaga = false;
+	float abc = 0;
 };

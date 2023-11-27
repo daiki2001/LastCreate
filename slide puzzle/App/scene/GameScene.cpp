@@ -76,7 +76,7 @@ void GameScene::Update()
 	{
 		enemys[i]->Update();
 	}
-	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{ 0.0f, 0.0f, 0.0f }, stage->GetStageSize());
+	ball->Update(player->GetPosition(), player->GetRotation(), enemys[0]->GetPosition(),stage->GetStageSize());
 	sceneChange_->Update();
 }
 
