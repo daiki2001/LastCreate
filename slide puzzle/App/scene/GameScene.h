@@ -65,7 +65,7 @@ private://’è‹`
 
 	std::unique_ptr<Stage>stage;
 
-	SpriteData back;
+	
 	ObjectData object;
 
 	std::vector<Enemy*>enemys;         //“G
