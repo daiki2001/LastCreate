@@ -123,7 +123,7 @@ private:
 	// 跳ね返り方向
 	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
 	// 跳ね返りのスピードの最大値
-	float maxReflectSpeed_ = 4.0f;
+	float maxReflectSpeed_ = 3.0f;
 	// 跳ね返りスピード
 	float baseReflectSpped_ = 0.25f;
 	// 跳ね返る方向のMAX数値
