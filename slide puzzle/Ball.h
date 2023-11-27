@@ -28,7 +28,7 @@ public:
 	// 位置の設定
 	void SetChainPosition(Vec3 havePos_);
 	void SetPosition(Vec3 pos) { position = pos; }
-	
+	Vec3 GetPosition() { return position; }
 	// 所持フラグセット
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
 	// 所持フラグゲット

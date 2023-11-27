@@ -20,8 +20,8 @@ void Enemy::BallCatch()
 void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 {
 	// UŒ‚‚ª“–‚½‚Á‚½‚ç
-	const float playerR = 1.0f;
-	const float ballR = 1.0f;
+	const float playerR = 3.0f;
+	const float ballR = 3.0f;
 
 	Vec3 axyz = (position - pos) * (position - pos);
 	float ar = (ballR + playerR) * (ballR + playerR);
