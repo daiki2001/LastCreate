@@ -9,7 +9,7 @@ extern const int window_width;
 extern const int window_height;
 
 /// <summary>
-/// ƒQ[ƒ€ƒV[ƒ“
+/// ï¿½Qï¿½[ï¿½ï¿½ï¿½Vï¿½[ï¿½ï¿½
 /// </summary>
 class GameScene :public BaseScene
 {
@@ -20,24 +20,24 @@ public:
 		Vec3 rotation = {};
 	};
 	/// <summary>
-	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	/// </summary>
 	GameScene();
 	/// <summary>
-	/// ƒfƒXƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	/// ï¿½fï¿½Xï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	/// </summary>
 	~GameScene();
 	void Init()override;
 	/// <summary>
-	/// XV
+	/// ï¿½Xï¿½V
 	/// </summary>
 	void Update()override;
 	/// <summary>
-	/// •`‰æ
+	/// ï¿½`ï¿½ï¿½
 	/// </summary>
 	void Draw()override;
 	/// <summary>
-	/// ‰e•`‰æ
+	/// ï¿½eï¿½`ï¿½ï¿½
 	/// </summary>
 	void ShadowDraw()override;
 
@@ -50,15 +50,15 @@ public:
 	void NearEnemyCheck();
 
 private:
-	//oŒ»ˆÊ’u‚Ìƒ[ƒh
+	//ï¿½oï¿½ï¿½ï¿½Ê’uï¿½Ìƒï¿½ï¿½[ï¿½h
 	void LoadSpawnStatus();
-	//ƒXƒ|[ƒ“ƒGƒlƒ~[
+	//ï¿½Xï¿½|ï¿½[ï¿½ï¿½ï¿½Gï¿½lï¿½~ï¿½[
 	void SpawnEnemy();
 private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<Audio> audio;
-private://’è‹`
-	// ƒV[ƒ“ƒ`ƒFƒ“ƒW
+private://ï¿½ï¿½`
+	// ï¿½Vï¿½[ï¿½ï¿½ï¿½`ï¿½Fï¿½ï¿½ï¿½W
 	std::unique_ptr<SceneChange> sceneChange_;
 
 	std::unique_ptr<Player>player;
@@ -71,12 +71,11 @@ private://’è‹`
 	SpriteData back;
 	ObjectData object;
 
-	std::vector<Enemy*>enemys;         //“G
-	std::vector<LoadStatus*>loadStatus;//“G‚ÌoŒ»ˆÊ’u
-	int enemyMax = 3;                  //“GÅ‘å”
-	int spwnCoolTime = 0;              //Œ»İ‚ÌƒN[ƒ‹ƒ^ƒCƒ€
-	int spwnCoolTimeMax = 500;         //ƒN[ƒ‹ƒ^ƒCƒ€Å‘å
+	std::vector<Enemy*>enemys;         //ï¿½G
+	std::vector<LoadStatus*>loadStatus;//ï¿½Gï¿½Ìoï¿½ï¿½ï¿½Ê’u
+	int enemyMax = 3;                  //ï¿½Gï¿½Å‘å”
+	int spwnCoolTime = 0;              //ï¿½ï¿½ï¿½İ‚ÌƒNï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½
+	int spwnCoolTimeMax = 500;         //ï¿½Nï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Å‘ï¿½
 
 	int forcusEnemyNum = 0;
-	bool forcusChangeFlag = false;
 };
