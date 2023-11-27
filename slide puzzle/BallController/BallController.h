@@ -3,10 +3,8 @@
 #include <array>
 #include <vector>
 #include "Vec.h"
-
-#ifdef _DEBUG
 #include <Sprite.h>
-#endif // _DEBUG
+
 
 class BallController
 {
@@ -53,10 +51,10 @@ private: //メンバ変数
 	bool oldFlag;
 	Vec3 angle;
 
-#ifdef _DEBUG
+
 	SpriteData debugBack;
 	SpriteData pointGraph;
-#endif // _DEBUG
+
 
 public: //メンバ関数
 	~BallController();
