@@ -22,6 +22,8 @@ public:
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
 	void SetBall(Ball* ball);
+	bool GetForcusChangeFlag() { return forcusChangeFlag_; };
+	void SetForcusChangeFlag(bool changeFlag_) { forcusChangeFlag_ = changeFlag_; }
 
 protected:
 	void BallThrow();
@@ -49,5 +51,6 @@ protected:
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
 	int hp_ = 0;
+	bool forcusChangeFlag_ = false;
 };
 

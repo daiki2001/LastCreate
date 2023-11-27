@@ -29,6 +29,9 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		hp_ -= 1 * comboCount_;
+		if (hp_ <= 0) {
+			forcusChangeFlag_ = true;
+		}
 	}
 }
 
