@@ -53,6 +53,8 @@ private:
 
 	Ball* ball_ = nullptr;
 
+	Ball* oldBall_ = nullptr;
+
 	bool onGround_ = true;
 	Vec3 fallV_ = {};
 

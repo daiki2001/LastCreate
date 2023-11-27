@@ -25,6 +25,8 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_, const float
 
 	//ボールの挙動のステータスチェンジ
 	StatusCalculation(havePos_, haveRotation, targetPos_);
+
+	StageCollision(stageSize);
 }
 
 void Ball::Draw() { Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation); }
@@ -108,6 +110,7 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 	else {
 		if (throwFlag_) {
 			ReflectCalculation(havePos_);
+			oldThrowPos = position;
 		}
 		throwFlag_ = false;
 		chargeFlag_ = false;
@@ -177,8 +180,8 @@ void Ball::BallFallPoint(Vec3 havePos_, Vec3 playerRotation) {
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
-	XMVECTOR cameraPos = {havePos_.x, havePos_.y, havePos_.z};
-	XMVECTOR v3 = cameraPos + v;
+	XMVECTOR havePosXMVec = {havePos_.x, havePos_.y, havePos_.z};
+	XMVECTOR v3 = havePosXMVec + v;
 	fallPositionCal_ = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
 }
 
@@ -237,19 +240,52 @@ void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_){
 }
 
 
-void Ball::StageCollision(const float stageSize)
-{
-	// 持っていないとき返る
-	if (!haveFlag_) {return;}
-
+void Ball::StageCollision(const float stageSize) {
 	// 円の当たり判定
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
-	{
-		float length = sqrt(position.x * position.x + position.z * position.z);
-		//差
-		float  difference = length - stageSize;
-		Vec2 normalize = { position.x / length,position.z / length };
-		position.x -= normalize.x * difference;
-		position.z -= normalize.y * difference;
+	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize) &&
+	    !refflaga) {
+		AngleCalculation();
+		WallRefrectCal();
+		ReflectCalculation({0.0f, 0.0f, 0.0f});
+		refflaga = true;
+	} else {
+		refflaga = false;
 	}
 }
+
+void Ball::AngleCalculation() {
+	wallPos = position;
+	Vec3 centerPos = {0.0f, 0.0f, 0.0f};
+
+	Vec3 vecAB = {centerPos.x - wallPos.x, 0.0f, centerPos.z - wallPos.z};
+	Vec3 vecAC = {oldThrowPos.x - wallPos.x, 0.0f, oldThrowPos.z - wallPos.z};
+	float abb =
+	    vecAB.normalize().x * vecAC.normalize().x + vecAB.normalize().z * vecAC.normalize().z;
+	float angleABC = acosf(abb);
+	wallRefVec = XMConvertToDegrees(angleABC);
+	// float aToB = ((wallPos.x * centerPos.y) - (centerPos.x * wallPos.y));
+	// float aToC = ((wallPos.x * oldThrowPos.y) - (oldThrowPos.x * wallPos.y));
+	float aToB = Cross(Vec2(wallPos.x, wallPos.z), Vec2(centerPos.x, centerPos.z));
+	float aToC = Cross(Vec2(wallPos.x, wallPos.z), Vec2(oldThrowPos.x, oldThrowPos.z));
+
+	if (aToC < 0) {
+		wallRefVec *= -1;
+	}
+
+	abc = XMConvertToDegrees(float(atan2(vecAC.x, vecAC.z)));
+}
+
+void Ball::WallRefrectCal() {
+	// 跳ね返る方向の座標決定
+	XMVECTOR v0 = {0.0f, 0.0f, 5.0f, 0};
+	// プレイヤーの左右のどちらかに座標を指定
+	XMMATRIX rotM = XMMatrixIdentity();
+	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
+	rotM *= XMMatrixRotationY(XMConvertToRadians(abc + (-wallRefVec * 2)));
+	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
+	XMVECTOR cameraPos = {position.x, position.y, position.z};
+	XMVECTOR v3 = cameraPos + v;
+	fallPositionCal_ = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+}
+
+float Ball::Cross(Vec2 a, Vec2 b) { return a.x * b.y - a.y * b.x; }

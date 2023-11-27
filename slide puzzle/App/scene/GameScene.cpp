@@ -69,14 +69,21 @@ void GameScene::Update()
 
 	SpawnEnemy();
 
-	player->TargetLockOn(enemys[0]->GetPosition());
+	if (enemys[forcusEnemyNum]->GetForcusChangeFlag()) {
+		int oldForcusNum = forcusEnemyNum;
+		NearEnemyCheck();
+		enemys[oldForcusNum]->SetForcusChangeFlag(false);
+	}
+	
+	player->TargetLockOn(enemys[forcusEnemyNum]->GetPosition());
 	player->Update(stage->GetStageSize());
 	CameraMove();
-	for (int i = 0; i < enemys.size(); i++)
-	{
+	for (int i = 0; i < enemys.size(); i++){
 		enemys[i]->Update();
 	}
-	ball->Update(player->GetPosition(), player->GetRotation(), Vec3{ 0.0f, 0.0f, 0.0f }, stage->GetStageSize());
+	ball->Update(
+	    player->GetPosition(), player->GetRotation(), enemys[forcusEnemyNum]->GetPosition(),
+	    stage->GetStageSize());
 	sceneChange_->Update();
 }
 
@@ -144,6 +151,22 @@ void GameScene::CameraMove()
 
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
+}
+
+void GameScene::NearEnemyCheck() {
+	// プレイヤーに一番近い敵を求める
+	float farLength = 5000.0f;
+	int ensmysNumber = 0;
+	for (int i = 0; i < enemys.size(); i++) {
+		// プレイヤーと敵との距離
+		float length = Vec3(player->GetPosition() - enemys[i]->GetPosition()).length();
+		if (farLength > length) {
+			farLength = length;
+			ensmysNumber = i;
+		}
+	}
+
+	forcusEnemyNum = ensmysNumber;
 }
 
 void GameScene::LoadSpawnStatus()
