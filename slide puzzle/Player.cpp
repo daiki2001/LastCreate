@@ -198,7 +198,8 @@ void Player::StageCollision(const float stageSize)
 
 void Player::TargetLockOn(Vec3 pos)
 {
-	Vec3 vector = { pos.x - position.x, pos.y - position.y, pos.z - position.z };
+	targetPos_ = pos;
+	Vec3 vector = { targetPos_.x - position.x, targetPos_.y - position.y, targetPos_.z - position.z };
 	Vec3 playerRot = rotation;
 
 	playerRot.y = -atan2(vector.z - 0.0f, vector.x - 0.0f) * (ANGLE / PI);

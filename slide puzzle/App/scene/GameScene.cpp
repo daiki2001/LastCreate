@@ -43,6 +43,8 @@ void GameScene::Init()
 	stage = std::make_unique<Stage>();
 	stage->Init();
 
+	targetEase_ = std::make_unique<EaseData>(60);
+
 	LoadSpawnStatus();
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -69,7 +71,7 @@ void GameScene::Update()
 
 	SpawnEnemy();
 
-	TargetReset();
+	TargetAct();
 	
 	player->Update(stage->GetStageSize());
 	CameraMove();
@@ -151,9 +153,6 @@ void GameScene::CameraMove()
 }
 
 void GameScene::NearEnemyCheck() {
-
-	if (enemys.size() == 0) { return; }
-
 	// プレイヤーに一番近い敵を求める
 	float farLength = 5000.0f;
 	int ensmysNumber = 0;
@@ -178,11 +177,12 @@ void GameScene::EnemyDeath()
 		if (enemys[i]->GetHp() <= 0)
 		{
 			enemys.erase(enemys.begin() + i);
+			targetFlag_ = true;
 		}
 	}
 }
 
-void GameScene::TargetReset()
+void GameScene::TargetAct()
 {
 	if (enemys.size() == 0) { return; }
 
@@ -197,12 +197,31 @@ void GameScene::TargetReset()
 		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 	}
 	
-	player->TargetLockOn(enemys[forcusEnemyNum]->GetPosition());
+	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
 	if (!ball->GetHaveFlag())
 	{
 		ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
 	}
+}
+
+void GameScene::TargetReset(Vec3 pos, bool flag)
+{
+	if (!flag)
+	{
+		player->TargetLockOn(pos);
+		targetEase_->Reset();
+		return;
+	}
+
+	player->TargetLockOn(Easing::easeInOut(player->GetTargetPos(), pos, targetEase_->GetTimeRate()));
+
+	if (targetEase_->GetEndFlag())
+	{
+		targetFlag_ = false;
+	}
+
+	targetEase_->Update();
 }
 
 void GameScene::LoadSpawnStatus()
