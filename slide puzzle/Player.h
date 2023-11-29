@@ -33,6 +33,8 @@ public:
 	int GetComboCount() { return comboCount_; };
 	void SetComboCount(int combo) { comboCount_ = combo; }
 
+	const Vec3 GetTargetPos() { return targetPos_; }
+
 	void TargetLockOn(Vec3 pos = {});
 
 private:
@@ -50,6 +52,8 @@ private:
 	ObjectData pObject;
 	Vec3 position = {};
 	Vec3 rotation = {};
+
+	Vec3 targetPos_ = {};
 
 	Ball* ball_ = nullptr;
 

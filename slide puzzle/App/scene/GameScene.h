@@ -5,6 +5,7 @@
 #include"../slide puzzle/Ball.h"
 #include"../slide puzzle/Stage.h"
 #include"../slide puzzle/BaseEnemy.h"
+#include"Easing.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -51,7 +52,9 @@ public:
 
 	void EnemyDeath();
 
-	void TargetReset();
+	void TargetAct();
+
+	void TargetReset(Vec3 pos, bool flag);
 
 private:
 	//出現位置のロード
@@ -72,6 +75,8 @@ private://定義
 
 	std::unique_ptr<Stage>stage;
 
+	std::unique_ptr<EaseData> targetEase_;
+	bool targetFlag_ = false;
 	
 	ObjectData object;
 
