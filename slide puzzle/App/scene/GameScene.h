@@ -6,6 +6,7 @@
 #include"../slide puzzle/Stage.h"
 #include"../slide puzzle/BaseEnemy.h"
 #include"Easing.h"
+#include"../slide puzzle/GameTime.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -88,4 +89,6 @@ private://’è‹`
 
 	int forcusEnemyNum = 0;
 	bool forcusChangeFlag = false;
+
+	GameTime gameTime;
 };

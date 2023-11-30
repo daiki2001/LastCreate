@@ -5,6 +5,7 @@
 #include "../../GameInputManager.h"
 #include <LoadJson.h>
 #include <random>
+#include"../slide puzzle/Score.h"
 GameScene::GameScene()
 {}
 GameScene::~GameScene()
@@ -46,6 +47,9 @@ void GameScene::Init()
 	targetEase_ = std::make_unique<EaseData>(60);
 
 	LoadSpawnStatus();
+	gameTime.Init();
+	gameTime.Start();
+	Score::Get()->ScoreReset();
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -54,17 +58,14 @@ void GameScene::Update()
 {
 	//ライト更新
 	lightGroup->Update();
-	if (sceneChange_->GetinEndFlag())
+	if (gameTime.GetChangeFlag())
 	{
-		/*if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
-		{
-			sceneChange_->SceneChangeStart("");
-		}
-		if (sceneChange_->GetOutEndFlag())
-		{
-			BaseScene* scene = new ResultScene();
-			sceneManager_->SetNextScene(scene);
-		}*/
+		sceneChange_->SceneChangeStart("");
+	}
+	if (sceneChange_->GetOutEndFlag())
+	{
+		BaseScene* scene = new ResultScene();
+		sceneManager_->SetNextScene(scene);
 	}
 
 	BallHave();
@@ -84,6 +85,8 @@ void GameScene::Update()
 	sceneChange_->Update();
 
 	EnemyDeath();
+
+	gameTime.Update();
 }
 
 void GameScene::Draw()
@@ -102,7 +105,8 @@ void GameScene::Draw()
 
 	stage->Draw();
 
-	
+	Score::Get()->GameSceneDraw();
+	gameTime.Draw();
 	sceneChange_->Draw();
 }
 
@@ -178,6 +182,7 @@ void GameScene::EnemyDeath()
 		{
 			enemys.erase(enemys.begin() + i);
 			targetFlag_ = true;
+			Score::Get()->PlasScore();
 		}
 	}
 }

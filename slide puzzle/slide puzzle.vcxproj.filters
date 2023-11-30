@@ -236,6 +236,10 @@
     <ClCompile Include="Stage.cpp">
       <Filter>ソースファイル\GameObj</Filter>
     </ClCompile>
+    <ClCompile Include="Score.cpp" />
+    <ClCompile Include="GameTime.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -416,6 +420,10 @@
     </ClInclude>
     <ClInclude Include="Stage.h">
       <Filter>ソースファイル\GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="Score.h" />
+    <ClInclude Include="GameTime.h">
+      <Filter>ソースファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
