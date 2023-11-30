@@ -5,23 +5,26 @@
 #include "Vec.h"
 #include <Sprite.h>
 
+// カルマンフィルタ
+#include <chrono>
+#include "KalmanFilter.h"
 
 class BallController
 {
-private: //定数
-	static const int ACCEL_X = 0;
-	static const int ACCEL_Y = 1;
-	static const int ACCEL_Z = 2;
-	static const int GYRO_X = 3;
-	static const int GYRO_Y = 4;
-	static const int GYRO_Z = 5;
-
+public: //定数
 	static const int accelCount = 3;
 	static const int gyroCount = 3;
 	static const int sensorCount = accelCount + gyroCount;
 	static const int flagCount = 1;
 	static const int DataCount = sensorCount + flagCount;
 	static const int maxRecordCount = 100;
+private:
+	static const int ACCEL_X = 0;
+	static const int ACCEL_Y = 1;
+	static const int ACCEL_Z = 2;
+	static const int GYRO_X = 3;
+	static const int GYRO_Y = 4;
+	static const int GYRO_Z = 5;
 
 	static const Vec3 gravity;
 	static const float deadzone;
@@ -47,14 +50,15 @@ private: //メンバ変数
 	Vec3 oldAccel;
 	Vec3 gyro;
 	Vec3 oldGyro;
+	Vec3 angle;
 	bool flag;
 	bool oldFlag;
-	Vec3 angle;
-
+	std::chrono::system_clock::time_point startTime;
+	std::chrono::duration<double> count;
+	KalmanFilter<double> kalman;
 
 	SpriteData debugBack;
 	SpriteData pointGraph;
-
 
 public: //メンバ関数
 	~BallController();
@@ -65,7 +69,12 @@ public: //メンバ関数
 
 	void AngleUpdate();
 	void AngleReset();
+
 	bool IsBallThrow();
+	bool IsForward() const;
+	bool IsBack() const;
+	bool IsLeft() const;
+	bool IsRight() const;
 
 	Vec3 GetAccelG() const { return accel; }
 	Vec3 GetOldAccelG() const { return oldAccel; }
