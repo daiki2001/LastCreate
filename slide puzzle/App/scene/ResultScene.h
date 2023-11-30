@@ -40,9 +40,9 @@ public:
 private:
 	std::unique_ptr<LightGroup> lightGroup;
 private:
+	SpriteData back;
+	SpriteData manipulate;
+	ObjectData object;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
-	ObjectData object;
-	SpriteData back;
-	SpriteData gameoverGraph;
 };

@@ -9,6 +9,7 @@
 #include"StageSelect.h"
 #include"ResultScene.h"
 #include "../../GameInputManager.h"
+#include"../slide puzzle/Score.h"
 SceneManager::SceneManager()
 {}
 SceneManager::~SceneManager()
@@ -65,6 +66,7 @@ void SceneManager::Initialize()
 
 	//音作成
 	Audio::Get()->Init();
+	Score::Get()->Init();
 	Texture::Get()->KeepTexture();
 	//シーンをタイトルに設定
 	BaseScene* scene = new TitleScene();
