@@ -75,11 +75,11 @@ void Player::Move()
 		speed.y = speed.y - 0.5f;
 	}
 
-	if (input->IsLeft())
+	if (input->IsRight())
 	{
 		speed.x = speed.x - 0.5f;
 	}
-	else if (input->IsRight())
+	else if (input->IsLeft())
 	{
 		speed.x = speed.x + 0.5f;
 	}
