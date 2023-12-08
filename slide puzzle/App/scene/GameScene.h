@@ -5,6 +5,8 @@
 #include"../slide puzzle/Ball.h"
 #include"../slide puzzle/Stage.h"
 #include"../slide puzzle/BaseEnemy.h"
+#include"Easing.h"
+#include"../slide puzzle/GameTime.h"
 extern const int window_width;
 extern const int window_height;
 
@@ -46,6 +48,15 @@ public:
 	void BallHave();
 
 	void CameraMove();
+
+	void NearEnemyCheck();
+
+	void EnemyDeath();
+
+	void TargetAct();
+
+	void TargetReset(Vec3 pos, bool flag);
+
 private:
 	//出現位置のロード
 	void LoadSpawnStatus();
@@ -65,7 +76,9 @@ private://定義
 
 	std::unique_ptr<Stage>stage;
 
-	SpriteData back;
+	std::unique_ptr<EaseData> targetEase_;
+	bool targetFlag_ = false;
+	
 	ObjectData object;
 
 	std::vector<Enemy*>enemys;         //敵
@@ -73,4 +86,9 @@ private://定義
 	int enemyMax = 3;                  //敵最大数
 	int spwnCoolTime = 0;              //現在のクールタイム
 	int spwnCoolTimeMax = 500;         //クールタイム最大
+
+	int forcusEnemyNum = 0;
+	bool forcusChangeFlag = false;
+
+	GameTime gameTime;
 };

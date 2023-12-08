@@ -33,6 +33,10 @@ public:
 	int GetComboCount() { return comboCount_; };
 	void SetComboCount(int combo) { comboCount_ = combo; }
 
+	const Vec3 GetTargetPos() { return targetPos_; }
+
+	void TargetLockOn(Vec3 pos = {});
+
 private:
 	void Move();
 	void Jump();
@@ -44,14 +48,16 @@ private:
 	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
 
-	void TargetLockOn(Vec3 pos = {});
-
 private:
 	ObjectData pObject;
 	Vec3 position = {};
 	Vec3 rotation = {};
 
+	Vec3 targetPos_ = {};
+
 	Ball* ball_ = nullptr;
+
+	Ball* oldBall_ = nullptr;
 
 	bool onGround_ = true;
 	Vec3 fallV_ = {};

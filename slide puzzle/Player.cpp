@@ -42,7 +42,6 @@ void Player::Update(float stageSize)
 	Jump();
 	BallThrow();
 	ComboCalculation(); 
-	TargetLockOn(Vec3{ 0.0f, 0.0f, 0.0f });
 	StageCollision(stageSize);
 	m_fbx->Update();
 }
@@ -76,11 +75,11 @@ void Player::Move()
 		speed.y = speed.y - 0.5f;
 	}
 
-	if (input->IsLeft())
+	if (input->IsRight())
 	{
 		speed.x = speed.x - 0.5f;
 	}
-	else if (input->IsRight())
+	else if (input->IsLeft())
 	{
 		speed.x = speed.x + 0.5f;
 	}
@@ -133,16 +132,21 @@ void Player::Jump()
 
 void Player::BallThrow()
 {
-	//ボール無し
-	if (ball_ == nullptr) { return; }
+	// ボール無し
+	if (ball_ == nullptr) {
+		return;
+	}
 
-	//溜める
+	// 溜める
 	if (GameInputManager::Get()->IsCharge()) {
 		ball_->SetChargeFlag(true);
+		oldBall_ = nullptr;
 	}
-	//投げる
+	// 投げる
 	if (GameInputManager::Get()->IsThrow()) {
 		ball_->SetThrowFlag(true);
+		oldBall_ = ball_;
+		ball_ = nullptr;
 	}
 }
 
@@ -161,20 +165,22 @@ void Player::BallCatch()
 void Player::ComboCalculation() 
 {
 	// ボール無し
-	if (ball_ == nullptr) {return;}
+	if (oldBall_ == nullptr) {
+		return;
+	}
 
-	//コンボ成功
-	if (ball_->GetComboUpFlag()){
+	// コンボ成功
+	if (oldBall_->GetComboUpFlag()) {
 		if (comboCount_ < maxComboCount_) {
 			comboCount_++;
 		}
-		ball_->SetComboUpFlag(false);
+		oldBall_->SetComboUpFlag(false);
 	}
 
-	//コンボ失敗
-	if (ball_->GetComboMissFlag()) {
+	// コンボ失敗
+	if (oldBall_->GetComboMissFlag()) {
 		comboCount_ = 0;
-		ball_->SetComboMissFlag(false);
+		oldBall_->SetComboMissFlag(false);
 	}
 }
 
@@ -192,7 +198,8 @@ void Player::StageCollision(const float stageSize)
 
 void Player::TargetLockOn(Vec3 pos)
 {
-	Vec3 vector = { pos.x - position.x, pos.y - position.y, pos.z - position.z };
+	targetPos_ = pos;
+	Vec3 vector = { targetPos_.x - position.x, targetPos_.y - position.y, targetPos_.z - position.z };
 	Vec3 playerRot = rotation;
 
 	playerRot.y = -atan2(vector.z - 0.0f, vector.x - 0.0f) * (ANGLE / PI);
@@ -209,5 +216,6 @@ void Player::TargetLockOn(Vec3 pos)
 
 	rotation = playerRot;
 	playerRot.y += 90.0f;
+	playerRot.z = 0.0f;
 	m_fbx->SetRotation(Vec3(-playerRot.z, playerRot.y, playerRot.x));
 }

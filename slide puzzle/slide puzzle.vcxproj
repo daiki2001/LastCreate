@@ -286,6 +286,7 @@
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameInputManager.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="Library\2d\DebugText.h" />
     <ClInclude Include="Library\2d\PostEffect.h" />
     <ClInclude Include="Library\2d\ShadowMap.h" />
@@ -333,6 +334,7 @@
     <ClInclude Include="Library\Texture\Texture.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChange.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="Stage.h" />
   </ItemGroup>
   <ItemGroup>
@@ -349,6 +351,7 @@
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameInputManager.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="Library\2d\DebugText.cpp" />
     <ClCompile Include="Library\2d\PostEffect.cpp" />
     <ClCompile Include="Library\2d\ShadowMap.cpp" />
@@ -389,6 +392,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChange.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="Stage.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

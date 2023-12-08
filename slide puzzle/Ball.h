@@ -2,7 +2,7 @@
 #include "Object.h"
 #include <memory>
 #include <array>
-
+#include <DirectXMath.h>
 class Ball {
 public:
 	// コンストラクタ
@@ -16,19 +16,20 @@ public:
 	/// <summary>
 	/// 更新
 	/// </summary>
-	void Update(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_, const float stageSize);
+	void Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize);
 	/// <summary>
 	/// 描画
 	/// </summary>
 	void Draw();
 
+	void AfterDraw();
 	//
 	void HaveAct(Vec3 havePos_);
 
 	// 位置の設定
 	void SetChainPosition(Vec3 havePos_);
 	void SetPosition(Vec3 pos) { position = pos; }
-	
+	Vec3 GetPosition() { return position; }
 	// 所持フラグセット
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
 	// 所持フラグゲット
@@ -49,6 +50,10 @@ public:
 	void SetComboMissFlag(bool flag) { comboMissFlag_ = flag; }
 	// コンボ失敗フラグゲット
 	bool GetComboMissFlag() { return comboMissFlag_; }
+
+	void SetTargetPos(Vec3 pos) { targetPos_ = pos; }
+
+	bool GetHitFlag();
 
 private:
 	// ボールの挙動
@@ -71,11 +76,19 @@ private:
 	void StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_);
 	//　ステージの壁当たり判定
 	void StageCollision(const float stageSize);
+	// 壁跳ね返りの角度計算
+	void AngleCalculation();
+	// 壁跳ね返りの位置情報の送り
+	void WallRefrectCal();
+
+	float Cross(Vec2 a, Vec2 b);
 
 private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
 	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
 	Vec3 rotation = {};                 // 回転軸
+
+	Vec3 targetPos_ = {};
 
 	// 所持しているか
 	bool haveFlag_ = false;
@@ -91,7 +104,7 @@ private:
 	bool comboMissFlag_ = false;
 
 	// ボールのスピード
-	float speed_ = 0.25f;
+	float speed_ = 0.5f;
 	// バウンドの高さ
 	float baseBound_ = 0.0f;
 	// バウンドの高さ(近い時)
@@ -117,7 +130,7 @@ private:
 	// 跳ね返り方向
 	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
 	// 跳ね返りのスピードの最大値
-	float maxReflectSpeed_ = 4.0f;
+	float maxReflectSpeed_ = 3.0f;
 	// 跳ね返りスピード
 	float baseReflectSpped_ = 0.25f;
 	// 跳ね返る方向のMAX数値
@@ -126,5 +139,16 @@ private:
 	int minFlyVectorRandom_ = -5;
 	// 跳ね返る方向のランダム数値
 	float flyVectorRandom_ = 0.0f; 
-	
+	// 壁の向き確認のための座標
+	Vec3 wallPos = {0.0f, 0.0f, 0.0f};
+	// 投げられた場所のポジション
+	Vec3 oldThrowPos = {0.0f, 0.0f, 0.0f};
+	//
+	float wallRefVec = 0.0f;
+	bool refflaga = false;
+	float abc = 0;
+
+
+	ObjectData landmarkObj;
+	TextureData landmarkTex;
 };

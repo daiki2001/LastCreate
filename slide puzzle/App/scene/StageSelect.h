@@ -39,6 +39,7 @@ public:
 	std::unique_ptr<LightGroup>lightGroup;
 private://定義
 	SpriteData back;
+	SpriteData manipulate;
 	ObjectData object;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;

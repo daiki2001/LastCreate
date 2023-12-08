@@ -22,11 +22,16 @@ public:
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
 	void SetBall(Ball* ball);
+	bool GetForcusChangeFlag() { return forcusChangeFlag_; };
+	void SetForcusChangeFlag(bool changeFlag_) { forcusChangeFlag_ = changeFlag_; }
 
+	int GetHp() { return hp_; }
+
+	void DamageHit(Vec3 pos, int comboCount_);
 protected:
 	void BallThrow();
 	void BallCatch();
-	void DamageHit(Vec3 pos, int comboCount_);
+	void StageCollision(const float stageSize);
 
 protected:
 	std::unique_ptr<Model> m_model;
@@ -44,9 +49,10 @@ protected:
 	/*---------------*/
 
 	Ball* ball_ = nullptr;
-
+	bool actFlag_ = false;
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;
 	int hp_ = 0;
+	bool forcusChangeFlag_ = false;
 };
 

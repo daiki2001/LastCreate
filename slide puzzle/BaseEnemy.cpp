@@ -14,7 +14,8 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 
 void BaseEnemy::Update()
 {
-
+	Move();
+	StageCollision(40.0f);
 }
 
 void BaseEnemy::Draw()
@@ -26,8 +27,8 @@ void BaseEnemy::Move()
 {
 	if (!actFlag_)
 	{
-		maxTime_ = (rand() % 150) + 100;
-		act = static_cast<MoveAct>(rand() % 3);
+		maxTime_ = (rand() % 60) + 60;
+		act = static_cast<MoveAct>(rand() % 4);
 		timer_ = 0;
 		actFlag_ = true;
 	}
@@ -39,16 +40,16 @@ void BaseEnemy::Move()
 	switch (act)
 	{
 	case BaseEnemy::Progress:
-		position.z += 0.5f;
+		position.z += 0.25f;
 		break;
 	case BaseEnemy::Retreat:
-		position.z -= 0.5f;
+		position.z -= 0.25f;
 		break;
 	case BaseEnemy::Right:
-		position.x += 0.5f;
+		position.x += 0.25f;
 		break;
 	case BaseEnemy::Left:
-		position.x -= 0.5f;
+		position.x -= 0.25f;
 		break;
 	default:
 		break;

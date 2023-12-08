@@ -41,6 +41,7 @@ private://定義
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
 	SpriteData title;
+	SpriteData press;
 	ObjectData object;
 	SpriteData button;
 	ObjectData stageObj;
