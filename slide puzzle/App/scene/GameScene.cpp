@@ -104,7 +104,7 @@ void GameScene::Draw()
 	}
 
 	stage->Draw();
-
+	ball->AfterDraw();
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();

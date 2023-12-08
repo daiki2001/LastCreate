@@ -22,6 +22,7 @@ public:
 	/// </summary>
 	void Draw();
 
+	void AfterDraw();
 	//
 	void HaveAct(Vec3 havePos_);
 
@@ -146,4 +147,8 @@ private:
 	float wallRefVec = 0.0f;
 	bool refflaga = false;
 	float abc = 0;
+
+
+	ObjectData landmarkObj;
+	TextureData landmarkTex;
 };

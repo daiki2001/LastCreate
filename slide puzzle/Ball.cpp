@@ -8,7 +8,12 @@ Ball::Ball() {}
 
 Ball::~Ball() {}
 
-void Ball::Init() { pObject = Shape::CreateOBJ("Ball"); }
+void Ball::Init() {
+	pObject = Shape::CreateOBJ("Ball");
+	landmarkObj = Shape::CreateRect(1.0f, 1.0f);
+	landmarkTex = Texture::Get()->LoadTexture(L"Resources/sprite/landmark.png");
+	landmarkObj.OBJTexture = landmarkTex;
+}
 
 void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	// ボール回収
@@ -29,7 +34,15 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	StageCollision(stageSize);
 }
 
-void Ball::Draw() { Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation); }
+void Ball::Draw() {	Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation);}
+
+void Ball::AfterDraw()
+{
+	if (hitFlag_==true)
+	{
+		Object::Draw(landmarkObj, Vec3(position.x, 0.0f, position.z), Vec3(2.5f, 2.5f, 1.0f), Vec3(90.0f, 0.0f, 0.0f));
+	}
+}
 
 void Ball::HaveAct(Vec3 havePos_) {
 	// 投げてるときは捕らない
@@ -58,7 +71,7 @@ void Ball::HaveAct(Vec3 havePos_) {
 
 void Ball::SetChainPosition(Vec3 havePos_) {
 	// 持っていないとき返す
-	if (!haveFlag_) {return;}
+	if (!haveFlag_) { return; }
 
 	//位置リンク
 	position = havePos_;
@@ -80,7 +93,7 @@ void Ball::ThrowAct(Vec3 targetPos) {
 
 	// 投げた挙動
 	if (throwFlag_) {
-		vector_ = {targetPos.x - position.x, targetPos.y - position.y, targetPos.z - position.z};
+		vector_ = { targetPos.x - position.x, targetPos.y - position.y, targetPos.z - position.z };
 		vector_ = vector_.normalize() * speed_;
 		position += vector_;
 	}
@@ -122,7 +135,7 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 			ReflectCalculation(havePos_);
 			oldThrowPos = position;
 		}
-		
+
 		chargeFlag_ = false;
 		if (time_[0] < 1) {
 			time_[0] += baseTime_;
@@ -130,32 +143,37 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 			position.x -= reflectVector_.x * 0.5f;
 			position.y = startPos.y * (1.0f - y) + baseBound_ * y;
 			position.z -= reflectVector_.z * 0.5f;
-		} else if (1 <= time_[0] && time_[1] < 1) {
+		}
+		else if (1 <= time_[0] && time_[1] < 1) {
 			time_[1] += baseTime_;
 			float y = time_[1] * time_[1];
 			position.x -= reflectVector_.x * 0.5f;
 			position.y = baseBound_ * (1.0f - y) + 0.0f * y;
 			position.z -= reflectVector_.z * 0.5f;
-		} else if (1 <= time_[1] && time_[2] < 1) {
+		}
+		else if (1 <= time_[1] && time_[2] < 1) {
 			comboMissFlag_ = true;
 			time_[2] += baseTime_ * 2;
 			float y = time_[2] * (2 - time_[2]);
 			position.x -= reflectVector_.x * 0.25f;
 			position.y = startPos.y * (1.0f - y) + (baseBound_ / 2) * y;
 			position.z -= reflectVector_.z * 0.25f;
-		} else if (1 <= time_[2] && time_[3] < 1) {
+		}
+		else if (1 <= time_[2] && time_[3] < 1) {
 			time_[3] += baseTime_ * 2;
 			float y = time_[3] * time_[3];
 			position.x -= reflectVector_.x * 0.25f;
 			position.y = (baseBound_ / 2) * (1.0f - y) + 0.0f * y;
 			position.z -= reflectVector_.z * 0.25f;
-		} else if (1 <= time_[3] && time_[4] < 1) {
+		}
+		else if (1 <= time_[3] && time_[4] < 1) {
 			time_[4] += baseTime_ * 4;
 			float y = time_[4] * (2 - time_[4]);
 			position.x -= reflectVector_.x * 0.125f;
 			position.y = startPos.y * (1.0f - y) + (baseBound_ / 4) * y;
 			position.z -= reflectVector_.z * 0.125f;
-		} else if (1 <= time_[4] && time_[5] < 1) {
+		}
+		else if (1 <= time_[4] && time_[5] < 1) {
 			time_[5] += baseTime_ * 4;
 			float y = time_[5] * time_[5];
 			position.x -= reflectVector_.x * 0.125f;
@@ -166,7 +184,8 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 		if (1 <= time_[5]) {
 			baseReflectSpped_ = 0.25f;
 			hitFlag_ = false;
-		} else if (haveFlag_ && 0 <= time_[0]) {
+		}
+		else if (haveFlag_ && 0 <= time_[0]) {
 			baseReflectSpped_ = 0.25f;
 			SetChainPosition(havePos_);
 			hitFlag_ = false;
@@ -183,16 +202,16 @@ void Ball::ReflectCalculation(Vec3 havePos_) {
 
 void Ball::BallFallPoint(Vec3 havePos_, Vec3 playerRotation) {
 	// 跳ね返る方向の座標決定
-	XMVECTOR v0 = {0.0f, 0.0f, flyVectorRandom_, 0};
+	XMVECTOR v0 = { 0.0f, 0.0f, flyVectorRandom_, 0 };
 
 	// プレイヤーの左右のどちらかに座標を指定
 	XMMATRIX rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(180.0f));
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
-	XMVECTOR havePosXMVec = {havePos_.x, havePos_.y, havePos_.z};
+	XMVECTOR havePosXMVec = { havePos_.x, havePos_.y, havePos_.z };
 	XMVECTOR v3 = havePosXMVec + v;
-	fallPositionCal_ = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+	fallPositionCal_ = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
 }
 
 void Ball::ThrowPowerChange() {
@@ -216,7 +235,8 @@ void Ball::FlyTimeChange(Vec3 havePos_, Vec3 targetPos_) {
 		// 時間短い
 		baseBound_ = nearBound_;
 		baseTime_ = nearTime_;
-	} else // 遠い時
+	}
+	else // 遠い時
 	{
 		// 時間長い
 		baseBound_ = farBound_;
@@ -232,10 +252,10 @@ void Ball::FlyVectorCal() {
 	flyVectorRandom_ = float(rand2(mt)); // -5 ~ +5の範囲
 }
 
-void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_){
+void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_) {
 	//持っていないときとチャージしていないとき返す
-	if (!haveFlag_ || !chargeFlag_) {return;}
-	
+	if (!haveFlag_ || !chargeFlag_) { return; }
+
 	// 投げる強さ調整
 	ThrowPowerChange();
 
@@ -253,24 +273,25 @@ void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_){
 void Ball::StageCollision(const float stageSize) {
 	// 円の当たり判定
 	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize) &&
-	    !refflaga) {
+		!refflaga) {
 		AngleCalculation();
 		WallRefrectCal();
-		ReflectCalculation({0.0f, 0.0f, 0.0f});
+		ReflectCalculation({ 0.0f, 0.0f, 0.0f });
 		refflaga = true;
-	} else {
+	}
+	else {
 		refflaga = false;
 	}
 }
 
 void Ball::AngleCalculation() {
 	wallPos = position;
-	Vec3 centerPos = {0.0f, 0.0f, 0.0f};
+	Vec3 centerPos = { 0.0f, 0.0f, 0.0f };
 
-	Vec3 vecAB = {centerPos.x - wallPos.x, 0.0f, centerPos.z - wallPos.z};
-	Vec3 vecAC = {oldThrowPos.x - wallPos.x, 0.0f, oldThrowPos.z - wallPos.z};
+	Vec3 vecAB = { centerPos.x - wallPos.x, 0.0f, centerPos.z - wallPos.z };
+	Vec3 vecAC = { oldThrowPos.x - wallPos.x, 0.0f, oldThrowPos.z - wallPos.z };
 	float abb =
-	    vecAB.normalize().x * vecAC.normalize().x + vecAB.normalize().z * vecAC.normalize().z;
+		vecAB.normalize().x * vecAC.normalize().x + vecAB.normalize().z * vecAC.normalize().z;
 	float angleABC = acosf(abb);
 	wallRefVec = XMConvertToDegrees(angleABC);
 	// float aToB = ((wallPos.x * centerPos.y) - (centerPos.x * wallPos.y));
@@ -287,15 +308,15 @@ void Ball::AngleCalculation() {
 
 void Ball::WallRefrectCal() {
 	// 跳ね返る方向の座標決定
-	XMVECTOR v0 = {0.0f, 0.0f, 5.0f, 0};
+	XMVECTOR v0 = { 0.0f, 0.0f, 5.0f, 0 };
 	// プレイヤーの左右のどちらかに座標を指定
 	XMMATRIX rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(0.0f));
 	rotM *= XMMatrixRotationY(XMConvertToRadians(abc + (-wallRefVec * 2)));
 	XMVECTOR v = XMVector3TransformNormal(v0, rotM);
-	XMVECTOR cameraPos = {position.x, position.y, position.z};
+	XMVECTOR cameraPos = { position.x, position.y, position.z };
 	XMVECTOR v3 = cameraPos + v;
-	fallPositionCal_ = {v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2]};
+	fallPositionCal_ = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
 }
 
 float Ball::Cross(Vec2 a, Vec2 b) { return a.x * b.y - a.y * b.x; }
