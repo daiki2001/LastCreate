@@ -46,4 +46,8 @@ void Enemy::StageCollision(const float stageSize)
 		position.z -= normalize.y * difference;
 		actFlag_ = false;
 	}
+
+	if (position.z <= 0.0f) { actFlag_ = false; }
+
+	position.z = std::clamp(position.z, 0.0f, 50.0f);
 }

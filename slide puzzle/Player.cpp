@@ -33,7 +33,7 @@ void Player::Init()
 
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
-	position = { 10.0f, 0.0f, 0.0f };
+	position = { 0.0f, 0.0f, 10.0f };
 }
 
 void Player::Update(float stageSize)
@@ -68,27 +68,27 @@ void Player::Move()
 	XMFLOAT2 speed = {};
 	if (input->IsForward())
 	{
-		speed.y = speed.y + 0.5f;
+		speed.y = speed.y + 0.25f;
 	}
 	else if (input->IsBack())
 	{
-		speed.y = speed.y - 0.5f;
+		speed.y = speed.y - 0.25f;
 	}
 
 	if (input->IsRight())
 	{
-		speed.x = speed.x - 0.5f;
+		speed.x = speed.x - 0.25f;
 	}
 	else if (input->IsLeft())
 	{
-		speed.x = speed.x + 0.5f;
+		speed.x = speed.x + 0.25f;
 	}
 
 	//
 	if (input->IsDash())
 	{
-		speed.x *= 1.5f;
-		speed.y *= 1.5f;
+		speed.x *= 1.25f;
+		speed.y *= 1.25f;
 	}
 
 	if (speed.y != 0.0f)
@@ -194,6 +194,8 @@ void Player::StageCollision(const float stageSize)
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
 	}
+
+	position.z = std::clamp(position.z, -50.0f, 0.0f);
 }
 
 void Player::TargetLockOn(Vec3 pos)
