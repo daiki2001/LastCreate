@@ -75,10 +75,10 @@ StyleCopReport.xml
 *_h.h
 *.ilk
 *.meta
-# *.obj
+
 *.iobj
 *.pch
-*.pdb
+
 *.ipdb
 *.pgc
 *.pgd
@@ -361,9 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-
-# Resources directory
-!Resources/
-
-# Library directory
-# !lib/
