@@ -81,6 +81,8 @@ private:
 	// •Ç’µ‚Ë•Ô‚è‚ÌˆÊ’uî•ñ‚Ì‘—‚è
 	void WallRefrectCal();
 
+	void Effect();
+
 	float Cross(Vec2 a, Vec2 b);
 
 private:
@@ -147,6 +149,8 @@ private:
 	float wallRefVec = 0.0f;
 	bool refflaga = false;
 	float abc = 0;
+
+	int effectCount_ = 0;
 
 
 	ObjectData landmarkObj;

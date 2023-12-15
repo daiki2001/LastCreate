@@ -37,7 +37,7 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 
 void Enemy::StageCollision(const float stageSize)
 {
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	/*if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
 	{
 		float length = sqrt(position.x * position.x + position.z * position.z);
 		float  difference = length - stageSize;
@@ -45,9 +45,10 @@ void Enemy::StageCollision(const float stageSize)
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
 		actFlag_ = false;
-	}
+	}*/
 
-	if (position.z <= 0.0f) { actFlag_ = false; }
-
+	if (position.z <= 0.0f || position.z >= 50.0f || position.x <= -29.0f || position.x >= 29.0f) { actFlag_ = false; }
+	float aaaa = 29.0f;
+	position.x = std::clamp(position.x, -aaaa, aaaa);
 	position.z = std::clamp(position.z, 0.0f, 50.0f);
 }

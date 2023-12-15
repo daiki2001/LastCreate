@@ -186,15 +186,16 @@ void Player::ComboCalculation()
 
 void Player::StageCollision(const float stageSize)
 {
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	/*if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
 	{
 		float length = sqrt(position.x * position.x + position.z * position.z);
 		float  difference = length - stageSize;
 		Vec2 normalize = { position.x / length,position.z / length };
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
-	}
-
+	}*/
+	float aaaa = 29.0f;
+	position.x = std::clamp(position.x, -aaaa, aaaa);
 	position.z = std::clamp(position.z, -50.0f, 0.0f);
 }
 

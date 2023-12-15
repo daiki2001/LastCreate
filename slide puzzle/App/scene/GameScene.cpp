@@ -143,15 +143,6 @@ void GameScene::CameraMove()
 	Vec3 center = { target.m128_f32[0], target.m128_f32[1], target.m128_f32[2] };
 	Vec3 pos = f;
 
-	if (!Collision::CircleCollision(Vec2(pos.x, pos.z), Vec2(), 1.0f, stage->GetStageSize()))
-	{
-		float length = sqrt(pos.x * pos.x + pos.z * pos.z);
-		float  difference = length - stage->GetStageSize();
-		Vec2 normalize = { pos.x / length,pos.z / length };
-		pos.x -= normalize.x * difference;
-		pos.z -= normalize.y * difference;
-	}
-
 	//カメラ位置をセット
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
 }

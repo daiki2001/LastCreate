@@ -32,6 +32,8 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	StatusCalculation(havePos_, haveRotation, targetPos_);
 
 	StageCollision(stageSize);
+
+	Effect();
 }
 
 void Ball::Draw() {	Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation);}
@@ -317,6 +319,39 @@ void Ball::WallRefrectCal() {
 	XMVECTOR cameraPos = { position.x, position.y, position.z };
 	XMVECTOR v3 = cameraPos + v;
 	fallPositionCal_ = { v3.m128_f32[0], v3.m128_f32[1], v3.m128_f32[2] };
+}
+
+void Ball::Effect()
+{
+	if (!throwFlag_)
+	{
+		effectCount_ = rand() % 4;
+		return;
+	}
+
+	float speed = 3.0f;
+
+	switch (effectCount_)
+	{
+	case 0:
+		rotation.x += speed;
+		rotation.z += speed;
+		break;
+	case 1:
+		rotation.x += speed;
+		rotation.z -= speed;
+		break;
+	case 2:
+		rotation.x -= speed;
+		rotation.z += speed;
+		break;
+	case 3:
+		rotation.x -= speed;
+		rotation.z -= speed;
+		break;
+	default:
+		break;
+	}
 }
 
 float Ball::Cross(Vec2 a, Vec2 b) { return a.x * b.y - a.y * b.x; }
