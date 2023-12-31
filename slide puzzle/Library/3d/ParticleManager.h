@@ -106,8 +106,16 @@ public: // 静的メンバ関数
 	/// <param name = "accel">加速度</param>
 	void Add2(int life, const Vec3& position, const Vec3& velocity, const Vec3& accel,
 		float start_scale, float end_scale, const Vec4& start_color, const Vec4& end_color);
-
-	void BreakBoxAdd(const Vec3 &Pos, float Vel, float start_scale, float end_scale, const Vec4 &start_color, const Vec4 &end_color);
+	/// <summary>
+	/// 歩き砂埃
+	/// </summary>
+	/// <param name="Pos"></param>
+	/// <param name="Vel"></param>
+	/// <param name="start_scale"></param>
+	/// <param name="end_scale"></param>
+	/// <param name="start_color"></param>
+	/// <param name="end_color"></param>
+	void DustAdd(const Vec3& Pos, float Vel, float start_scale, float end_scale, const Vec4& start_color, const Vec4& end_color);
 
 	/// <summary>
 	/// 爆発パーティクル

@@ -34,6 +34,10 @@ void Player::Init()
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
 	position = { 0.0f, 0.0f, 10.0f };
+
+	dustParticle = std::make_unique<ParticleManager>();
+	dustParticle->Initialize();
+	dustGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 }
 
 void Player::Update(float stageSize)
@@ -41,9 +45,10 @@ void Player::Update(float stageSize)
 	Move();
 	Jump();
 	BallThrow();
-	ComboCalculation(); 
+	ComboCalculation();
 	StageCollision(stageSize);
 	m_fbx->Update();
+	dustParticle->Update();
 }
 
 void Player::Draw()
@@ -52,6 +57,11 @@ void Player::Draw()
 	m_fbx->Draw();
 	m_fbx->SetPosition(position);
 	input->DebugDraw();
+}
+
+void Player::ParticleDraw()
+{
+	dustParticle->Draw(dustGraph);
 }
 
 void Player::SetBall(Ball* ball)
@@ -100,6 +110,12 @@ void Player::Move()
 	{
 		position.x += sinf((rotation.y * 3.14f) / 180.0f) * speed.x;
 		position.z += cosf((rotation.y * 3.14f) / 180.0f) * speed.x;
+	}
+	if (onGround_ && (input->IsForward() || input->IsBack() || input->IsLeft() || input->IsRight()))
+	{
+		dustParticle->DustAdd(position,
+			0.0f, 0.4f, 0.0f,
+			Vec4(0.3f, 0.1f, 0.1f, 0.3f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 	}
 }
 
@@ -162,7 +178,7 @@ void Player::BallCatch()
 	}
 }
 
-void Player::ComboCalculation() 
+void Player::ComboCalculation()
 {
 	// ボール無し
 	if (oldBall_ == nullptr) {

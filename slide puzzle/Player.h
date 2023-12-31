@@ -11,6 +11,7 @@
 #include "FbxLoader.h"
 #include "FBXObject3d.h"
 #include"../slide puzzle/Ball.h"
+#include<ParticleManager.h>
 class Player
 {
 private:
@@ -26,6 +27,7 @@ public:
 	void Init();
 	void Update(const float stageSize);
 	void Draw();
+	void ParticleDraw();
 
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
@@ -67,5 +69,8 @@ private:
 
 	int maxComboCount_ = 10;
 	int comboCount_ = 0;
+
+	std::unique_ptr < ParticleManager> dustParticle = nullptr;
+	TextureData dustGraph;
 };
 
