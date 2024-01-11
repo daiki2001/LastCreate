@@ -158,6 +158,23 @@ void ParticleManager::BombAdd(const Vec3& Pos, float Vel, float start_scale, flo
 	}
 }
 
+void ParticleManager::BallLineAdd(const Vec3& Pos, float Vel, float start_scale, float end_scale, const Vec4& start_color, const Vec4& end_color)
+{
+	for (int i = 0; i < 1; i++)
+	{
+		//X,Y,Z全て{-5.0f,+5.0f}でランダムに分布
+		const float md_pos = 4.0f;
+		Vec3 pos = Pos;
+		////X,Y,Z全て{-0.05f,+0.05f}でランダムに分布
+		const float md_vel = Vel;
+		Vec3 vel = {};
+		//重力に見立ててYのみ{-0.001f,0}でランダム分布
+		Vec3 acc{};
+		//追加
+		Add2(30, pos, vel, acc, start_scale, end_scale, start_color, end_color);
+	}
+}
+
 void ParticleManager::ParticleAdd2(const Vec3& Pos, const Vec4& start_color, const Vec4& end_color)
 {
 	for (int i = 0; i < 1; i++)

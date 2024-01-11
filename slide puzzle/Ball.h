@@ -156,7 +156,10 @@ private:
 
 	ObjectData landmarkObj;
 	TextureData landmarkTex;
-
+	//ダメージパーティクル
 	std::unique_ptr<ParticleManager>damegeParticle = nullptr;
 	TextureData damegeGraph;
+	//ボールの集中線パーティクル
+	std::unique_ptr<ParticleManager>ballLineParticle = nullptr;
+	TextureData ballLineGraph;
 };
