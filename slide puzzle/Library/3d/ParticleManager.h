@@ -118,6 +118,17 @@ public: // 静的メンバ関数
 	void DustAdd(const Vec3& Pos, float Vel, float start_scale, float end_scale, const Vec4& start_color, const Vec4& end_color);
 
 	/// <summary>
+	/// 歩き砂埃
+	/// </summary>
+	/// <param name="Pos"></param>
+	/// <param name="Vel"></param>
+	/// <param name="start_scale"></param>
+	/// <param name="end_scale"></param>
+	/// <param name="start_color"></param>
+	/// <param name="end_color"></param>
+	void DamegeAdd(const Vec3& Pos, const Vec3& targetPos_, float Vel, float start_scale, float end_scale, const Vec4& start_color, const Vec4& end_color);
+
+	/// <summary>
 	/// 爆発パーティクル
 	/// </summary>
 	/// <param name="Pos">座標</param>

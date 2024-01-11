@@ -192,6 +192,7 @@ void GameScene::TargetAct()
 	if (ball->GetThrowFlag() && ball->GetHitFlag())
 	{
 		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+
 	}
 	
 	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
