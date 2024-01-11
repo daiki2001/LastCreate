@@ -16,6 +16,9 @@ void Ball::Init() {
 	damegeParticle = std::make_unique<ParticleManager>();
 	damegeParticle->Initialize();
 	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
+	ballLineParticle = std::make_unique<ParticleManager>();
+	ballLineParticle->Initialize();
+	ballLineGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 }
 
 void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
@@ -49,6 +52,7 @@ void Ball::AfterDraw()
 		Object::Draw(landmarkObj, Vec3(position.x, 0.0f, position.z), Vec3(2.5f, 2.5f, 1.0f), Vec3(90.0f, 0.0f, 0.0f));
 	}
 	damegeParticle->Draw(damegeGraph);
+	ballLineParticle->Draw(ballLineGraph);
 }
 
 void Ball::HaveAct(Vec3 havePos_) {
@@ -333,6 +337,14 @@ void Ball::Effect()
 {
 
 	damegeParticle->Update();
+	ballLineParticle->Update();
+	if (throwFlag_)
+	{
+		ballLineParticle->BallLineAdd(position, 0.0f, 1.0f, 0.0f,
+			Vec4(0.3f, 0.3f, 0.3f, 0.3f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	}
+
+
 	if (!throwFlag_)
 	{
 		effectCount_ = rand() % 4;
