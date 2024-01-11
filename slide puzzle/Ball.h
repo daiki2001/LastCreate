@@ -3,6 +3,7 @@
 #include <memory>
 #include <array>
 #include <DirectXMath.h>
+#include <ParticleManager.h>
 class Ball {
 public:
 	// コンストラクタ
@@ -155,4 +156,7 @@ private:
 
 	ObjectData landmarkObj;
 	TextureData landmarkTex;
+
+	std::unique_ptr<ParticleManager>damegeParticle = nullptr;
+	TextureData damegeGraph;
 };

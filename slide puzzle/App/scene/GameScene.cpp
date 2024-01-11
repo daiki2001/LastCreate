@@ -105,6 +105,7 @@ void GameScene::Draw()
 
 	stage->Draw();
 	ball->AfterDraw();
+	player->ParticleDraw();
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();
@@ -191,6 +192,7 @@ void GameScene::TargetAct()
 	if (ball->GetThrowFlag() && ball->GetHitFlag())
 	{
 		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+
 	}
 	
 	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
