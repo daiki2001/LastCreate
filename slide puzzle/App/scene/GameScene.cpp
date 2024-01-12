@@ -37,9 +37,8 @@ void GameScene::Init()
 	player = std::make_unique<Player>();
 	player->Init();
 
-	ball = std::make_unique<Ball>();
-	ball->Init();
-
+	// ボールの生成
+	BallCreate();
 
 	stage = std::make_unique<Stage>();
 	stage->Init();
@@ -79,12 +78,17 @@ void GameScene::Update()
 	for (int i = 0; i < enemys.size(); i++){
 		enemys[i]->Update();
 	}
-	ball->Update(
-		player->GetPosition(), player->GetRotation(),
-	    stage->GetStageSize());
+
+	for (auto& ball : balls)
+	{
+		ball->Update(
+			player->GetPosition(), player->GetRotation(),
+			stage->GetStageSize());
+	}
 	sceneChange_->Update();
 
 	EnemyDeath();
+	BallDelete();
 
 	gameTime.Update();
 }
@@ -95,8 +99,10 @@ void GameScene::Draw()
 
 	player->Draw();
 
-
-	ball->Draw();
+	for (auto& ball : balls)
+	{
+		ball->Draw();
+	}
 
 	for (int i = 0; i < enemys.size(); i++)
 	{
@@ -104,7 +110,10 @@ void GameScene::Draw()
 	}
 
 	stage->Draw();
-	ball->AfterDraw();
+	for (auto& ball : balls)
+	{
+		ball->AfterDraw();
+	}
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();
@@ -123,9 +132,12 @@ void GameScene::Finalize()
 
 void GameScene::BallHave()
 {
-	if (ball->GetHaveFlag())
+	for (auto& ball : balls)
 	{
-		player->SetBall(ball.get());
+		if (ball->GetHaveFlag())
+		{
+			player->SetBall(ball.get());
+		}
 	}
 }
 
@@ -188,16 +200,19 @@ void GameScene::TargetAct()
 		enemys[oldForcusNum]->SetForcusChangeFlag(false);
 	}
 
-	if (ball->GetThrowFlag() && ball->GetHitFlag())
+	for (auto& ball : balls)
 	{
-		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
-	}
-	
-	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
+		if (ball->GetThrowFlag() && ball->GetHitFlag())
+		{
+			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+		}
 
-	if (!ball->GetHaveFlag())
-	{
-		ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
+		TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
+
+		if (!ball->GetHaveFlag())
+		{
+			ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
+		}
 	}
 }
 
@@ -218,6 +233,29 @@ void GameScene::TargetReset(Vec3 pos, bool flag)
 	}
 
 	targetEase_->Update();
+}
+
+void GameScene::BallDelete()
+{
+	if (balls.size() == 0) { return; }
+	int count = 0;
+
+	for (auto& ball : balls)
+	{
+		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())//バウンドが終わったら
+		{
+			balls.erase(balls.begin() + count);
+		}
+
+		count++;
+	}
+}
+
+void GameScene::BallCreate()
+{
+	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
+	ball->Init();
+	balls.push_back(std::move(ball));
 }
 
 void GameScene::LoadSpawnStatus()

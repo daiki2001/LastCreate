@@ -87,7 +87,7 @@ private:
 
 private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
-	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
+	Vec3 position = {0.0f, 0.0f, -5.0f}; // 位置
 	Vec3 rotation = {};                 // 回転軸
 
 	Vec3 targetPos_ = {};

@@ -57,6 +57,10 @@ public:
 
 	void TargetReset(Vec3 pos, bool flag);
 
+	void BallDelete();
+
+	void BallCreate();
+
 private:
 	//出現位置のロード
 	void LoadSpawnStatus();
@@ -71,8 +75,7 @@ private://定義
 
 	std::unique_ptr<Player>player;
 
-	std::unique_ptr<Ball> ball;
-	std::unique_ptr<Ball> ball2;
+	std::vector<std::unique_ptr<Ball>> balls;
 
 	std::unique_ptr<Stage>stage;
 
