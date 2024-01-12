@@ -3,22 +3,23 @@
 #include <memory>
 #include <array>
 #include <DirectXMath.h>
+#include <ParticleManager.h>
 class Ball {
 public:
-	// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	Ball();
-	// ƒfƒXƒRƒ“ƒXƒgƒ‰ƒNƒ^
+	// ï¿½fï¿½Xï¿½Rï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Nï¿½^
 	~Ball();
 	/// <summary>
-	/// ‰Šú‰»
+	/// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	/// </summary>
 	void Init();
 	/// <summary>
-	/// XV
+	/// ï¿½Xï¿½V
 	/// </summary>
 	void Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize);
 	/// <summary>
-	/// •`‰æ
+	/// ï¿½`ï¿½ï¿½
 	/// </summary>
 	void Draw();
 
@@ -26,29 +27,29 @@ public:
 	//
 	void HaveAct(Vec3 havePos_);
 
-	// ˆÊ’u‚Ìİ’è
+	// ï¿½Ê’uï¿½Ìİ’ï¿½
 	void SetChainPosition(Vec3 havePos_);
 	void SetPosition(Vec3 pos) { position = pos; }
 	Vec3 GetPosition() { return position; }
-	// Šƒtƒ‰ƒOƒZƒbƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½Zï¿½bï¿½g
 	void SetHaveFlag(bool flag) { haveFlag_ = flag; }
-	// Šƒtƒ‰ƒOƒQƒbƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½Qï¿½bï¿½g
 	bool GetHaveFlag() { return haveFlag_; }
-	// “Š‚°‚éƒtƒ‰ƒOƒZƒbƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½Zï¿½bï¿½g
 	void SetThrowFlag(bool flag) { throwFlag_ = flag; }
-	// “Š‚°‚éƒtƒ‰ƒOƒQƒbƒg
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Oï¿½Qï¿½bï¿½g
 	bool GetThrowFlag() { return throwFlag_; }
-	// ƒ`ƒƒ[ƒWƒtƒ‰ƒOƒZƒbƒg
+	// ï¿½`ï¿½ï¿½ï¿½[ï¿½Wï¿½tï¿½ï¿½ï¿½Oï¿½Zï¿½bï¿½g
 	void SetChargeFlag(bool flag) { chargeFlag_ = flag; }
-	// ƒ`ƒƒ[ƒWƒtƒ‰ƒOƒQƒbƒg
+	// ï¿½`ï¿½ï¿½ï¿½[ï¿½Wï¿½tï¿½ï¿½ï¿½Oï¿½Qï¿½bï¿½g
 	bool GetChargeFlag() { return chargeFlag_; }
-	// ƒRƒ“ƒ{ƒAƒbƒvƒtƒ‰ƒOƒZƒbƒg
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½Aï¿½bï¿½vï¿½tï¿½ï¿½ï¿½Oï¿½Zï¿½bï¿½g
 	void SetComboUpFlag(bool flag) { comboUpFlag_ = flag; }
-	// ƒRƒ“ƒ{ƒAƒbƒvƒtƒ‰ƒOƒQƒbƒg
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½Aï¿½bï¿½vï¿½tï¿½ï¿½ï¿½Oï¿½Qï¿½bï¿½g
 	bool GetComboUpFlag() { return comboUpFlag_; }
-	// ƒRƒ“ƒ{¸”sƒtƒ‰ƒOƒZƒbƒg
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½sï¿½tï¿½ï¿½ï¿½Oï¿½Zï¿½bï¿½g
 	void SetComboMissFlag(bool flag) { comboMissFlag_ = flag; }
-	// ƒRƒ“ƒ{¸”sƒtƒ‰ƒOƒQƒbƒg
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½sï¿½tï¿½ï¿½ï¿½Oï¿½Qï¿½bï¿½g
 	bool GetComboMissFlag() { return comboMissFlag_; }
 
 	void SetTargetPos(Vec3 pos) { targetPos_ = pos; }
@@ -56,95 +57,104 @@ public:
 	bool GetHitFlag();
 
 private:
-	// ƒ{[ƒ‹‚Ì‹““®
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½
 	void ThrowAct(Vec3 targetPos_);
-	// ƒ{[ƒ‹‚ª“–‚½‚Á‚½ƒtƒ‰ƒO
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½O
 	bool BallHitFlag(Vec3 targetPos);
-	// ƒ{[ƒ‹‚ª“–‚½‚Á‚Ä”½Ë
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä”ï¿½ï¿½ï¿½
 	void BallReflectBound(Vec3 havePos_, Vec3 targetPos_);
-	// @’µ‚Ë•Ô‚é•ûŒüŒvZ
+	// ï¿½@ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Z
 	void ReflectCalculation(Vec3 havePos_);
-	// ƒ{[ƒ‹‚Ì—‚¿‚éˆÊ’u
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì—ï¿½ï¿½ï¿½ï¿½ï¿½Ê’u
 	void BallFallPoint(Vec3 havePos_, Vec3 playerRotation);
-	// “Š‚°‚é‹­‚³’²®
+	// ï¿½ï¿½ï¿½ï¿½ï¿½é‹­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	void ThrowPowerChange();
-	// ‘Ø‹óŠÔ’²®
+	// ï¿½Ø‹óŠÔ’ï¿½ï¿½ï¿½
 	void FlyTimeChange(Vec3 havePos_, Vec3 targetPos_);
-	// ”ò‚ÔŒü‚«‚Ìƒ‰ƒ“ƒ_ƒ€‰»
+	// ï¿½ï¿½ÔŒï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½
 	void FlyVectorCal();
-	// ƒ`ƒƒ[ƒW’†‚Ìˆ—
+	// ï¿½`ï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 	void StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_);
-	//@ƒXƒe[ƒW‚Ì•Ç“–‚½‚è”»’è
+	//ï¿½@ï¿½Xï¿½eï¿½[ï¿½Wï¿½Ì•Ç“ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½
 	void StageCollision(const float stageSize);
-	// •Ç’µ‚Ë•Ô‚è‚ÌŠp“xŒvZ
+	// ï¿½Ç’ï¿½ï¿½Ë•Ô‚ï¿½ÌŠpï¿½xï¿½vï¿½Z
 	void AngleCalculation();
-	// •Ç’µ‚Ë•Ô‚è‚ÌˆÊ’uî•ñ‚Ì‘—‚è
+	// ï¿½Ç’ï¿½ï¿½Ë•Ô‚ï¿½ÌˆÊ’uï¿½ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½
 	void WallRefrectCal();
 
 	void Effect();
 
 	float Cross(Vec2 a, Vec2 b);
+	//ï¿½ï¿½ï¿½Xï¿½|ï¿½[ï¿½ï¿½
+	void Respawn();
 
+	void LoadRespawn();
 private:
-	ObjectData pObject;                 // ƒvƒŒƒCƒ„[ƒIƒuƒWƒFƒNƒg
-	Vec3 position = {0.0f, 0.0f, -5.0f}; // ˆÊ’u
-	Vec3 rotation = {};                 // ‰ñ“]²
+	struct RespawnPos
+	{
+		Vec3 pos = {};
+	};
+private:
+	ObjectData pObject;                 // ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½g
+	Vec3 position = { 5.0f, 0.0f, 0.0f }; // ï¿½Ê’u
+	Vec3 position = {0.0f, 0.0f, -5.0f}; // ï¿½Ê’u
+	Vec3 rotation = {};                 // ï¿½ï¿½]ï¿½ï¿½
 
 	Vec3 targetPos_ = {};
 
-	// Š‚µ‚Ä‚¢‚é‚©
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©
 	bool haveFlag_ = false;
-	// “Š‚°‚Ä‚¢‚é‚©
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©
 	bool throwFlag_ = false;
-	// ƒ`ƒƒ[ƒW‚µ‚Ä‚é‚©
+	// ï¿½`ï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½Ä‚é‚©
 	bool chargeFlag_ = false;
-	// “–‚½‚Á‚½‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO
-	bool hitFlag_ = false; 
-	// ƒRƒ“ƒ{ƒAƒbƒvƒtƒ‰ƒO
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½O
+	bool hitFlag_ = false;
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½Aï¿½bï¿½vï¿½tï¿½ï¿½ï¿½O
 	bool comboUpFlag_ = false;
-	// ƒRƒ“ƒ{ƒ~ƒXƒtƒ‰ƒO
+	// ï¿½Rï¿½ï¿½ï¿½{ï¿½~ï¿½Xï¿½tï¿½ï¿½ï¿½O
 	bool comboMissFlag_ = false;
 
-	// ƒ{[ƒ‹‚ÌƒXƒs[ƒh
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌƒXï¿½sï¿½[ï¿½h
 	float speed_ = 0.5f;
-	// ƒoƒEƒ“ƒh‚Ì‚‚³
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½
 	float baseBound_ = 0.0f;
-	// ƒoƒEƒ“ƒh‚Ì‚‚³(‹ß‚¢)
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½(ï¿½ß‚ï¿½ï¿½ï¿½)
 	float nearBound_ = 4.0f;
-	// ƒoƒEƒ“ƒh‚Ì‚‚³(‰“‚¢)
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 	float farBound_ = 6.0f;
-	// ƒoƒEƒ“ƒh‚ÌŠÔ
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½
 	float baseTime_ = 0.05f;
-	// ƒoƒEƒ“ƒh‚ÌŠÔ(‹ß‚¢)
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½(ï¿½ß‚ï¿½ï¿½ï¿½)
 	float nearTime_ = 0.01625f;
-	// ƒoƒEƒ“ƒh‚ÌŠÔ(‰“‚¢)
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ìï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
 	float farTime_ = 0.0125f;
-	// ƒC[ƒWƒ“ƒO‚Ìƒ^ƒCƒ€
-	std::array<float, 6> time_ = {0, 0, 0, 0, 0, 0};
-	// ƒoƒEƒ“ƒh‚Ì’·‚³•Ï‚í‚é‹——£
+	// ï¿½Cï¿½[ï¿½Wï¿½ï¿½ï¿½Oï¿½Ìƒ^ï¿½Cï¿½ï¿½
+	std::array<float, 6> time_ = { 0, 0, 0, 0, 0, 0 };
+	// ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½Ì’ï¿½ï¿½ï¿½ï¿½Ï‚ï¿½é‹—ï¿½ï¿½
 	float boundChangeR = 22.5f;
 
 
-	// ƒ`ƒƒ[ƒW‚Ì‘¬‚³
-	float chargeValue_ = 0.005f;   
-	// ƒ{[ƒ‹‚Ì’µ‚Ë•Ô‚éÀ•W
-	Vec3 fallPositionCal_ = {0.0f, 0.0f, 0.0f}; 
-	// ’µ‚Ë•Ô‚è•ûŒü
-	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
-	// ’µ‚Ë•Ô‚è‚ÌƒXƒs[ƒh‚ÌÅ‘å’l
+	// ï¿½`ï¿½ï¿½ï¿½[ï¿½Wï¿½Ì‘ï¿½ï¿½ï¿½
+	float chargeValue_ = 0.005f;
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ì’ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½W
+	Vec3 fallPositionCal_ = { 0.0f, 0.0f, 0.0f };
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½ï¿½
+	Vec3 reflectVector_ = { 0.0f, 0.0f, 0.0f };
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ÌƒXï¿½sï¿½[ï¿½hï¿½ÌÅ‘ï¿½l
 	float maxReflectSpeed_ = 3.0f;
-	// ’µ‚Ë•Ô‚èƒXƒs[ƒh
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½Xï¿½sï¿½[ï¿½h
 	float baseReflectSpped_ = 0.25f;
-	// ’µ‚Ë•Ô‚é•ûŒü‚ÌMAX”’l
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MAXï¿½ï¿½ï¿½l
 	int maxFlyVectorRandom_ = 5;
-	// ’µ‚Ë•Ô‚é•ûŒü‚ÌMIN”’l
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½MINï¿½ï¿½ï¿½l
 	int minFlyVectorRandom_ = -5;
-	// ’µ‚Ë•Ô‚é•ûŒü‚Ìƒ‰ƒ“ƒ_ƒ€”’l
-	float flyVectorRandom_ = 0.0f; 
-	// •Ç‚ÌŒü‚«Šm”F‚Ì‚½‚ß‚ÌÀ•W
-	Vec3 wallPos = {0.0f, 0.0f, 0.0f};
-	// “Š‚°‚ç‚ê‚½êŠ‚Ìƒ|ƒWƒVƒ‡ƒ“
-	Vec3 oldThrowPos = {0.0f, 0.0f, 0.0f};
+	// ï¿½ï¿½ï¿½Ë•Ô‚ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½l
+	float flyVectorRandom_ = 0.0f;
+	// ï¿½Ç‚ÌŒï¿½ï¿½ï¿½ï¿½mï¿½Fï¿½Ì‚ï¿½ï¿½ß‚Ìï¿½ï¿½W
+	Vec3 wallPos = { 0.0f, 0.0f, 0.0f };
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½êŠï¿½Ìƒ|ï¿½Wï¿½Vï¿½ï¿½ï¿½ï¿½
+	Vec3 oldThrowPos = { 0.0f, 0.0f, 0.0f };
 	//
 	float wallRefVec = 0.0f;
 	bool refflaga = false;
@@ -153,6 +163,16 @@ private:
 	int effectCount_ = 0;
 
 
+	std::vector<RespawnPos*>respawnPos;//ï¿½Gï¿½Ìoï¿½ï¿½ï¿½Ê’u
+	ObjectData respawnObj;
+
+
 	ObjectData landmarkObj;
 	TextureData landmarkTex;
+	//ï¿½_ï¿½ï¿½ï¿½[ï¿½Wï¿½pï¿½[ï¿½eï¿½Bï¿½Nï¿½ï¿½
+	std::unique_ptr<ParticleManager>damegeParticle = nullptr;
+	TextureData damegeGraph;
+	//ï¿½{ï¿½[ï¿½ï¿½ï¿½ÌWï¿½ï¿½ï¿½ï¿½ï¿½pï¿½[ï¿½eï¿½Bï¿½Nï¿½ï¿½
+	std::unique_ptr<ParticleManager>ballLineParticle = nullptr;
+	TextureData ballLineGraph;
 };

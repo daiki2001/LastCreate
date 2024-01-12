@@ -4,6 +4,7 @@
 #include <Shape.h>
 #include <random>
 #include <Collision.h>
+#include <LoadJson.h>
 Ball::Ball() {}
 
 Ball::~Ball() {}
@@ -13,6 +14,14 @@ void Ball::Init() {
 	landmarkObj = Shape::CreateRect(1.0f, 1.0f);
 	landmarkTex = Texture::Get()->LoadTexture(L"Resources/sprite/landmark.png");
 	landmarkObj.OBJTexture = landmarkTex;
+	damegeParticle = std::make_unique<ParticleManager>();
+	damegeParticle->Initialize();
+	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
+	ballLineParticle = std::make_unique<ParticleManager>();
+	ballLineParticle->Initialize();
+	ballLineGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
+	respawnObj = Shape::CreateOBJ("sphere");
+	LoadRespawn();
 }
 
 void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
@@ -34,16 +43,29 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	StageCollision(stageSize);
 
 	Effect();
+
+	Respawn();
 }
 
-void Ball::Draw() {	Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation);}
+void Ball::Draw()
+{
+	Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation);
+
+	for (int i = 0; i < respawnPos.size(); i++)
+	{
+		Object::Draw(respawnObj, respawnPos[i]->pos+Vec3(0.0f,-0.5f,0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	}
+}
+
 
 void Ball::AfterDraw()
 {
-	if (hitFlag_==true)
+	if (hitFlag_ == true)
 	{
 		Object::Draw(landmarkObj, Vec3(position.x, 0.0f, position.z), Vec3(2.5f, 2.5f, 1.0f), Vec3(90.0f, 0.0f, 0.0f));
 	}
+	damegeParticle->Draw(damegeGraph);
+	ballLineParticle->Draw(ballLineGraph);
 }
 
 void Ball::HaveAct(Vec3 havePos_) {
@@ -83,6 +105,9 @@ bool Ball::GetHitFlag()
 {
 	if (BallHitFlag(targetPos_)) {
 		throwFlag_ = false;
+		damegeParticle->DamegeAdd(position, targetPos_,
+			1.5f, 1.0f, 0.0f,
+			Vec4(0.5f, 0.0f, 0.0f, 0.5f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 		return true;
 	}
 
@@ -323,6 +348,16 @@ void Ball::WallRefrectCal() {
 
 void Ball::Effect()
 {
+
+	damegeParticle->Update();
+	ballLineParticle->Update();
+	if (throwFlag_)
+	{
+		ballLineParticle->BallLineAdd(position, 0.0f, 1.0f, 0.0f,
+			Vec4(0.3f, 0.3f, 0.3f, 0.3f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+	}
+
+
 	if (!throwFlag_)
 	{
 		effectCount_ = rand() % 4;
@@ -355,3 +390,33 @@ void Ball::Effect()
 }
 
 float Ball::Cross(Vec2 a, Vec2 b) { return a.x * b.y - a.y * b.x; }
+
+void Ball::Respawn()
+{
+	//固定湧きする条件
+	if (Input::Get()->KeybordTrigger(DIK_M))
+	{
+		Vec3 pos = {};
+		//ランダムで出現位置
+		if (respawnPos.size() == 0) { return; }
+		std::random_device rnd;
+		std::mt19937 mt(rnd());
+		std::uniform_int_distribution<> rand2(0, (int)respawnPos.size() - 1);
+		int spawn = rand2(mt);
+
+		position = respawnPos[spawn]->pos;
+	}
+}
+
+void Ball::LoadRespawn()
+{
+	LevelData* levelData = nullptr;
+	std::string filepath = "ball";
+	levelData = LoadJson::Load(filepath);
+	for (auto& loadData : levelData->objects)
+	{
+		RespawnPos* load = new RespawnPos();
+		load->pos = loadData.translation;
+ 		respawnPos.push_back(load);
+	}
+}

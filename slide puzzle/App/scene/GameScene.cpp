@@ -14,30 +14,30 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
-	//AudioƒNƒ‰ƒXì¬
+	//Audioï¿½Nï¿½ï¿½ï¿½Xï¿½ì¬
 	audio = std::make_unique<Audio>();
-	//ƒ‰ƒCƒgƒOƒ‹[ƒvƒNƒ‰ƒXì¬
+	//ï¿½ï¿½ï¿½Cï¿½gï¿½Oï¿½ï¿½ï¿½[ï¿½vï¿½Nï¿½ï¿½ï¿½Xï¿½ì¬
 	lightGroup = std::make_unique<LightGroup>();
 	lightGroup->Initialize();
-	// 3DƒIƒuƒGƒNƒg‚Éƒ‰ƒCƒg‚ğƒZƒbƒg
+	// 3Dï¿½Iï¿½uï¿½Gï¿½Nï¿½gï¿½Éƒï¿½ï¿½Cï¿½gï¿½ï¿½Zï¿½bï¿½g
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
-	//‰¹ƒf[ƒ^“Ç‚İ‚İ
+	//ï¿½ï¿½ï¿½fï¿½[ï¿½^ï¿½Ç‚İï¿½ï¿½ï¿½
 
-	//ƒJƒƒ‰ˆÊ’u‚ğƒZƒbƒg
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½Zï¿½bï¿½g
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
-	//ƒXƒvƒ‰ƒCƒg‰æ‘œ“Ç‚İ‚İ
+	//ï¿½Xï¿½vï¿½ï¿½ï¿½Cï¿½gï¿½æ‘œï¿½Ç‚İï¿½ï¿½ï¿½
 
 	
 
-	//ƒIƒuƒWƒFƒNƒg¶¬
+	//ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½
 	player = std::make_unique<Player>();
 	player->Init();
 
-	// ƒ{[ƒ‹‚Ì¶¬
+	// ï¿½{ï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
 	BallCreate();
 
 	stage = std::make_unique<Stage>();
@@ -49,13 +49,13 @@ void GameScene::Init()
 	gameTime.Init();
 	gameTime.Start();
 	Score::Get()->ScoreReset();
-	// ƒV[ƒ“‘JˆÚ‚Ì‰‰o‚Ì‰Šú‰»
+	// ï¿½Vï¿½[ï¿½ï¿½ï¿½Jï¿½Ú‚Ì‰ï¿½ï¿½oï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½
 	sceneChange_ = std::make_unique<SceneChange>();
 }
 
 void GameScene::Update()
 {
-	//ƒ‰ƒCƒgXV
+	//ï¿½ï¿½ï¿½Cï¿½gï¿½Xï¿½V
 	lightGroup->Update();
 	if (gameTime.GetChangeFlag())
 	{
@@ -114,6 +114,8 @@ void GameScene::Draw()
 	{
 		ball->AfterDraw();
 	}
+	ball->AfterDraw();
+	player->ParticleDraw();
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();
@@ -143,7 +145,7 @@ void GameScene::BallHave()
 
 void GameScene::CameraMove()
 {
-	//”¼Œa‚Í-10
+	//ï¿½ï¿½ï¿½aï¿½ï¿½-10
 	XMVECTOR v0 = { 0, 0, -10, 0 };
 	XMMATRIX  rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(30.0f));
@@ -155,16 +157,16 @@ void GameScene::CameraMove()
 	Vec3 center = { target.m128_f32[0], target.m128_f32[1], target.m128_f32[2] };
 	Vec3 pos = f;
 
-	//ƒJƒƒ‰ˆÊ’u‚ğƒZƒbƒg
+	//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ê’uï¿½ï¿½Zï¿½bï¿½g
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
 }
 
 void GameScene::NearEnemyCheck() {
-	// ƒvƒŒƒCƒ„[‚Éˆê”Ô‹ß‚¢“G‚ğ‹‚ß‚é
+	// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Éˆï¿½Ô‹ß‚ï¿½ï¿½Gï¿½ï¿½ï¿½ï¿½ß‚ï¿½
 	float farLength = 5000.0f;
 	int ensmysNumber = 0;
 	for (int i = 0; i < enemys.size(); i++) {
-		// ƒvƒŒƒCƒ„[‚Æ“G‚Æ‚Ì‹——£
+		// ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Æ“Gï¿½Æ‚Ì‹ï¿½ï¿½ï¿½
 		float length = Vec3(player->GetPosition() - enemys[i]->GetPosition()).length();
 		if (farLength > length) {
 			farLength = length;
@@ -206,6 +208,11 @@ void GameScene::TargetAct()
 		{
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 		}
+		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+
+	}
+	
+	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
 		TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
@@ -242,7 +249,7 @@ void GameScene::BallDelete()
 
 	for (auto& ball : balls)
 	{
-		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())//ƒoƒEƒ“ƒh‚ªI‚í‚Á‚½‚ç
+		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())//ï¿½oï¿½Eï¿½ï¿½ï¿½hï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		{
 			balls.erase(balls.begin() + count);
 		}
@@ -275,24 +282,20 @@ void GameScene::LoadSpawnStatus()
 void GameScene::SpawnEnemy()
 {
 
-	//Å‘å”‚©‚Ç‚¤‚©@ƒN[ƒ‹ƒ^ƒCƒ€‚Å‘ª‚é
+	//ï¿½Å‘å”ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½@ï¿½Nï¿½[ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Å‘ï¿½ï¿½ï¿½
 	if (enemys.size() < enemyMax && spwnCoolTime <= 0)
 	{
 		spwnCoolTime = spwnCoolTimeMax;
-		//“G‚Ìí—Ş‚É‚æ‚Á‚Ä•ª‚©‚ê‚é
+		//ï¿½Gï¿½Ìï¿½Ş‚É‚ï¿½ï¿½ï¿½Ä•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Enemy* enemy = new BaseEnemy();
 
-		//ƒ‰ƒ“ƒ_ƒ€‚ÅoŒ»ˆÊ’u
+		//ï¿½ï¿½ï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½Åoï¿½ï¿½ï¿½Ê’u
 		if (loadStatus.size() == 0) { return; }
 		std::random_device rnd;
 		std::mt19937 mt(rnd());
 		std::uniform_int_distribution<> rand2(0, (int)loadStatus.size() - 1);
 		int spawn = rand2(mt);
 
-		if (spawn < 0 || spawn>3)
-		{
-			int i = 0;
-		}
 		enemy->Init(loadStatus[spawn]->position, loadStatus[spawn]->rotation);
 		enemys.push_back(enemy);
 	}
