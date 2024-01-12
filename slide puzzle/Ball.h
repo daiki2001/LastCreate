@@ -85,10 +85,18 @@ private:
 	void Effect();
 
 	float Cross(Vec2 a, Vec2 b);
+	//リスポーン
+	void Respawn();
 
+	void LoadRespawn();
+private:
+	struct RespawnPos
+	{
+		Vec3 pos = {};
+	};
 private:
 	ObjectData pObject;                 // プレイヤーオブジェクト
-	Vec3 position = {5.0f, 0.0f, 0.0f}; // 位置
+	Vec3 position = { 5.0f, 0.0f, 0.0f }; // 位置
 	Vec3 rotation = {};                 // 回転軸
 
 	Vec3 targetPos_ = {};
@@ -100,7 +108,7 @@ private:
 	// チャージしてるか
 	bool chargeFlag_ = false;
 	// 当たったかどうかのフラグ
-	bool hitFlag_ = false; 
+	bool hitFlag_ = false;
 	// コンボアップフラグ
 	bool comboUpFlag_ = false;
 	// コンボミスフラグ
@@ -121,17 +129,17 @@ private:
 	// バウンドの時間(遠い時)
 	float farTime_ = 0.0125f;
 	// イージングのタイム
-	std::array<float, 6> time_ = {0, 0, 0, 0, 0, 0};
+	std::array<float, 6> time_ = { 0, 0, 0, 0, 0, 0 };
 	// バウンドの長さ変わる距離
 	float boundChangeR = 22.5f;
 
 
 	// チャージの速さ
-	float chargeValue_ = 0.005f;   
+	float chargeValue_ = 0.005f;
 	// ボールの跳ね返る座標
-	Vec3 fallPositionCal_ = {0.0f, 0.0f, 0.0f}; 
+	Vec3 fallPositionCal_ = { 0.0f, 0.0f, 0.0f };
 	// 跳ね返り方向
-	Vec3 reflectVector_ = {0.0f, 0.0f, 0.0f};
+	Vec3 reflectVector_ = { 0.0f, 0.0f, 0.0f };
 	// 跳ね返りのスピードの最大値
 	float maxReflectSpeed_ = 3.0f;
 	// 跳ね返りスピード
@@ -141,17 +149,21 @@ private:
 	// 跳ね返る方向のMIN数値
 	int minFlyVectorRandom_ = -5;
 	// 跳ね返る方向のランダム数値
-	float flyVectorRandom_ = 0.0f; 
+	float flyVectorRandom_ = 0.0f;
 	// 壁の向き確認のための座標
-	Vec3 wallPos = {0.0f, 0.0f, 0.0f};
+	Vec3 wallPos = { 0.0f, 0.0f, 0.0f };
 	// 投げられた場所のポジション
-	Vec3 oldThrowPos = {0.0f, 0.0f, 0.0f};
+	Vec3 oldThrowPos = { 0.0f, 0.0f, 0.0f };
 	//
 	float wallRefVec = 0.0f;
 	bool refflaga = false;
 	float abc = 0;
 
 	int effectCount_ = 0;
+
+
+	std::vector<RespawnPos*>respawnPos;//敵の出現位置
+	ObjectData respawnObj;
 
 
 	ObjectData landmarkObj;

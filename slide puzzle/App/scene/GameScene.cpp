@@ -253,10 +253,6 @@ void GameScene::SpawnEnemy()
 		std::uniform_int_distribution<> rand2(0, (int)loadStatus.size() - 1);
 		int spawn = rand2(mt);
 
-		if (spawn < 0 || spawn>3)
-		{
-			int i = 0;
-		}
 		enemy->Init(loadStatus[spawn]->position, loadStatus[spawn]->rotation);
 		enemys.push_back(enemy);
 	}
