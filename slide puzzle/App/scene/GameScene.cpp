@@ -14,48 +14,30 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
-	//Audio�N���X�쐬
 	audio = std::make_unique<Audio>();
-	//���C�g�O���[�v�N���X�쐬
 	lightGroup = std::make_unique<LightGroup>();
 	lightGroup->Initialize();
-	// 3D�I�u�G�N�g�Ƀ��C�g��Z�b�g
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
-	//���f�[�^�ǂݍ���
-
-	//�J�����ʒu��Z�b�g
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
-	//�X�v���C�g�摜�ǂݍ���
-
-	
-
-	//�I�u�W�F�N�g����
 	player = std::make_unique<Player>();
 	player->Init();
-
-	// �{�[���̐���
 	BallCreate();
-
 	stage = std::make_unique<Stage>();
 	stage->Init();
-
 	targetEase_ = std::make_unique<EaseData>(60);
-
 	LoadSpawnStatus();
 	gameTime.Init();
 	gameTime.Start();
 	Score::Get()->ScoreReset();
-	// �V�[���J�ڂ̉��o�̏�����
 	sceneChange_ = std::make_unique<SceneChange>();
 }
 
 void GameScene::Update()
 {
-	//���C�g�X�V
 	lightGroup->Update();
 	if (gameTime.GetChangeFlag())
 	{
@@ -95,8 +77,6 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	
-
 	player->Draw();
 
 	for (auto& ball : balls)
@@ -114,7 +94,6 @@ void GameScene::Draw()
 	{
 		ball->AfterDraw();
 	}
-	ball->AfterDraw();
 	player->ParticleDraw();
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
@@ -145,7 +124,6 @@ void GameScene::BallHave()
 
 void GameScene::CameraMove()
 {
-	//���a��-10
 	XMVECTOR v0 = { 0, 0, -10, 0 };
 	XMMATRIX  rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(30.0f));
@@ -157,16 +135,13 @@ void GameScene::CameraMove()
 	Vec3 center = { target.m128_f32[0], target.m128_f32[1], target.m128_f32[2] };
 	Vec3 pos = f;
 
-	//�J�����ʒu��Z�b�g
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
 }
 
 void GameScene::NearEnemyCheck() {
-	// �v���C���[�Ɉ�ԋ߂��G����߂�
 	float farLength = 5000.0f;
 	int ensmysNumber = 0;
 	for (int i = 0; i < enemys.size(); i++) {
-		// �v���C���[�ƓG�Ƃ̋���
 		float length = Vec3(player->GetPosition() - enemys[i]->GetPosition()).length();
 		if (farLength > length) {
 			farLength = length;
@@ -208,14 +183,12 @@ void GameScene::TargetAct()
 		{
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 		}
-		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
-
 	}
 	
 	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
-		TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
-
+	for (auto& ball : balls)
+	{
 		if (!ball->GetHaveFlag())
 		{
 			ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
@@ -249,7 +222,7 @@ void GameScene::BallDelete()
 
 	for (auto& ball : balls)
 	{
-		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())//�o�E���h���I�������
+		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())
 		{
 			balls.erase(balls.begin() + count);
 		}
@@ -281,15 +254,11 @@ void GameScene::LoadSpawnStatus()
 
 void GameScene::SpawnEnemy()
 {
-
-	//�ő吔���ǂ����@�N�[���^�C���ő���
 	if (enemys.size() < enemyMax && spwnCoolTime <= 0)
 	{
 		spwnCoolTime = spwnCoolTimeMax;
-		//�G�̎�ނɂ���ĕ������
 		Enemy* enemy = new BaseEnemy();
 
-		//�����_���ŏo���ʒu
 		if (loadStatus.size() == 0) { return; }
 		std::random_device rnd;
 		std::mt19937 mt(rnd());
