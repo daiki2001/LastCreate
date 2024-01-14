@@ -7,6 +7,7 @@ void Enemy::BallThrow()
 	if (ball == nullptr) { return; }
 
 	// “Š‚°‚é
+	ball->SetChargeFlag(true);	
 	ball->SetThrowFlag(true);
 	oldBall = std::move(ball);
 	ball = nullptr;

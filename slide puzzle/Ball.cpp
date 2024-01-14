@@ -31,11 +31,15 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	// 所有者に追尾
 	SetChainPosition(havePos_);
 
-	// ボールが飛ぶ
-	ThrowAct(targetPos_);
-
 	// ボール跳ね返り
 	BallReflectBound(havePos_, targetPos_);
+
+	if (enemyHave) {
+		EnemyThrowAct(targetPos_);
+	} else {
+		// ボールが飛ぶ
+		ThrowAct(targetPos_);
+	}
 
 	//ボールの挙動のステータスチェンジ
 	StatusCalculation(havePos_, haveRotation, targetPos_);
@@ -150,7 +154,7 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 		hitFlag_ = true;
 	}
 
-	if (!hitFlag_) {
+	if (!hitFlag_ && !wallReflectFlag) {
 		Vec3 startPos = position;
 		for (auto& t : time_) {
 			t = 0;
@@ -158,7 +162,7 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 	}
 	// ボールが敵に当たったフラグ
 	else {
-		if (throwFlag_) {
+		if (throwFlag_ || wallReflectFlag) {
 			ReflectCalculation(havePos_);
 			oldThrowPos = position;
 		}
@@ -211,11 +215,13 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 		if (1 <= time_[5]) {
 			baseReflectSpped_ = 0.25f;
 			hitFlag_ = false;
+			wallReflectFlag = false;
 		}
 		else if (haveFlag_ && 0 <= time_[0]) {
 			baseReflectSpped_ = 0.25f;
 			SetChainPosition(havePos_);
 			hitFlag_ = false;
+			wallReflectFlag = false;
 		}
 	}
 }
@@ -298,27 +304,46 @@ void Ball::StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_) 
 
 
 void Ball::StageCollision(const float stageSize) {
-	// 円の当たり判定
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize) &&
-		!refflaga) {
-		AngleCalculation();
+	// の当たり判定
+	if (position.x >= 29.0f && !refflaga) {
+		AngleCalculation(right);
 		WallRefrectCal();
-		ReflectCalculation({ 0.0f, 0.0f, 0.0f });
+		ReflectCalculation({0.0f, 0.0f, 0.0f});
 		refflaga = true;
-	}
-	else {
+	} else if (position.x <= -29.0f && !refflaga) {
+		AngleCalculation(left);
+		WallRefrectCal();
+		ReflectCalculation({0.0f, 0.0f, 0.0f});
+	} else if (position.z >= 50.0f && !refflaga) {
+		AngleCalculation(front);
+		WallRefrectCal();
+		ReflectCalculation({0.0f, 0.0f, 0.0f});
+	} else if (position.z <= -50.0f && !refflaga) {
+		AngleCalculation(back);
+		WallRefrectCal();
+		ReflectCalculation({0.0f, 0.0f, 0.0f});
+	} else {
 		refflaga = false;
 	}
 }
 
-void Ball::AngleCalculation() {
+void Ball::AngleCalculation(wallHitType hitType) {
 	wallPos = position;
-	Vec3 centerPos = { 0.0f, 0.0f, 0.0f };
+	Vec3 centerPos = {0.0f, 0.0f, 0.0f};
+	if (hitType == wallHitType::front) {
+		centerPos = {position.x, 0.0f, 0.0f};
+	} else if (hitType == wallHitType::back) {
+		centerPos = {position.x, 0.0f, 0.0f};
+	} else if (hitType == wallHitType::right) {
+		centerPos = {0.0f, 0.0f, position.z};
+	} else if (hitType == wallHitType::left) {
+		centerPos = {0.0f, 0.0f, position.z};
+	}
 
-	Vec3 vecAB = { centerPos.x - wallPos.x, 0.0f, centerPos.z - wallPos.z };
-	Vec3 vecAC = { oldThrowPos.x - wallPos.x, 0.0f, oldThrowPos.z - wallPos.z };
+	Vec3 vecAB = {centerPos.x - wallPos.x, 0.0f, centerPos.z - wallPos.z};
+	Vec3 vecAC = {oldThrowPos.x - wallPos.x, 0.0f, oldThrowPos.z - wallPos.z};
 	float abb =
-		vecAB.normalize().x * vecAC.normalize().x + vecAB.normalize().z * vecAC.normalize().z;
+	    vecAB.normalize().x * vecAC.normalize().x + vecAB.normalize().z * vecAC.normalize().z;
 	float angleABC = acosf(abb);
 	wallRefVec = XMConvertToDegrees(angleABC);
 	// float aToB = ((wallPos.x * centerPos.y) - (centerPos.x * wallPos.y));
@@ -418,5 +443,34 @@ void Ball::LoadRespawn()
 		RespawnPos* load = new RespawnPos();
 		load->pos = loadData.translation;
  		respawnPos.push_back(load);
+	}
+}
+
+void Ball::EnemyThrowAct(Vec3 targetPos) {
+	// ボールの飛ぶベクトル
+	Vec3 vector_ = {};
+
+	// 投げた挙動
+	if (throwFlag_) {
+
+		vector_ = vector_.normalize() * speed_;
+		position += vector_;
+	} else {
+		vector_ = {targetPos.x - position.x, targetPos.y - position.y, targetPos.z - position.z};
+	}
+
+	// 当たり判定
+	if (position.x >= 29.0f && throwFlag_) {
+		wallReflectFlag = true;
+		throwFlag_ = false;
+	} else if (position.x <= -29.0f && throwFlag_) {
+		wallReflectFlag = true;
+		throwFlag_ = false;
+	} else if (position.z >= 50.0f && throwFlag_) {
+		wallReflectFlag = true;
+		throwFlag_ = false;
+	} else if (position.z <= -50.0f && throwFlag_) {
+		wallReflectFlag = true;
+		throwFlag_ = false;
 	}
 }
