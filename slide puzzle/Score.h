@@ -23,9 +23,16 @@ public:
 	void GameSceneDraw();
 
 	void ResultSceneDraw();
+
+	void RankingLoad();
+
+	void RankingWrite();
+
 private:
 	int score = 0;
 	SpriteData number[10];
 	SpriteData scoreBack;
+	int topScore[3] = {0, 0, 0};
+	bool loadFlag = true;
 };
 

@@ -240,6 +240,9 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Library\Helper\WriteCSV.cpp">
+      <Filter>Library\Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -424,6 +427,9 @@
     <ClInclude Include="Score.h" />
     <ClInclude Include="GameTime.h">
       <Filter>ソースファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Library\Helper\WriteCSV.h">
+      <Filter>Library\Helper</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

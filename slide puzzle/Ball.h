@@ -5,6 +5,13 @@
 #include <DirectXMath.h>
 #include <ParticleManager.h>
 class Ball {
+	enum wallHitType {
+		front,
+		back,
+		right,
+		left
+	};
+
 public:
 
 	Ball();
@@ -41,12 +48,14 @@ private:
 	void FlyVectorCal();
 	void StatusCalculation(Vec3 havePos_, Vec3 haveRotation, Vec3 targetPos_);
 	void StageCollision(const float stageSize);
-	void AngleCalculation();
+	void AngleCalculation(wallHitType hitType);
 	void WallRefrectCal();
 	void Effect();
 	float Cross(Vec2 a, Vec2 b);
 	void Respawn();
 	void LoadRespawn();
+	void EnemyThrowAct(Vec3 targetPos_);
+
 private:
 	struct RespawnPos
 	{
@@ -94,4 +103,8 @@ private:
 	TextureData damegeGraph;
 	std::unique_ptr<ParticleManager>ballLineParticle = nullptr;
 	TextureData ballLineGraph;
+
+	bool enemyHave = false;
+
+	bool wallReflectFlag = false;
 };
