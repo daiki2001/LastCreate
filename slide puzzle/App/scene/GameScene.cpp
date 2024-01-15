@@ -25,7 +25,7 @@ void GameScene::Init()
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
 	player = std::make_unique<Player>();
 	player->Init();
-	BallCreate();
+
 	stage = std::make_unique<Stage>();
 	stage->Init();
 	targetEase_ = std::make_unique<EaseData>(60);
@@ -34,6 +34,9 @@ void GameScene::Init()
 	gameTime.Start();
 	Score::Get()->ScoreReset();
 	sceneChange_ = std::make_unique<SceneChange>();
+	respawnObj = Shape::CreateOBJ("sphere");
+	LoadRespawn();
+	BallRespawn();
 }
 
 void GameScene::Update()
@@ -54,11 +57,11 @@ void GameScene::Update()
 	SpawnEnemy();
 
 	TargetAct();
-	
+
 	player->Update(stage->GetStageSize());
 	CameraMove();
-	for (int i = 0; i < enemys.size(); i++){
-		enemys[i]->Update();
+	for (auto& enemy : enemys) {
+		enemy->Update();
 	}
 
 	for (auto& ball : balls)
@@ -71,6 +74,7 @@ void GameScene::Update()
 
 	EnemyDeath();
 	BallDelete();
+	BallRespawn();
 
 	gameTime.Update();
 }
@@ -84,11 +88,14 @@ void GameScene::Draw()
 		ball->Draw();
 	}
 
-	for (int i = 0; i < enemys.size(); i++)
+	for (auto& enemy : enemys)
 	{
-		enemys[i]->Draw();
+		enemy->Draw();
 	}
-
+	for (int i = 0; i < respawnPos.size(); i++)
+	{
+		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, -0.5f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	}
 	stage->Draw();
 	for (auto& ball : balls)
 	{
@@ -107,7 +114,6 @@ void GameScene::ShadowDraw()
 
 void GameScene::Finalize()
 {
-	enemys.clear();
 	Texture::Get()->Delete();
 }
 
@@ -155,15 +161,16 @@ void GameScene::NearEnemyCheck() {
 void GameScene::EnemyDeath()
 {
 	if (enemys.size() == 0) { return; }
-
-	for (int i = 0; i < enemys.size(); i++)
+	int count = 0;
+	for (auto& enemy : enemys)
 	{
-		if (enemys[i]->GetHp() <= 0)
+		if (enemy->GetHp() <= 0)
 		{
-			enemys.erase(enemys.begin() + i);
+			enemys.erase(enemys.begin() + count);
 			targetFlag_ = true;
 			Score::Get()->PlasScore();
 		}
+		count++;
 	}
 }
 
@@ -184,7 +191,7 @@ void GameScene::TargetAct()
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 		}
 	}
-	
+
 	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
 	for (auto& ball : balls)
@@ -231,10 +238,11 @@ void GameScene::BallDelete()
 	}
 }
 
-void GameScene::BallCreate()
+void GameScene::BallCreate(const Vec3& pos)
 {
 	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
 	ball->Init();
+	ball->SetPosition(pos);
 	balls.push_back(std::move(ball));
 }
 
@@ -257,7 +265,7 @@ void GameScene::SpawnEnemy()
 	if (enemys.size() < enemyMax && spwnCoolTime <= 0)
 	{
 		spwnCoolTime = spwnCoolTimeMax;
-		Enemy* enemy = new BaseEnemy();
+		std::unique_ptr<Enemy> enemy = std::make_unique <BaseEnemy>();
 
 		if (loadStatus.size() == 0) { return; }
 		std::random_device rnd;
@@ -266,7 +274,7 @@ void GameScene::SpawnEnemy()
 		int spawn = rand2(mt);
 
 		enemy->Init(loadStatus[spawn]->position, loadStatus[spawn]->rotation);
-		enemys.push_back(enemy);
+		enemys.push_back(std::move(enemy));
 	}
 
 	if (spwnCoolTime > 0)
@@ -275,3 +283,32 @@ void GameScene::SpawnEnemy()
 	}
 }
 
+void GameScene::BallRespawn()
+{
+	//å≈íËóNÇ´Ç∑ÇÈèåè
+	if (balls.size() == 0)
+	{
+		Vec3 pos = {};
+		//ÉâÉìÉ_ÉÄÇ≈èoåªà íu
+		if (respawnPos.size() == 0) { return; }
+		std::random_device rnd;
+		std::mt19937 mt(rnd());
+		std::uniform_int_distribution<> rand2(0, (int)respawnPos.size() - 1);
+		int spawn = rand2(mt);
+
+		BallCreate(respawnPos[spawn]->pos);
+	}
+}
+
+void GameScene::LoadRespawn()
+{
+	LevelData* levelData = nullptr;
+	std::string filepath = "ball";
+	levelData = LoadJson::Load(filepath);
+	for (auto& loadData : levelData->objects)
+	{
+		RespawnPos* load = new RespawnPos();
+		load->pos = loadData.translation;
+		respawnPos.push_back(load);
+	}
+}

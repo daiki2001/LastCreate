@@ -20,8 +20,6 @@ void Ball::Init() {
 	ballLineParticle = std::make_unique<ParticleManager>();
 	ballLineParticle->Initialize();
 	ballLineGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
-	respawnObj = Shape::CreateOBJ("sphere");
-	LoadRespawn();
 }
 
 void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
@@ -47,18 +45,11 @@ void Ball::Update(Vec3 havePos_, Vec3 haveRotation, const float stageSize) {
 	StageCollision(stageSize);
 
 	Effect();
-
-	Respawn();
 }
 
 void Ball::Draw()
 {
 	Object::Draw(pObject, position, Vec3(0.5f, 0.5f, 0.5f), rotation);
-
-	for (int i = 0; i < respawnPos.size(); i++)
-	{
-		Object::Draw(respawnObj, respawnPos[i]->pos+Vec3(0.0f,-0.5f,0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
-	}
 }
 
 
@@ -416,35 +407,6 @@ void Ball::Effect()
 
 float Ball::Cross(Vec2 a, Vec2 b) { return a.x * b.y - a.y * b.x; }
 
-void Ball::Respawn()
-{
-	//固定湧きする条件
-	if (Input::Get()->KeybordTrigger(DIK_M))
-	{
-		Vec3 pos = {};
-		//ランダムで出現位置
-		if (respawnPos.size() == 0) { return; }
-		std::random_device rnd;
-		std::mt19937 mt(rnd());
-		std::uniform_int_distribution<> rand2(0, (int)respawnPos.size() - 1);
-		int spawn = rand2(mt);
-
-		position = respawnPos[spawn]->pos;
-	}
-}
-
-void Ball::LoadRespawn()
-{
-	LevelData* levelData = nullptr;
-	std::string filepath = "ball";
-	levelData = LoadJson::Load(filepath);
-	for (auto& loadData : levelData->objects)
-	{
-		RespawnPos* load = new RespawnPos();
-		load->pos = loadData.translation;
- 		respawnPos.push_back(load);
-	}
-}
 
 void Ball::EnemyThrowAct(Vec3 targetPos) {
 	// ボールの飛ぶベクトル
