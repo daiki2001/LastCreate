@@ -21,6 +21,10 @@ public:
 		Vec3 position = {};
 		Vec3 rotation = {};
 	};
+	struct RespawnPos
+	{
+		Vec3 pos = {};
+	};
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
@@ -59,13 +63,17 @@ public:
 
 	void BallDelete();
 
-	void BallCreate();
+	void BallCreate(const Vec3& pos);
 
 private:
 	//出現位置のロード
 	void LoadSpawnStatus();
 	//スポーンエネミー
 	void SpawnEnemy();
+	//ボールリスポーン
+	void BallRespawn();
+	//ボールのスポーンする座標
+	void LoadRespawn();
 private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<Audio> audio;
@@ -81,10 +89,10 @@ private://定義
 
 	std::unique_ptr<EaseData> targetEase_;
 	bool targetFlag_ = false;
-	
+
 	ObjectData object;
 
-	std::vector<Enemy*>enemys;         //敵
+	std::vector<std::unique_ptr<Enemy>>enemys;         //敵
 	std::vector<LoadStatus*>loadStatus;//敵の出現位置
 	int enemyMax = 3;                  //敵最大数
 	int spwnCoolTime = 0;              //現在のクールタイム
@@ -94,4 +102,7 @@ private://定義
 	bool forcusChangeFlag = false;
 
 	GameTime gameTime;
+
+	std::vector<RespawnPos*>respawnPos;
+	ObjectData respawnObj;
 };

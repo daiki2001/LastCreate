@@ -52,15 +52,7 @@ private:
 	void WallRefrectCal();
 	void Effect();
 	float Cross(Vec2 a, Vec2 b);
-	void Respawn();
-	void LoadRespawn();
 	void EnemyThrowAct(Vec3 targetPos_);
-
-private:
-	struct RespawnPos
-	{
-		Vec3 pos = {};
-	};
 private:
 	ObjectData pObject;
 	Vec3 position = { 0.0f, 0.0f, -5.0f};
@@ -95,8 +87,6 @@ private:
 	bool refflaga = false;
 	float abc = 0;
 	int effectCount_ = 0;
-	std::vector<RespawnPos*>respawnPos;
-	ObjectData respawnObj;
 	ObjectData landmarkObj;
 	TextureData landmarkTex;
 	std::unique_ptr<ParticleManager>damegeParticle = nullptr;
