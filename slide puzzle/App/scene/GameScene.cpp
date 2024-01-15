@@ -161,16 +161,14 @@ void GameScene::NearEnemyCheck() {
 void GameScene::EnemyDeath()
 {
 	if (enemys.size() == 0) { return; }
-	int count = 0;
-	for (auto& enemy : enemys)
+	for (int i = 0; i < enemys.size() - 1; i++)
 	{
-		if (enemy->GetHp() <= 0)
+		if (enemys[i]->GetHp() <= 0)
 		{
-			enemys.erase(enemys.begin() + count);
+			enemys.erase(enemys.begin() + i);
 			targetFlag_ = true;
 			Score::Get()->PlasScore();
 		}
-		count++;
 	}
 }
 
