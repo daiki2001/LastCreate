@@ -25,11 +25,24 @@ void TitleScene::Init()
 	//スプライト画像読み込み
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("titleStage", true);
+	object = Shape::CreateOBJ("sky", true);
+	stageObj = Shape::CreateOBJ("titleStage", true);
 
 	//スプライト生成
 	title = Sprite::Get()->SpriteCreate(L"Resources/sprite/title.png");
 	press = Sprite::Get()->SpriteCreate(L"Resources/sprite/press.png");
+
+	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("titlePlayer");
+	m_model = std::make_unique<Model>();
+	m_model = std::unique_ptr<Model>(model1);
+	m_fbx = std::make_unique<FBXObject3d>();
+	m_fbx->Initialize();
+	m_fbx->SetModel(m_model.get());
+	m_fbx->LoadAnumation();
+	m_fbx->SetScale(Vec3(0.0015f, 0.0015f, 0.0015f));
+	m_fbx->SetRotation(Vec3(0, 90, 0));
+
+	m_fbx->PlayAnimation(0, true);
 
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
@@ -52,6 +65,9 @@ void TitleScene::Update()
 
 	sceneChange_->Update();
 	TitleDirection();
+
+	m_fbx->SetPosition(Vec3(-2.6f, 0.65f, -1.0f));
+	m_fbx->Update();
 }
 
 void TitleScene::Draw()
@@ -63,7 +79,9 @@ void TitleScene::Draw()
 
 void TitleScene::ShadowDraw()
 {
-	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), sAngle);
+	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3());
+	Object::Draw(stageObj, Vec3(-3.0f,1.0f,0.2f), Vec3(1.6f, 1.6f, 0.0f), Vec3(15,-240,0));
+	m_fbx->Draw();
 
 	Vec2 size = { 650,650 };
 	float posX = static_cast<float>(window_width) / 2 - size.x / 2;
