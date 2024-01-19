@@ -105,4 +105,5 @@ private://’è‹`
 
 	std::vector<RespawnPos*>respawnPos;
 	ObjectData respawnObj;
+	SpriteData ui;
 };

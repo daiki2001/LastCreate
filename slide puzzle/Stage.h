@@ -22,6 +22,9 @@ public:
 private:
 	ObjectData stageObj;
 	ObjectData sky;
+	ObjectData building;
+	ObjectData signage;
+	ObjectData ground;
 
 	Data skyData;
 	Data stageData;

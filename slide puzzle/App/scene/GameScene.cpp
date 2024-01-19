@@ -35,6 +35,9 @@ void GameScene::Init()
 	Score::Get()->ScoreReset();
 	sceneChange_ = std::make_unique<SceneChange>();
 	respawnObj = Shape::CreateOBJ("sphere");
+
+	ui = Sprite::Get()->SpriteCreate(L"Resources/sprite/playUI.png");
+
 	LoadRespawn();
 	BallRespawn();
 }
@@ -102,6 +105,8 @@ void GameScene::Draw()
 		ball->AfterDraw();
 	}
 	player->ParticleDraw();
+
+	Sprite::Get()->Draw(ui, Vec2(), (float)window_width, (float)window_height);
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();

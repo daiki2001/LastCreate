@@ -14,16 +14,16 @@ Score::~Score()
 
 void Score::Init()
 {
-	number[0] = Sprite::Get()->SpriteCreate(L"Resources/number/combo0.png");
-	number[1] = Sprite::Get()->SpriteCreate(L"Resources/number/combo1.png");
-	number[2] = Sprite::Get()->SpriteCreate(L"Resources/number/combo2.png");
-	number[3] = Sprite::Get()->SpriteCreate(L"Resources/number/combo3.png");
-	number[4] = Sprite::Get()->SpriteCreate(L"Resources/number/combo4.png");
-	number[5] = Sprite::Get()->SpriteCreate(L"Resources/number/combo5.png");
-	number[6] = Sprite::Get()->SpriteCreate(L"Resources/number/combo6.png");
-	number[7] = Sprite::Get()->SpriteCreate(L"Resources/number/combo7.png");
-	number[8] = Sprite::Get()->SpriteCreate(L"Resources/number/combo8.png");
-	number[9] = Sprite::Get()->SpriteCreate(L"Resources/number/combo9.png");
+	number[0] = Sprite::Get()->SpriteCreate(L"Resources/number/0.png");
+	number[1] = Sprite::Get()->SpriteCreate(L"Resources/number/1.png");
+	number[2] = Sprite::Get()->SpriteCreate(L"Resources/number/2.png");
+	number[3] = Sprite::Get()->SpriteCreate(L"Resources/number/3.png");
+	number[4] = Sprite::Get()->SpriteCreate(L"Resources/number/4.png");
+	number[5] = Sprite::Get()->SpriteCreate(L"Resources/number/5.png");
+	number[6] = Sprite::Get()->SpriteCreate(L"Resources/number/6.png");
+	number[7] = Sprite::Get()->SpriteCreate(L"Resources/number/7.png");
+	number[8] = Sprite::Get()->SpriteCreate(L"Resources/number/8.png");
+	number[9] = Sprite::Get()->SpriteCreate(L"Resources/number/9.png");
 
 	scoreBack = Sprite::Get()->SpriteCreate(L"Resources/sprite/scoreBack.png");
 }
@@ -63,7 +63,7 @@ void Score::GameSceneDraw()
 
 		int num = score % m / (m / 10);
 		if (num > 10 || num < 0) { break; }
-		Sprite::Get()->Draw(number[num], Vec2(1240.0f, 20.0f) - Vec2(38.0f, 0.0f) * static_cast<float>(i), 40.0f, 40.0f);
+		Sprite::Get()->Draw(number[num], Vec2(1155.0f, 18.0f) - Vec2(50.0f, 0.0f) * static_cast<float>(i), 90.0f, 90.0f);
 	}
 }
 
