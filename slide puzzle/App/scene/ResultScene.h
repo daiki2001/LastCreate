@@ -43,6 +43,7 @@ private:
 	SpriteData back;
 	SpriteData manipulate;
 	ObjectData object;
+	ObjectData stageObj;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
 };
