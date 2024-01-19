@@ -21,7 +21,6 @@ public:
 
 	const Vec3 GetPosition() { return position; }
 	const Vec3 GetRotation() { return rotation; }
-	void SetBall(Ball* ball);
 	bool GetForcusChangeFlag() { return forcusChangeFlag_; };
 	void SetForcusChangeFlag(bool changeFlag_) { forcusChangeFlag_ = changeFlag_; }
 
@@ -32,6 +31,8 @@ protected:
 	void BallThrow();
 	void BallCatch();
 	void StageCollision(const float stageSize);
+	void BallCreate();
+	void EnemyBallAct();
 
 protected:
 	std::unique_ptr<Model> m_model;
@@ -48,7 +49,9 @@ protected:
 	Vec3 hpScale = { 0.3f,0.2f,0.3f };
 	/*---------------*/
 
-	Ball* ball_ = nullptr;
+	std::unique_ptr<Ball> ball;
+	std::unique_ptr<Ball> oldBall;
+	int createTimer_ = 0;
 	bool actFlag_ = false;
 	bool catchFlag_ = false;
 	int catchTimer_ = 0;

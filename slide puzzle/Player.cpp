@@ -33,7 +33,11 @@ void Player::Init()
 
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
-	position = { 10.0f, 0.0f, 0.0f };
+	position = { 0.0f, 0.0f, 10.0f };
+
+	dustParticle = std::make_unique<ParticleManager>();
+	dustParticle->Initialize();
+	dustGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 }
 
 void Player::Update(float stageSize)
@@ -41,9 +45,10 @@ void Player::Update(float stageSize)
 	Move();
 	Jump();
 	BallThrow();
-	ComboCalculation(); 
+	ComboCalculation();
 	StageCollision(stageSize);
 	m_fbx->Update();
+	dustParticle->Update();
 }
 
 void Player::Draw()
@@ -52,6 +57,11 @@ void Player::Draw()
 	m_fbx->Draw();
 	m_fbx->SetPosition(position);
 	input->DebugDraw();
+}
+
+void Player::ParticleDraw()
+{
+	dustParticle->Draw(dustGraph);
 }
 
 void Player::SetBall(Ball* ball)
@@ -68,27 +78,27 @@ void Player::Move()
 	XMFLOAT2 speed = {};
 	if (input->IsForward())
 	{
-		speed.y = speed.y + 0.5f;
+		speed.y = speed.y + 0.25f;
 	}
 	else if (input->IsBack())
 	{
-		speed.y = speed.y - 0.5f;
+		speed.y = speed.y - 0.25f;
 	}
 
 	if (input->IsRight())
 	{
-		speed.x = speed.x - 0.5f;
+		speed.x = speed.x - 0.25f;
 	}
 	else if (input->IsLeft())
 	{
-		speed.x = speed.x + 0.5f;
+		speed.x = speed.x + 0.25f;
 	}
 
 	//
 	if (input->IsDash())
 	{
-		speed.x *= 1.5f;
-		speed.y *= 1.5f;
+		speed.x *= 1.25f;
+		speed.y *= 1.25f;
 	}
 
 	if (speed.y != 0.0f)
@@ -100,6 +110,12 @@ void Player::Move()
 	{
 		position.x += sinf((rotation.y * 3.14f) / 180.0f) * speed.x;
 		position.z += cosf((rotation.y * 3.14f) / 180.0f) * speed.x;
+	}
+	if (onGround_ && (input->IsForward() || input->IsBack() || input->IsLeft() || input->IsRight()))
+	{
+		dustParticle->DustAdd(position,
+			0.0f, 0.4f, 0.0f,
+			Vec4(0.3f, 0.1f, 0.1f, 0.3f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 	}
 }
 
@@ -162,7 +178,7 @@ void Player::BallCatch()
 	}
 }
 
-void Player::ComboCalculation() 
+void Player::ComboCalculation()
 {
 	// ボール無し
 	if (oldBall_ == nullptr) {
@@ -186,14 +202,17 @@ void Player::ComboCalculation()
 
 void Player::StageCollision(const float stageSize)
 {
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	/*if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
 	{
 		float length = sqrt(position.x * position.x + position.z * position.z);
 		float  difference = length - stageSize;
 		Vec2 normalize = { position.x / length,position.z / length };
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
-	}
+	}*/
+	float aaaa = 29.0f;
+	position.x = std::clamp(position.x, -aaaa, aaaa);
+	position.z = std::clamp(position.z, -50.0f, 0.0f);
 }
 
 void Player::TargetLockOn(Vec3 pos)

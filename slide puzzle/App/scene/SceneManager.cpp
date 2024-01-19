@@ -109,6 +109,10 @@ void SceneManager::Update()
 		BaseScene* scene = new TitleScene();
 		SetNextScene(scene);
 	}
+	if (Input::Get()->KeybordTrigger(DIK_0) == true) {
+		BaseScene* scene = new ResultScene();
+		SetNextScene(scene);
+	}
 }
 
 void SceneManager::Draw()

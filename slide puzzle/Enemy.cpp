@@ -1,16 +1,16 @@
 #include "Enemy.h"
 #include<Collision.h>
 
-void Enemy::SetBall(Ball* ball)
-{
-	if (ball_ != nullptr) { return; }
-
-	ball_ = ball;
-	ball_->SetHaveFlag(true);
-}
-
 void Enemy::BallThrow()
 {
+	// ƒ{[ƒ‹–³‚µ
+	if (ball == nullptr) { return; }
+
+	// “Š‚°‚é
+	ball->SetChargeFlag(true);	
+	ball->SetThrowFlag(true);
+	oldBall = std::move(ball);
+	ball = nullptr;
 }
 
 void Enemy::BallCatch()
@@ -37,7 +37,7 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 
 void Enemy::StageCollision(const float stageSize)
 {
-	if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
+	/*if (!Collision::CircleCollision(Vec2(position.x, position.z), Vec2(), 1.0f, stageSize))
 	{
 		float length = sqrt(position.x * position.x + position.z * position.z);
 		float  difference = length - stageSize;
@@ -45,5 +45,29 @@ void Enemy::StageCollision(const float stageSize)
 		position.x -= normalize.x * difference;
 		position.z -= normalize.y * difference;
 		actFlag_ = false;
-	}
+	}*/
+
+	if (position.z <= 0.0f || position.z >= 50.0f || position.x <= -29.0f || position.x >= 29.0f) { actFlag_ = false; }
+	float aaaa = 29.0f;
+	position.x = std::clamp(position.x, -aaaa, aaaa);
+	position.z = std::clamp(position.z, 0.0f, 50.0f);
+}
+
+void Enemy::BallCreate()
+{
+	if (ball == nullptr) { return; }
+	createTimer_--;
+	if (createTimer_ > 0) { return; }
+	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
+	ball->Init();
+	ball->SetHaveFlag(true);
+	ball = std::move(ball);
+	createTimer_ = (rand() % 1800) + 1800;
+}
+
+void Enemy::EnemyBallAct()
+{
+	ball->Update(
+		position, rotation,
+		15.0f);
 }

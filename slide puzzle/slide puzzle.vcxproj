@@ -317,6 +317,7 @@
     <ClInclude Include="Library\Helper\LoadCSV.h" />
     <ClInclude Include="Library\Helper\LoadJson.h" />
     <ClInclude Include="Library\Helper\Vec.h" />
+    <ClInclude Include="Library\Helper\WriteCSV.h" />
     <ClInclude Include="Library\imgui\imconfig.h" />
     <ClInclude Include="Library\imgui\imgui.h" />
     <ClInclude Include="Library\imgui\imgui_impl_dx12.h" />
@@ -375,6 +376,7 @@
     <ClCompile Include="Library\Helper\LoadCSV.cpp" />
     <ClCompile Include="Library\Helper\LoadJson.cpp" />
     <ClCompile Include="Library\Helper\Vec.cpp" />
+    <ClCompile Include="Library\Helper\WriteCSV.cpp" />
     <ClCompile Include="Library\imgui\imgui.cpp" />
     <ClCompile Include="Library\imgui\imgui_demo.cpp" />
     <ClCompile Include="Library\imgui\imgui_draw.cpp" />

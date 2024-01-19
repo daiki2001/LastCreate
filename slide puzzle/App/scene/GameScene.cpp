@@ -14,49 +14,33 @@ GameScene::~GameScene()
 
 void GameScene::Init()
 {
-	//Audioクラス作成
 	audio = std::make_unique<Audio>();
-	//ライトグループクラス作成
 	lightGroup = std::make_unique<LightGroup>();
 	lightGroup->Initialize();
-	// 3Dオブエクトにライトをセット
 	lightGroup->SetDirLightActive(0, true);
 	lightGroup->SetDirLightDir(0, XMVECTOR{ 0,-1,0,0 });
 	lightGroup->SetShadowDir(Vec3(0, 1, 0));
 	FBXObject3d::SetLight(lightGroup.get());
 	Object::SetLight(lightGroup.get());
-	//音データ読み込み
-
-	//カメラ位置をセット
 	Camera::Get()->SetCamera(Vec3{ 0,10,-10 }, Vec3{ 0, -3, 0 }, Vec3{ 0, 1, 0 });
-	//スプライト画像読み込み
-
-	
-
-	//オブジェクト生成
 	player = std::make_unique<Player>();
 	player->Init();
 
-	ball = std::make_unique<Ball>();
-	ball->Init();
-
-
 	stage = std::make_unique<Stage>();
 	stage->Init();
-
 	targetEase_ = std::make_unique<EaseData>(60);
-
 	LoadSpawnStatus();
 	gameTime.Init();
 	gameTime.Start();
 	Score::Get()->ScoreReset();
-	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
+	respawnObj = Shape::CreateOBJ("sphere");
+	LoadRespawn();
+	BallRespawn();
 }
 
 void GameScene::Update()
 {
-	//ライト更新
 	lightGroup->Update();
 	if (gameTime.GetChangeFlag())
 	{
@@ -73,38 +57,51 @@ void GameScene::Update()
 	SpawnEnemy();
 
 	TargetAct();
-	
+
 	player->Update(stage->GetStageSize());
 	CameraMove();
-	for (int i = 0; i < enemys.size(); i++){
-		enemys[i]->Update();
+	for (auto& enemy : enemys) {
+		enemy->Update();
 	}
-	ball->Update(
-		player->GetPosition(), player->GetRotation(),
-	    stage->GetStageSize());
+
+	for (auto& ball : balls)
+	{
+		ball->Update(
+			player->GetPosition(), player->GetRotation(),
+			stage->GetStageSize());
+	}
 	sceneChange_->Update();
 
 	EnemyDeath();
+	BallDelete();
+	BallRespawn();
 
 	gameTime.Update();
 }
 
 void GameScene::Draw()
 {
-	
-
 	player->Draw();
 
-
-	ball->Draw();
-
-	for (int i = 0; i < enemys.size(); i++)
+	for (auto& ball : balls)
 	{
-		enemys[i]->Draw();
+		ball->Draw();
 	}
 
+	for (auto& enemy : enemys)
+	{
+		enemy->Draw();
+	}
+	for (int i = 0; i < respawnPos.size(); i++)
+	{
+		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, -0.5f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+	}
 	stage->Draw();
-
+	for (auto& ball : balls)
+	{
+		ball->AfterDraw();
+	}
+	player->ParticleDraw();
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();
@@ -117,21 +114,22 @@ void GameScene::ShadowDraw()
 
 void GameScene::Finalize()
 {
-	enemys.clear();
 	Texture::Get()->Delete();
 }
 
 void GameScene::BallHave()
 {
-	if (ball->GetHaveFlag())
+	for (auto& ball : balls)
 	{
-		player->SetBall(ball.get());
+		if (ball->GetHaveFlag())
+		{
+			player->SetBall(ball.get());
+		}
 	}
 }
 
 void GameScene::CameraMove()
 {
-	//半径は-10
 	XMVECTOR v0 = { 0, 0, -10, 0 };
 	XMMATRIX  rotM = XMMatrixIdentity();
 	rotM *= XMMatrixRotationX(XMConvertToRadians(30.0f));
@@ -143,25 +141,13 @@ void GameScene::CameraMove()
 	Vec3 center = { target.m128_f32[0], target.m128_f32[1], target.m128_f32[2] };
 	Vec3 pos = f;
 
-	if (!Collision::CircleCollision(Vec2(pos.x, pos.z), Vec2(), 1.0f, stage->GetStageSize()))
-	{
-		float length = sqrt(pos.x * pos.x + pos.z * pos.z);
-		float  difference = length - stage->GetStageSize();
-		Vec2 normalize = { pos.x / length,pos.z / length };
-		pos.x -= normalize.x * difference;
-		pos.z -= normalize.y * difference;
-	}
-
-	//カメラ位置をセット
 	Camera::Get()->SetCamera(pos, center, Vec3{ 0, 1, 0 });
 }
 
 void GameScene::NearEnemyCheck() {
-	// プレイヤーに一番近い敵を求める
 	float farLength = 5000.0f;
 	int ensmysNumber = 0;
 	for (int i = 0; i < enemys.size(); i++) {
-		// プレイヤーと敵との距離
 		float length = Vec3(player->GetPosition() - enemys[i]->GetPosition()).length();
 		if (farLength > length) {
 			farLength = length;
@@ -175,8 +161,7 @@ void GameScene::NearEnemyCheck() {
 void GameScene::EnemyDeath()
 {
 	if (enemys.size() == 0) { return; }
-
-	for (int i = 0; i < enemys.size(); i++)
+	for (int i = 0; i < enemys.size() - 1; i++)
 	{
 		if (enemys[i]->GetHp() <= 0)
 		{
@@ -197,16 +182,22 @@ void GameScene::TargetAct()
 		enemys[oldForcusNum]->SetForcusChangeFlag(false);
 	}
 
-	if (ball->GetThrowFlag() && ball->GetHitFlag())
+	for (auto& ball : balls)
 	{
-		enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+		if (ball->GetThrowFlag() && ball->GetHitFlag())
+		{
+			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+		}
 	}
-	
+
 	TargetReset(enemys[forcusEnemyNum]->GetPosition(), targetFlag_);
 
-	if (!ball->GetHaveFlag())
+	for (auto& ball : balls)
 	{
-		ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
+		if (!ball->GetHaveFlag())
+		{
+			ball->SetTargetPos(enemys[forcusEnemyNum]->GetPosition());
+		}
 	}
 }
 
@@ -229,6 +220,30 @@ void GameScene::TargetReset(Vec3 pos, bool flag)
 	targetEase_->Update();
 }
 
+void GameScene::BallDelete()
+{
+	if (balls.size() == 0) { return; }
+	int count = 0;
+
+	for (auto& ball : balls)
+	{
+		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())
+		{
+			balls.erase(balls.begin() + count);
+		}
+
+		count++;
+	}
+}
+
+void GameScene::BallCreate(const Vec3& pos)
+{
+	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
+	ball->Init();
+	ball->SetPosition(pos);
+	balls.push_back(std::move(ball));
+}
+
 void GameScene::LoadSpawnStatus()
 {
 	LevelData* levelData = nullptr;
@@ -245,27 +260,19 @@ void GameScene::LoadSpawnStatus()
 
 void GameScene::SpawnEnemy()
 {
-
-	//最大数かどうか　クールタイムで測る
 	if (enemys.size() < enemyMax && spwnCoolTime <= 0)
 	{
 		spwnCoolTime = spwnCoolTimeMax;
-		//敵の種類によって分かれる
-		Enemy* enemy = new BaseEnemy();
+		std::unique_ptr<Enemy> enemy = std::make_unique <BaseEnemy>();
 
-		//ランダムで出現位置
 		if (loadStatus.size() == 0) { return; }
 		std::random_device rnd;
 		std::mt19937 mt(rnd());
 		std::uniform_int_distribution<> rand2(0, (int)loadStatus.size() - 1);
 		int spawn = rand2(mt);
 
-		if (spawn < 0 || spawn>3)
-		{
-			int i = 0;
-		}
 		enemy->Init(loadStatus[spawn]->position, loadStatus[spawn]->rotation);
-		enemys.push_back(enemy);
+		enemys.push_back(std::move(enemy));
 	}
 
 	if (spwnCoolTime > 0)
@@ -274,3 +281,32 @@ void GameScene::SpawnEnemy()
 	}
 }
 
+void GameScene::BallRespawn()
+{
+	//固定湧きする条件
+	if (balls.size() == 0)
+	{
+		Vec3 pos = {};
+		//ランダムで出現位置
+		if (respawnPos.size() == 0) { return; }
+		std::random_device rnd;
+		std::mt19937 mt(rnd());
+		std::uniform_int_distribution<> rand2(0, (int)respawnPos.size() - 1);
+		int spawn = rand2(mt);
+
+		BallCreate(respawnPos[spawn]->pos);
+	}
+}
+
+void GameScene::LoadRespawn()
+{
+	LevelData* levelData = nullptr;
+	std::string filepath = "ball";
+	levelData = LoadJson::Load(filepath);
+	for (auto& loadData : levelData->objects)
+	{
+		RespawnPos* load = new RespawnPos();
+		load->pos = loadData.translation;
+		respawnPos.push_back(load);
+	}
+}

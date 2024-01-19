@@ -2,6 +2,13 @@
 #include"Object.h"
 class Stage
 {
+private:
+	struct Data
+	{
+		Vec3 position = {};
+		Vec3 rotation = {};
+		Vec3 scale = {};
+	};
 
 public:
 	Stage();
@@ -16,10 +23,10 @@ private:
 	ObjectData stageObj;
 	ObjectData sky;
 
-	Vec3 position = {};
-	const float SCALE = 40.0f;
-	const float SCALEDRAW = 25.0f;
-	Vec3 scale = { SCALEDRAW,SCALEDRAW,SCALEDRAW };
-	Vec3 rotation = {};
+	Data skyData;
+	Data stageData;
+
+	const float SCALE = 15.0f;
+	const float SCALEDRAW = 30.0f;
 };
 
