@@ -282,6 +282,7 @@
     <ClInclude Include="Ball.h" />
     <ClInclude Include="BallController\BallController.h" />
     <ClInclude Include="BallController\Ini.h" />
+    <ClInclude Include="BallController\KalmanFilter.h" />
     <ClInclude Include="BallController\Serial.h" />
     <ClInclude Include="BaseEnemy.h" />
     <ClInclude Include="Enemy.h" />

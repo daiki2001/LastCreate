@@ -219,3 +219,23 @@ bool BallController::IsBallThrow()
 	AngleReset();
 	return result;
 }
+
+bool BallController::IsForward() const
+{
+	return false;
+}
+
+bool BallController::IsBack() const
+{
+	return false;
+}
+
+bool BallController::IsLeft() const
+{
+	return false;
+}
+
+bool BallController::IsRight() const
+{
+	return false;
+}

@@ -45,6 +45,7 @@ bool GameInputManager::IsForward() const
 	bool result = false;
 	result |= input->KeybordPush(DIK_W);
 	result |= input->ControllerPush(ButtonKind::LButtonUp);
+	result |= ball->IsForward();
 	return result;
 }
 
@@ -53,6 +54,7 @@ bool GameInputManager::IsBack() const
 	bool result = false;
 	result |= input->KeybordPush(DIK_S);
 	result |= input->ControllerPush(ButtonKind::LButtonDown);
+	result |= ball->IsBack();
 	return result;
 }
 
@@ -61,6 +63,7 @@ bool GameInputManager::IsLeft() const
 	bool result = false;
 	result |= input->KeybordPush(DIK_A);
 	result |= input->ControllerPush(ButtonKind::LButtonLeft);
+	result |= ball->IsLeft();
 	return result;
 }
 
@@ -69,6 +72,7 @@ bool GameInputManager::IsRight() const
 	bool result = false;
 	result |= input->KeybordPush(DIK_D);
 	result |= input->ControllerPush(ButtonKind::LButtonRight);
+	result |= ball->IsRight();
 	return result;
 }
 
@@ -85,7 +89,7 @@ bool GameInputManager::IsJamp() const
 	bool result = false;
 	result |= input->KeybordTrigger(DIK_SPACE);
 	result |= input->ControllerUp(ButtonKind::ButtonA);
-	result |= ball->GetFlagTriger();
+	//result |= ball->GetFlagTriger();
 	return result;
 }
 
