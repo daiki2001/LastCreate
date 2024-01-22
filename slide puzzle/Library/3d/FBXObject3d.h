@@ -111,6 +111,8 @@ public://メンバ関数
 	void SetRotation(const Vec3 &rotation) { m_rotation = rotation; }
 	//アーマチュアの番号検索
 	int GetArmature(std::string name);
+	FbxTime GetAnimeCurrentTime(int num) { return animeDatas_[num].currentTime; }
+	FbxTime GetAnimeEndTime(int num) { return animeDatas_[num].endTime; }
 protected://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource>m_constBuffTransform;
@@ -155,8 +157,4 @@ protected://メンバ変数
 	FbxScene* scene;
 	//アーマチュア番号
 	int armatureNo = 0;
-	//アニメーション名前
-	const char* animstackname;
-	//アニメーションの数
-	int animeStackCount;
 };
