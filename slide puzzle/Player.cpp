@@ -31,8 +31,6 @@ void Player::Init()
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	m_fbx->SetRotation(Vec3(0, 90, 0));
 
-	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
-
 	position = { 0.0f, 0.0f, 10.0f };
 
 	dustParticle = std::make_unique<ParticleManager>();
@@ -113,6 +111,7 @@ void Player::Move()
 	}
 	if (onGround_ && (input->IsForward() || input->IsBack() || input->IsLeft() || input->IsRight()))
 	{
+		m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 		dustParticle->DustAdd(position,
 			0.0f, 0.4f, 0.0f,
 			Vec4(0.3f, 0.1f, 0.1f, 0.3f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -136,6 +135,7 @@ void Player::Jump()
 		onGround_ = false;
 		const float jumpVYFist = 0.2f;
 		fallV_ = { 0, jumpVYFist, 0 };
+		m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 	}
 
 	if (!onGround_ && position.y < 0)
@@ -163,6 +163,7 @@ void Player::BallThrow()
 		ball_->SetThrowFlag(true);
 		oldBall_ = ball_;
 		ball_ = nullptr;
+		m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
 	}
 }
 
