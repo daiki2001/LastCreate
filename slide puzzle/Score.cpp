@@ -39,7 +39,7 @@ void Score::Update()
 
 void Score::PlasScore()
 {
-	score += 10;
+	score += 1;
 }
 
 void Score::GameSceneDraw()
