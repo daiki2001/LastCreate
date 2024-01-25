@@ -89,8 +89,6 @@ private:
 	int effectCount_ = 0;
 	ObjectData landmarkObj;
 	TextureData landmarkTex;
-	std::unique_ptr<ParticleManager>damegeParticle = nullptr;
-	TextureData damegeGraph;
 	std::unique_ptr<ParticleManager>ballLineParticle = nullptr;
 	TextureData ballLineGraph;
 
