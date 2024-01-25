@@ -14,9 +14,6 @@ void Ball::Init() {
 	landmarkObj = Shape::CreateRect(1.0f, 1.0f);
 	landmarkTex = Texture::Get()->LoadTexture(L"Resources/sprite/landmark.png");
 	landmarkObj.OBJTexture = landmarkTex;
-	damegeParticle = std::make_unique<ParticleManager>();
-	damegeParticle->Initialize();
-	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 	ballLineParticle = std::make_unique<ParticleManager>();
 	ballLineParticle->Initialize();
 	ballLineGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
@@ -59,7 +56,7 @@ void Ball::AfterDraw()
 	{
 		Object::Draw(landmarkObj, Vec3(position.x, 0.0f, position.z), Vec3(2.5f, 2.5f, 1.0f), Vec3(90.0f, 0.0f, 0.0f));
 	}
-	damegeParticle->Draw(damegeGraph);
+	
 	ballLineParticle->Draw(ballLineGraph);
 }
 
@@ -100,9 +97,7 @@ bool Ball::GetHitFlag()
 {
 	if (BallHitFlag(targetPos_)) {
 		throwFlag_ = false;
-		damegeParticle->DamegeAdd(position, targetPos_,
-			1.5f, 1.0f, 0.0f,
-			Vec4(0.5f, 0.0f, 0.0f, 0.5f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
+		
 		return true;
 	}
 
@@ -365,7 +360,7 @@ void Ball::WallRefrectCal() {
 void Ball::Effect()
 {
 
-	damegeParticle->Update();
+	
 	ballLineParticle->Update();
 	if (throwFlag_)
 	{
