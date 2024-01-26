@@ -251,7 +251,7 @@ void GameScene::BallCreate(const Vec3& pos)
 {
 	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
 	ball->Init();
-	ball->SetPosition(pos);
+	ball->SetPosition(Vec3{ pos.x,1.0f,pos.z });
 	balls.push_back(std::move(ball));
 }
 
@@ -312,7 +312,7 @@ void GameScene::BallRespawn()
 void GameScene::LoadRespawn()
 {
 	LevelData* levelData = nullptr;
-	std::string filepath = "stage";
+	std::string filepath = "ball";
 	levelData = LoadJson::Load(filepath);
 	for (auto& loadData : levelData->objects)
 	{
