@@ -34,7 +34,7 @@ void GameScene::Init()
 	gameTime.Start();
 	Score::Get()->ScoreReset();
 	sceneChange_ = std::make_unique<SceneChange>();
-	respawnObj = Shape::CreateOBJ("sphere");
+	respawnObj = Shape::CreateOBJ("stand");
 	damegeParticle = std::make_unique<ParticleManager>();
 	damegeParticle->Initialize();
 	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
@@ -100,7 +100,7 @@ void GameScene::Draw()
 	}
 	for (int i = 0; i < respawnPos.size(); i++)
 	{
-		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, -0.5f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, 0.0f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
 	}
 	stage->Draw();
 	for (auto& ball : balls)
@@ -312,7 +312,7 @@ void GameScene::BallRespawn()
 void GameScene::LoadRespawn()
 {
 	LevelData* levelData = nullptr;
-	std::string filepath = "ball";
+	std::string filepath = "stage";
 	levelData = LoadJson::Load(filepath);
 	for (auto& loadData : levelData->objects)
 	{

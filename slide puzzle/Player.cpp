@@ -254,7 +254,7 @@ void Player::Action()
 	{
 		if (animeNo == JAMP)
 		{
-			m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
+			//m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 
 			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("jump")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("jump")))
 			{
@@ -263,7 +263,7 @@ void Player::Action()
 		}
 		else if (animeNo == THROW)
 		{
-			m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
+			//m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
 
 			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("throw")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("throw")))
 			{

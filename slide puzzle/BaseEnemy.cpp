@@ -12,7 +12,6 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 	m_fbx->SetModel(FBXModelManager::GetInstance()->GetModel("enemy"));
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
-	m_fbx->SetRotation(Vec3(0, 0, 0));
 
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
@@ -26,6 +25,7 @@ void BaseEnemy::Update()
 	Move();
 	StageCollision(40.0f);
 	m_fbx->SetPosition(position);
+	m_fbx->SetRotation(rotation);
 	m_fbx->Update();
 }
 
@@ -53,15 +53,19 @@ void BaseEnemy::Move()
 	{
 	case BaseEnemy::Progress:
 		position.z += 0.25f;
+		rotation.y = 0;
 		break;
 	case BaseEnemy::Retreat:
 		position.z -= 0.25f;
+		rotation.y = 180;
 		break;
 	case BaseEnemy::Right:
 		position.x += 0.25f;
+		rotation.y = 90;
 		break;
 	case BaseEnemy::Left:
 		position.x -= 0.25f;
+		rotation.y = -90;
 		break;
 	default:
 		break;
