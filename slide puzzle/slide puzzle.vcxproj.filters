@@ -243,6 +243,9 @@
     <ClCompile Include="Library\Helper\WriteCSV.cpp">
       <Filter>Library\Helper</Filter>
     </ClCompile>
+    <ClCompile Include="BallController\KalmanFilter.cpp">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Library\Helper\WriteCSV.h">
       <Filter>Library\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="BallController\KalmanFilter.h">
+      <Filter>ソースファイル\BallController</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
