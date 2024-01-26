@@ -2,6 +2,34 @@
 #include "Ini.h"
 #include <string>
 
+#ifdef _DEBUG
+#include <fstream>
+#endif // _DEBUG
+
+namespace
+{
+const double PI = 3.14159265358979323846;
+const double DEGREE = 180.0 / PI;
+
+#ifdef _DEBUG
+std::ofstream outlog;
+#endif // _DEBUG
+
+std::array<double, BallController::sensorCount> ToImuData(const Vec3& a, const Vec3& g)
+{
+	std::array<double, BallController::sensorCount> result = {};
+
+	result[0] = static_cast<double>(a.x);
+	result[1] = static_cast<double>(a.y);
+	result[2] = static_cast<double>(a.z);
+	result[3] = static_cast<double>(g.x);
+	result[4] = static_cast<double>(g.y);
+	result[5] = static_cast<double>(g.z);
+
+	return result;
+}
+}
+
 const char BallController::Data::header[4] = { 'D', 'A', 'T', 'F' };
 
 const int BallController::Data::GetPacketSize()
@@ -13,17 +41,31 @@ const int BallController::Data::GetPacketSize()
 	return result;
 }
 
-const Vec3 BallController::gravity = { 1, 0, 0 };
+const float BallController::deadzone = 0.25f;
+
 BallController::BallController(const char* serialDevice) :
 	accel{},
-	oldAccel(accel),
+	accelLPF(accel),
 	gyro{},
-	oldGyro(gyro),
+	gyroLPF(gyro),
+	angle{},
+	oldAngle{},
+	startAngle{},
+	startAngleSum{},
 	flag(false),
 	oldFlag(false),
-	angle(Vec3(0, 0, 0))
+	startTime(std::chrono::system_clock::now()),
+	count{},
+	oldCount(count),
+	kalman{},
+	dataCount(0)
 {
 	this->serial = Serial::create(serialDevice);
+
+#ifdef _DEBUG
+	outlog.open("./data/angle_output.txt");
+	outlog << std::fixed << std::setprecision(6);
+#endif // _DEBUG
 }
 
 BallController::~BallController()
@@ -56,11 +98,12 @@ int BallController::Update() {
 	contentSize += receivedSize;
 
 	// データの記録
-	oldAccel = accel;
-	oldGyro = gyro;
+	oldAngle = angle;
 	oldFlag = flag;
+	oldCount = count;
 	char* p = buf;
 	const int packetSize = Data::GetPacketSize();
+	std::array<float, sensorCount> rawData = {};
 	for (; p < buf + contentSize - packetSize; ) {
 		if (memcmp(p, Data::header, sizeof(Data::header)) != 0) {
 			p++;
@@ -74,6 +117,7 @@ int BallController::Update() {
 			const float accelSensitivity_16g = 2048;
 			const float gyroSensitivity_2kdps = 16.4f;
 			record.cencor[i] = *((const int16_t*)p) / (i < accelCount ? accelSensitivity_16g : gyroSensitivity_2kdps);
+			rawData[i] += record.cencor[i];
 		}
 		/* フラグの情報 */
 		for (int i = 0; i < (flagCount / 8.0f); i++, p += sizeof(uint8_t))
@@ -90,21 +134,40 @@ int BallController::Update() {
 		if (this->records.size() > this->maxRecordCount) {
 			this->records.erase(this->records.begin());
 		}
-
-		accel = Vec3(records.back().cencor[ACCEL_X],
-					 records.back().cencor[ACCEL_Y],
-					 records.back().cencor[ACCEL_Z]);
-		gyro = Vec3(records.back().cencor[GYRO_X],
-					records.back().cencor[GYRO_Y],
-					records.back().cencor[GYRO_Z]);
-		flag = records.back().flags[0];
 	}
 
 	const int tailSize = (int)(buf + contentSize - p);
 	memmove(buf, p, tailSize);
 	contentSize = tailSize;
 
+	for (int i = 0; i < sensorCount; i++)
+	{
+		records.back().cencor[i] = rawData[i] / dataCount;
+	}
+
+	accel = Vec3(records.back().cencor[ACCEL_X],
+				 records.back().cencor[ACCEL_Y],
+				 records.back().cencor[ACCEL_Z]);
+	gyro = Vec3(records.back().cencor[GYRO_X],
+				records.back().cencor[GYRO_Y],
+				records.back().cencor[GYRO_Z]);
+	gyro /= static_cast<float>(DEGREE);
+	flag = records.back().flags[0];
+
+#ifdef _DEBUG
+	//outlog << count.count() << ", ";
+	//for (size_t i = 0; i < records.back().cencor.size(); i++)
+	//{
+	//	double x = (i < accelCount) ? 1.0 : DEGREE;
+	//	outlog << records.back().cencor[i] / static_cast<float>(x) << ", ";
+	//}
+	//outlog << std::endl;
+#endif // _DEBUG
 	AngleUpdate();
+	count = std::chrono::system_clock::now() - startTime;
+#ifdef _DEBUG
+	outlog << count.count() << ", " << kalman.GetX()[0] << "," << kalman.GetX()[1] << "," << kalman.GetX()[2] << std::endl;
+#endif // _DEBUG
 
 	return dataCount;
 }
@@ -175,67 +238,94 @@ void BallController::DrawGraph()
 
 void BallController::AngleUpdate()
 {
-	if (accel.length() < 1)
+	if (GetFlagTriger() || abs((count - oldCount).count()) > 1.35)
 	{
-		return;
+		AngleReset();
 	}
 
-	angle += gyro;
+	const Vec3 baisA = { -0.5849296877f, 0.072347369f, -0.01939517739f };
+	const Vec3 baisG = { -0.8886206362f, 0.03656522179f, 0.6347734145f };
+	accel -= baisA;
+	gyro -= baisG;
 
-	if (angle.x < -180)
+	if (count.count() < 0.0005)
 	{
-		angle.x += 360;
+		accelLPF = accel;
+		gyroLPF = gyro;
 	}
-	else if (angle.x > +180)
+	else
 	{
-		angle.x -= 360;
+		float lpf = 0.07f;
+		accelLPF = lpf * accel + (1.0f - lpf) * accelLPF;
+		gyroLPF = lpf * gyro + (1.0f - lpf) * gyroLPF;
 	}
-	if (angle.y < -180)
+
+	// kalman filter and normalize quaternion
+	kalman.Update(count.count(), accelLPF, gyroLPF);
+
+	if (count.count() < 1.35)
 	{
-		angle.y += 360;
-	}
-	else if (angle.y > +180)
-	{
-		angle.y -= 360;
-	}
-	if (angle.z < -180)
-	{
-		angle.z += 360;
-	}
-	else if (angle.z > +180)
-	{
-		angle.z -= 360;
+		dataCount++;
+		startAngleSum += angle;
+		startAngle = (dataCount == 0) ? Vec3() : (startAngleSum / static_cast<float>(dataCount));
 	}
 }
 
 void BallController::AngleReset()
 {
-	angle = Vec3(0, 0, 0);
-}
+#ifdef _DEBUG
+	outlog << std::endl;
+	outlog << std::endl;
+	outlog << std::endl;
+#endif // _DEBUG
 
-bool BallController::IsBallThrow()
-{
-	bool result = GetFlagReturn() && gyro.y < -10;
-	AngleReset();
-	return result;
+	kalman.Reset();
+	startAngleSum = {};
+	dataCount = 0;
+	startTime = std::chrono::system_clock::now();
 }
 
 bool BallController::IsForward() const
 {
-	return false;
+	bool result = false;
+	result = accel.y > +deadzone;
+	//Vec3 v = startAngle - angle;
+	//result = v.z > +deadzone;
+	return result;
 }
 
 bool BallController::IsBack() const
 {
-	return false;
+	bool result = false;
+	result = accel.y < -deadzone;
+	//Vec3 v = startAngle - angle;
+	//result = v.z < -deadzone;
+	return result;
 }
 
 bool BallController::IsLeft() const
 {
-	return false;
+	bool result = false;
+	result = accel.x > +deadzone + 0.5f;
+	//result = (startAngle - angle).y > +deadzone;
+	return result;
 }
 
 bool BallController::IsRight() const
 {
-	return false;
+	bool result = false;
+	result = accel.x < -deadzone + 0.5f;
+	//result = (startAngle - angle).y < -deadzone;
+	return result;
+}
+
+bool BallController::IsJump() const
+{
+	return !GetFlag() && accel.z > 0.0f;
+}
+
+bool BallController::IsBallThrow() const
+{
+	bool result = GetFlagReturn() && gyro.z < -10.0f;
+	return result;
 }

@@ -349,6 +349,7 @@
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="BallController\BallController.cpp" />
     <ClCompile Include="BallController\Ini.cpp" />
+    <ClCompile Include="BallController\KalmanFilter.cpp" />
     <ClCompile Include="BallController\Serial.cpp" />
     <ClCompile Include="BaseEnemy.cpp" />
     <ClCompile Include="Enemy.cpp" />
