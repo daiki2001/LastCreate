@@ -1,16 +1,15 @@
 #include "BaseEnemy.h"
 #include<Shape.h>
+#include "../../FBXModelManager.h"
 
 void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 {
 	position = pos;
 	rotation = rot;
-	Model* model = FbxLoader::GetInstance()->LoadModelFromFile("enemy");
-	m_model = std::make_unique<Model>();
-	m_model = std::unique_ptr<Model>(model);
+
 	m_fbx = std::make_unique<FBXObject3d>();
 	m_fbx->Initialize();
-	m_fbx->SetModel(m_model.get());
+	m_fbx->SetModel(FBXModelManager::GetInstance()->GetModel("enemy"));
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	m_fbx->SetRotation(Vec3(0, 0, 0));

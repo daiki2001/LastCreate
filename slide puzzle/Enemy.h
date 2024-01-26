@@ -35,7 +35,6 @@ protected:
 	void EnemyBallAct();
 
 protected:
-	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
 
 protected:

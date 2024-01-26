@@ -38,7 +38,6 @@ private:
 private:
 	std::unique_ptr<LightGroup>lightGroup;
 	std::unique_ptr<FBXObject3d>  m_fbx;
-	std::unique_ptr<Model> m_model;
 private://定義
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
