@@ -45,8 +45,10 @@ const float BallController::deadzone = 0.25f;
 
 BallController::BallController(const char* serialDevice) :
 	accel{},
+	oldAccle(accel),
 	accelLPF(accel),
 	gyro{},
+	oldGyro(gyro),
 	gyroLPF(gyro),
 	angle{},
 	oldAngle{},
@@ -98,6 +100,8 @@ int BallController::Update() {
 	contentSize += receivedSize;
 
 	// データの記録
+	oldAccle = accel;
+	oldGyro = gyro;
 	oldAngle = angle;
 	oldFlag = flag;
 	oldCount = count;
@@ -319,13 +323,41 @@ bool BallController::IsRight() const
 	return result;
 }
 
-bool BallController::IsJump() const
+bool BallController::IsJamp() const
 {
-	return !GetFlag() && accel.z > 0.0f;
+	static bool isJamp = false;
+	bool result = false;
+
+	if (GetFlag() || GetFlagReturn())
+	{
+		result = false;
+	}
+	else
+	{
+		if (accel.z > 0.0f)
+		{
+			if (isJamp)
+			{
+				result = false;
+			}
+			else
+			{
+				isJamp = true;
+				result = true;
+			}
+		}
+		else
+		{
+			isJamp = false;
+			result = false;
+		}
+	}
+
+	return result;
 }
 
 bool BallController::IsBallThrow() const
 {
-	bool result = GetFlagReturn() && gyro.z < -10.0f;
+	bool result = GetFlagReturn() && (gyro.x + gyro.z < -15.0f);
 	return result;
 }
