@@ -37,6 +37,12 @@ bool GameInputManager::IsDecide() const
 	result |= input->KeybordTrigger(DIK_SPACE);
 	result |= input->ControllerUp(ButtonKind::ButtonA);
 	result |= ball->GetFlagTriger();
+
+	if (result)
+	{
+		ball->AngleReset();
+	}
+
 	return result;
 }
 

@@ -244,6 +244,9 @@
       <Filter>Library\Helper</Filter>
     </ClCompile>
     <ClCompile Include="FBXModelManager.cpp" />
+    <ClCompile Include="BallController\KalmanFilter.cpp">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library\3d\DirectionalLight.h">
@@ -434,6 +437,9 @@
     </ClInclude>
     <ClInclude Include="BallController\KalmanFilter.h" />
     <ClInclude Include="FBXModelManager.h" />
+    <ClInclude Include="BallController\KalmanFilter.h">
+      <Filter>ソースファイル\BallController</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\PostEffect\DepthOfField.hlsli">

@@ -26,7 +26,6 @@ private:
 	static const int GYRO_Y = 4;
 	static const int GYRO_Z = 5;
 
-	static const Vec3 gravity;
 	static const float deadzone;
 
 private: //サブクラス
@@ -47,15 +46,20 @@ private: //メンバ変数
 	std::vector<Data> records;
 
 	Vec3 accel;
-	Vec3 oldAccel;
+	Vec3 accelLPF;
 	Vec3 gyro;
-	Vec3 oldGyro;
+	Vec3 gyroLPF;
 	Vec3 angle;
+	Vec3 oldAngle;
+	Vec3 startAngle;
+	Vec3 startAngleSum;
 	bool flag;
 	bool oldFlag;
 	std::chrono::system_clock::time_point startTime;
 	std::chrono::duration<double> count;
-	KalmanFilter<double> kalman;
+	std::chrono::duration<double> oldCount;
+	KalmanFilter kalman;
+	unsigned int dataCount;
 
 	SpriteData debugBack;
 	SpriteData pointGraph;
@@ -70,16 +74,17 @@ public: //メンバ関数
 	void AngleUpdate();
 	void AngleReset();
 
-	bool IsBallThrow();
 	bool IsForward() const;
 	bool IsBack() const;
 	bool IsLeft() const;
 	bool IsRight() const;
+	bool IsJump() const;
+	bool IsBallThrow() const;
 
 	Vec3 GetAccelG() const { return accel; }
-	Vec3 GetOldAccelG() const { return oldAccel; }
+	Vec3 GetAccelGLPF() const { return accelLPF; }
 	Vec3 GetGyroDps() const { return gyro; }
-	Vec3 GetOldGyroDps() const { return oldGyro; }
+	Vec3 GetGyroDpsLPF() const { return gyroLPF; }
 	bool GetFlag() const { return flag; }
 	bool GetFlagTriger() const { return flag && !oldFlag; }
 	bool GetFlagReturn() const { return !flag && oldFlag; }
