@@ -105,4 +105,8 @@ private://’è‹`
 
 	std::vector<RespawnPos*>respawnPos;
 	ObjectData respawnObj;
+	SpriteData ui;
+
+	std::unique_ptr <ParticleManager> damegeParticle = nullptr;
+	TextureData damegeGraph = {};
 };

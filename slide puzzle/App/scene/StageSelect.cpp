@@ -56,7 +56,7 @@ void StageSelect::Draw()
 	
 	//Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3());
 	//Vec2 size = { 700,500 };
-	//float posX = static_cast<float>(window_width) / 2 - size.x / 2;
+	//float posX = static_cast<float>(window_width) / 2 - size.x / 2;9ko
 	//float posY = static_cast<float>(window_height) / 2 - size.y / 2;
 	//Sprite::Get()->Draw(manipulate, Vec2(posX, posY), size.x, size.y);
 

@@ -35,6 +35,11 @@ void GameScene::Init()
 	Score::Get()->ScoreReset();
 	sceneChange_ = std::make_unique<SceneChange>();
 	respawnObj = Shape::CreateOBJ("sphere");
+	damegeParticle = std::make_unique<ParticleManager>();
+	damegeParticle->Initialize();
+	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
+	ui = Sprite::Get()->SpriteCreate(L"Resources/sprite/playUI.png");
+
 	LoadRespawn();
 	BallRespawn();
 }
@@ -77,6 +82,7 @@ void GameScene::Update()
 	BallRespawn();
 
 	gameTime.Update();
+	damegeParticle->Update();
 }
 
 void GameScene::Draw()
@@ -102,6 +108,8 @@ void GameScene::Draw()
 		ball->AfterDraw();
 	}
 	player->ParticleDraw();
+	damegeParticle->Draw(damegeGraph);
+	Sprite::Get()->Draw(ui, Vec2(), (float)window_width, (float)window_height);
 	Score::Get()->GameSceneDraw();
 	gameTime.Draw();
 	sceneChange_->Draw();
@@ -187,6 +195,9 @@ void GameScene::TargetAct()
 		if (ball->GetThrowFlag() && ball->GetHitFlag())
 		{
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+			damegeParticle->DamegeAdd(ball->GetPosition(), enemys[forcusEnemyNum]->GetPosition(),
+				1.0f, 2.0f, 0.0f,
+				Vec4(0.5f, 0.0f, 0.0f, 0.5f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
 		}
 	}
 

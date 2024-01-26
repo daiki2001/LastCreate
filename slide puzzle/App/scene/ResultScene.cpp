@@ -24,10 +24,11 @@ void ResultScene::Init()
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 
-	manipulate = Sprite::Get()->SpriteCreate(L"Resources/sprite/manipulate.png");
+	manipulate = Sprite::Get()->SpriteCreate(L"Resources/sprite/result.png");
 
 	//オブジェクト生成
-	object = Shape::CreateOBJ("titleStage", true);
+	object = Shape::CreateOBJ("sky", true);
+	stageObj = Shape::CreateOBJ("titleStage", true);
 }
 
 void ResultScene::Update()
@@ -56,7 +57,8 @@ void ResultScene::Draw()
 void ResultScene::ShadowDraw()
 {
 	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3());
-	
+	Object::Draw(stageObj, Vec3(-3.0f, 1.0f, 0.2f), Vec3(1.6f, 1.6f, 0.0f), Vec3(15, -240, 0));
+	Sprite::Get()->Draw(manipulate, Vec2(), (float)window_width, (float)window_height);
 	Score::Get()->ResultSceneDraw();
 
 	sceneChange_->Draw();
