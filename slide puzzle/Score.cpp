@@ -73,7 +73,7 @@ void Score::ResultSceneDraw() {
 		RankingWrite(); // CSV‚Éƒ‰ƒ“ƒLƒ“ƒO‚ð‘‚«ž‚Ý
 		loadFlag = false;
 	}
-	Sprite::Get()->Draw(scoreBack, Vec2(400.0f, 260.0f), 500.0f, 128 * 3.0f);
+	
 	// 1ˆÊ
 	int score1st_ = topScore[0];
 	int index1st = 1;
@@ -92,7 +92,7 @@ void Score::ResultSceneDraw() {
 			break;
 		}
 		Sprite::Get()->Draw(
-		    number[num], Vec2(800.0f, 300.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
+		    number[num], Vec2(670.0f, 370.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
 		    64.0f);
 	}
 	// 2ˆÊ
@@ -113,7 +113,7 @@ void Score::ResultSceneDraw() {
 			break;
 		}
 		Sprite::Get()->Draw(
-		    number[num], Vec2(800.0f, 360.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
+		    number[num], Vec2(670.0f, 430.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
 		    64.0f);
 	}
 
@@ -135,8 +135,30 @@ void Score::ResultSceneDraw() {
 			break;
 		}
 		Sprite::Get()->Draw(
-		    number[num], Vec2(800.0f, 420.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
+		    number[num], Vec2(670.0f, 490.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
 		    64.0f);
+	}
+
+	//¡‰ñ‚Ì“_”
+	int scoreNow_ = score;
+	int indexNow = 1;
+	while (scoreNow_ > 9) {
+		indexNow++;
+		scoreNow_ = scoreNow_ / 10;
+	}
+	for (int i = 0; i < indexNow; i++) {
+		int m = 10;
+		for (int j = 0; j < i; j++) {
+			m = m * 10;
+		}
+
+		int num = score % m / (m / 10);
+		if (num > 10 || num < 0) {
+			break;
+		}
+		Sprite::Get()->Draw(
+			number[num], Vec2(670.0f, 200.0f) - Vec2(60.0f, 0.0f) * static_cast<float>(i), 64.0f,
+			64.0f);
 	}
 }
 
