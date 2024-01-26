@@ -72,5 +72,4 @@ private://’è‹`
 	ShadowMap  m_shadowMapFar;
 
 	SoundData sound;
-	SoundData moveSound;
 };

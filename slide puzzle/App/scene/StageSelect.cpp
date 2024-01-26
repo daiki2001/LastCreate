@@ -29,6 +29,8 @@ void StageSelect::Init()
 	object = Shape::CreateOBJ("titleStage",true);
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
+
+	decideSound = Audio::Get()->SoundLoadWave("Resources/Sound/decide.wav");
 }
 
 
@@ -40,6 +42,11 @@ void StageSelect::Update()
 	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
 		sceneChange_->SceneChangeStart("");
+		if (soundFlag == false)
+		{
+			Audio::Get()->SoundSEPlayWave(decideSound);
+			soundFlag = true;
+		}
 	}
 
 	if (sceneChange_->GetOutEndFlag())
