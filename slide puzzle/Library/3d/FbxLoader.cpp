@@ -55,7 +55,7 @@ void FbxLoader::Finalize()
 	fbxManager->Destroy();
 }
 
-Model *FbxLoader::LoadModelFromFile(const string& modelName, const string &file)
+std::unique_ptr<Model> FbxLoader::LoadModelFromFile(const string& modelName, const string &file)
 {
 	// モデルと同じ名前のフォルダから読み込む
 	const string directoryPath = baseDirectory + file + modelName + "/";
@@ -89,7 +89,7 @@ Model *FbxLoader::LoadModelFromFile(const string& modelName, const string &file)
 	// バッファ生成
 	model->CreateBuffers(device);
 
-	return model;
+	return std::unique_ptr<Model>(model);
 }
 
 
