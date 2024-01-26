@@ -29,6 +29,8 @@ void ResultScene::Init()
 	//オブジェクト生成
 	object = Shape::CreateOBJ("sky", true);
 	stageObj = Shape::CreateOBJ("titleStage", true);
+
+	decideSound = Audio::Get()->SoundLoadWave("Resources/Sound/decide.wav");
 }
 
 void ResultScene::Update()
@@ -36,6 +38,11 @@ void ResultScene::Update()
 
 	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
+		if (soundFlag == false)
+		{
+			Audio::Get()->SoundSEPlayWave(decideSound);
+			soundFlag = true;
+		}
 		sceneChange_->SceneChangeStart("");
 	}
 

@@ -109,4 +109,6 @@ private://’è‹`
 
 	std::unique_ptr <ParticleManager> damegeParticle = nullptr;
 	TextureData damegeGraph = {};
+
+	SoundData damegeSound;
 };

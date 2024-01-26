@@ -39,7 +39,7 @@ void GameScene::Init()
 	damegeParticle->Initialize();
 	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 	ui = Sprite::Get()->SpriteCreate(L"Resources/sprite/playUI.png");
-
+	damegeSound = Audio::Get()->SoundLoadWave("Resources/Sound/damege.wav");
 	LoadRespawn();
 	BallRespawn();
 }
@@ -194,6 +194,7 @@ void GameScene::TargetAct()
 	{
 		if (ball->GetThrowFlag() && ball->GetHitFlag())
 		{
+			Audio::Get()->SoundSEPlayWave(damegeSound);
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 			damegeParticle->DamegeAdd(ball->GetPosition(), enemys[forcusEnemyNum]->GetPosition(),
 				1.0f, 2.0f, 0.0f,

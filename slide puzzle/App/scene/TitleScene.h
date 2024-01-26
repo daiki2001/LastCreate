@@ -47,4 +47,6 @@ private://’è‹`
 	SpriteData button;
 	ObjectData stageObj;
 	Vec3 sAngle={};
+	SoundData decideSound;
+	bool soundFlag = false;
 };

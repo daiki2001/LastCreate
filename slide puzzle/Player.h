@@ -80,5 +80,11 @@ private:
 
 	std::unique_ptr < ParticleManager> dustParticle = nullptr;
 	TextureData dustGraph;
+
+	SoundData throwSound;
+	SoundData walkSound;
+	int walkSoundCount = 0;
+	const int walkSoundCountMax = 10;
+	SoundData getBallSound;
 };
 
