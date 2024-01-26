@@ -46,7 +46,7 @@ public:
 	/// ファイルからFBXモデル読込
 	/// </summary>
 	/// <param name="modelName">モデル名</param>
-	Model *LoadModelFromFile(const string& modelName, const string &file = "");
+	std::unique_ptr<Model> LoadModelFromFile(const string& modelName, const string &file = "");
 private:
 	// D3D12デバイス
 	ID3D12Device* device = nullptr;

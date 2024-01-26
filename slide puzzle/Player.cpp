@@ -4,6 +4,8 @@
 #include"Easing.h"
 #include<random>
 #include"GameInputManager.h"
+#include "../../FBXModelManager.h"
+
 namespace
 {
 	auto* input = GameInputManager::Get();
@@ -21,12 +23,9 @@ void Player::Init()
 {
 	pObject = Shape::CreateOBJ("sphere");
 
-	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("player");
-	m_model = std::make_unique<Model>();
-	m_model = std::unique_ptr<Model>(model1);
 	m_fbx = std::make_unique<FBXObject3d>();
 	m_fbx->Initialize();
-	m_fbx->SetModel(m_model.get());
+	m_fbx->SetModel(FBXModelManager::GetInstance()->GetModel("player"));
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	m_fbx->SetRotation(Vec3(0, 90, 0));

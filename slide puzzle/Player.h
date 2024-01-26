@@ -47,7 +47,6 @@ private:
 	void ComboCalculation();
 	void StageCollision(const float stageSize);
 private:
-	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
 
 private:
