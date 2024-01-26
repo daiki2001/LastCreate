@@ -46,8 +46,10 @@ private: //メンバ変数
 	std::vector<Data> records;
 
 	Vec3 accel;
+	Vec3 oldAccle;
 	Vec3 accelLPF;
 	Vec3 gyro;
+	Vec3 oldGyro;
 	Vec3 gyroLPF;
 	Vec3 angle;
 	Vec3 oldAngle;
@@ -78,7 +80,7 @@ public: //メンバ関数
 	bool IsBack() const;
 	bool IsLeft() const;
 	bool IsRight() const;
-	bool IsJump() const;
+	bool IsJamp() const;
 	bool IsBallThrow() const;
 
 	Vec3 GetAccelG() const { return accel; }

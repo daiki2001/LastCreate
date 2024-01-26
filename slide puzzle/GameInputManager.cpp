@@ -95,7 +95,7 @@ bool GameInputManager::IsJamp() const
 	bool result = false;
 	result |= input->KeybordTrigger(DIK_SPACE);
 	result |= input->ControllerUp(ButtonKind::ButtonA);
-	//result |= ball->GetFlagTriger();
+	result |= ball->IsJamp();
 	return result;
 }
 
