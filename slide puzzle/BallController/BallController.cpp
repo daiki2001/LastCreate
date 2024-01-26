@@ -358,6 +358,6 @@ bool BallController::IsJamp() const
 
 bool BallController::IsBallThrow() const
 {
-	bool result = GetFlagReturn() && (gyro.x < -10.0f);
+	bool result = GetFlagReturn() && (gyro.x + gyro.z < -15.0f);
 	return result;
 }
