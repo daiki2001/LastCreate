@@ -2,6 +2,8 @@
 #include"StageSelect.h"
 #include"SceneManager.h"
 #include "../../GameInputManager.h"
+#include "../../FBXModelManager.h"
+
 TitleScene::TitleScene()
 {}
 TitleScene::~TitleScene()
@@ -32,12 +34,9 @@ void TitleScene::Init()
 	title = Sprite::Get()->SpriteCreate(L"Resources/sprite/title.png");
 	press = Sprite::Get()->SpriteCreate(L"Resources/sprite/press.png");
 
-	Model* model1 = FbxLoader::GetInstance()->LoadModelFromFile("titlePlayer");
-	m_model = std::make_unique<Model>();
-	m_model = std::unique_ptr<Model>(model1);
 	m_fbx = std::make_unique<FBXObject3d>();
 	m_fbx->Initialize();
-	m_fbx->SetModel(m_model.get());
+	m_fbx->SetModel(FBXModelManager::GetInstance()->GetModel("titlePlayer"));
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0015f, 0.0015f, 0.0015f));
 	m_fbx->SetRotation(Vec3(0, 90, 0));

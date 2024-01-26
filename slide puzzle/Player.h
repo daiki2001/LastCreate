@@ -46,8 +46,8 @@ private:
 	void BallCatch();
 	void ComboCalculation();
 	void StageCollision(const float stageSize);
+	void Action();
 private:
-	std::unique_ptr<Model> m_model;
 	std::unique_ptr<FBXObject3d>  m_fbx;
 
 private:
@@ -69,6 +69,14 @@ private:
 
 	int maxComboCount_ = 10;
 	int comboCount_ = 0;
+
+	bool isAction = false;
+	int animeNo = THROW;
+	enum Action
+	{
+		THROW,
+		JAMP
+	};
 
 	std::unique_ptr < ParticleManager> dustParticle = nullptr;
 	TextureData dustGraph;

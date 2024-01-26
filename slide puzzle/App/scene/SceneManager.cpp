@@ -10,6 +10,7 @@
 #include"ResultScene.h"
 #include "../../GameInputManager.h"
 #include"../slide puzzle/Score.h"
+#include "../../FBXModelManager.h"
 SceneManager::SceneManager()
 {}
 SceneManager::~SceneManager()
@@ -50,6 +51,8 @@ void SceneManager::Initialize()
 	FBXObject3d::SetCmdList(DirectXBase::Get()->GetCmandList());
 	FBXObject3d::CreateGraphicsPipeline();
 	FBXObject3d::CreateShadowPipeline();
+
+	FBXModelManager::GetInstance()->Initialize();
 	//図形モデル初期化
 	Shape::Init(DirectXBase::Get()->GetDevice());
 	//パーティクル初期化
@@ -96,7 +99,7 @@ void SceneManager::Update()
 		//シーン切り替え
 		scene_ = nextScene_;
 		nextScene_ = nullptr;
-
+		
 		scene_->SetSceneManager(this);
 		//次のシーンを初期化する
 		scene_->Init();
@@ -142,6 +145,7 @@ void SceneManager::Draw()
 void SceneManager::Delete()
 {
 	Object::Delete();
+	FBXModelManager::GetInstance()->Finalize();
 }
 
 void SceneManager::SceneChange()
