@@ -45,8 +45,8 @@ void Player::Update(float stageSize)
 	BallThrow();
 	ComboCalculation();
 	StageCollision(stageSize);
-	m_fbx->Update();
 	dustParticle->Update();
+	Action();
 }
 
 void Player::Draw()
@@ -111,6 +111,7 @@ void Player::Move()
 	}
 	if (onGround_ && (input->IsForward() || input->IsBack() || input->IsLeft() || input->IsRight()))
 	{
+
 		m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 		dustParticle->DustAdd(position,
 			0.0f, 0.4f, 0.0f,
@@ -135,7 +136,9 @@ void Player::Jump()
 		onGround_ = false;
 		const float jumpVYFist = 0.2f;
 		fallV_ = { 0, jumpVYFist, 0 };
-		m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
+		isAction = true;
+		animeNo = JAMP;
+		
 	}
 
 	if (!onGround_ && position.y < 0)
@@ -163,7 +166,8 @@ void Player::BallThrow()
 		ball_->SetThrowFlag(true);
 		oldBall_ = ball_;
 		ball_ = nullptr;
-		m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
+		isAction = true;
+		animeNo = THROW;
 	}
 }
 
@@ -238,4 +242,37 @@ void Player::TargetLockOn(Vec3 pos)
 	playerRot.y += 90.0f;
 	playerRot.z = 0.0f;
 	m_fbx->SetRotation(Vec3(-playerRot.z, playerRot.y, playerRot.x));
+}
+
+void Player::Action()
+{
+	if (!input->IsForward() && !input->IsBack() && !input->IsLeft() && !input->IsRight() && !isAction)
+	{
+		m_fbx->PlayAnimation(m_fbx->GetArmature("wait"), true);
+	}
+
+	if (isAction)
+	{
+		if (animeNo == JAMP)
+		{
+			m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
+
+			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("jump")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("jump")))
+			{
+				isAction = false;
+			}
+		}
+		else if (animeNo == THROW)
+		{
+			m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
+
+			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("throw")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("throw")))
+			{
+				isAction = false;
+			}
+		}
+	}
+
+	
+	m_fbx->Update();
 }
