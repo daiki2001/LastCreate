@@ -6,7 +6,7 @@ extern const int window_height;
 /// <summary>
 /// ステージセレクト
 /// </summary>
-class StageSelect:public BaseScene
+class StageSelect :public BaseScene
 {
 public:
 	/// <summary>
@@ -43,4 +43,7 @@ private://定義
 	ObjectData object;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
+
+	SoundData decideSound;
+	bool soundFlag = false;
 };

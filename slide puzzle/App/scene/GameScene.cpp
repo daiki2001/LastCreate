@@ -34,12 +34,12 @@ void GameScene::Init()
 	gameTime.Start();
 	Score::Get()->ScoreReset();
 	sceneChange_ = std::make_unique<SceneChange>();
-	respawnObj = Shape::CreateOBJ("sphere");
+	respawnObj = Shape::CreateOBJ("stand");
 	damegeParticle = std::make_unique<ParticleManager>();
 	damegeParticle->Initialize();
 	damegeGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
 	ui = Sprite::Get()->SpriteCreate(L"Resources/sprite/playUI.png");
-
+	damegeSound = Audio::Get()->SoundLoadWave("Resources/Sound/damege.wav");
 	LoadRespawn();
 	BallRespawn();
 }
@@ -100,7 +100,7 @@ void GameScene::Draw()
 	}
 	for (int i = 0; i < respawnPos.size(); i++)
 	{
-		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, -0.5f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
+		Object::Draw(respawnObj, respawnPos[i]->pos + Vec3(0.0f, 0.0f, 0.0f), Vec3(1.0f, 1.0f, 1.0f), Vec3());
 	}
 	stage->Draw();
 	for (auto& ball : balls)
@@ -194,6 +194,7 @@ void GameScene::TargetAct()
 	{
 		if (ball->GetThrowFlag() && ball->GetHitFlag())
 		{
+			Audio::Get()->SoundSEPlayWave(damegeSound);
 			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
 			damegeParticle->DamegeAdd(ball->GetPosition(), enemys[forcusEnemyNum]->GetPosition(),
 				1.0f, 2.0f, 0.0f,
@@ -251,7 +252,7 @@ void GameScene::BallCreate(const Vec3& pos)
 {
 	std::unique_ptr<Ball> ball = std::make_unique<Ball>();
 	ball->Init();
-	ball->SetPosition(pos);
+	ball->SetPosition(Vec3{ pos.x,1.0f,pos.z });
 	balls.push_back(std::move(ball));
 }
 

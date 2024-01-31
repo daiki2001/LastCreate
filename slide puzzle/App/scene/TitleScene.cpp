@@ -43,6 +43,8 @@ void TitleScene::Init()
 
 	m_fbx->PlayAnimation(0, true);
 
+	decideSound = Audio::Get()->SoundLoadWave("Resources/Sound/decide.wav");
+
 	// シーン遷移の演出の初期化
 	sceneChange_ = std::make_unique<SceneChange>();
 }
@@ -53,6 +55,11 @@ void TitleScene::Update()
 
 	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
+		if (soundFlag == false)
+		{
+			Audio::Get()->SoundSEPlayWave(decideSound);
+			soundFlag = true;
+		}
 		sceneChange_->SceneChangeStart("");
 	}
 
@@ -79,7 +86,7 @@ void TitleScene::Draw()
 void TitleScene::ShadowDraw()
 {
 	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3());
-	Object::Draw(stageObj, Vec3(-3.0f,1.0f,0.2f), Vec3(1.6f, 1.6f, 0.0f), Vec3(15,-240,0));
+	Object::Draw(stageObj, Vec3(-3.0f, 1.0f, 0.2f), Vec3(1.6f, 1.6f, 0.0f), Vec3(15, -240, 0));
 	m_fbx->Draw();
 
 	Vec2 size = { 650,650 };

@@ -74,9 +74,9 @@ void SceneManager::Initialize()
 	//シーンをタイトルに設定
 	BaseScene* scene = new TitleScene();
 	SetNextScene(scene);
-	/*sound = Audio::SoundLoadWave("Resources/Sound/BGM.wav");
-	Audio::Get()->SoundBGMPlayLoopWave(sound);*/
-	Audio::Get()->SetVolume(0.1f);
+	sound = Audio::SoundLoadWave("Resources/Sound/BGM.wav");
+	Audio::Get()->SoundBGMPlayLoopWave(sound);
+	Audio::Get()->SetVolume(0.05f);
 
 }
 

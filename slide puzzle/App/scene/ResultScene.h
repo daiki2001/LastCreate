@@ -1,7 +1,7 @@
 #pragma once
 #include"BaseScene.h"
 #include"../slide puzzle/SceneChange.h"
-
+#include<Audio.h>
 /// <summary>
 /// リザルトシーン
 /// </summary>
@@ -39,6 +39,7 @@ public:
 	void Finalize()override;
 private:
 	std::unique_ptr<LightGroup> lightGroup;
+	std::unique_ptr<FBXObject3d>  m_fbx;
 private:
 	SpriteData back;
 	SpriteData manipulate;
@@ -46,4 +47,7 @@ private:
 	ObjectData stageObj;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
+
+	SoundData decideSound;
+	bool soundFlag = false;
 };

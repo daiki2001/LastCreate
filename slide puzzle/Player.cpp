@@ -35,6 +35,9 @@ void Player::Init()
 	dustParticle = std::make_unique<ParticleManager>();
 	dustParticle->Initialize();
 	dustGraph = Texture::Get()->LoadTexture(L"Resources/Paricle/particle.jpg");
+	throwSound = Audio::Get()->SoundLoadWave("Resources/Sound/throw.wav");
+	walkSound = Audio::Get()->SoundLoadWave("Resources/Sound/walk.wav");
+	getBallSound = Audio::Get()->SoundLoadWave("Resources/Sound/getBall.wav");
 }
 
 void Player::Update(float stageSize)
@@ -64,7 +67,7 @@ void Player::ParticleDraw()
 void Player::SetBall(Ball* ball)
 {
 	if (ball_ != nullptr) { return; }
-
+	Audio::Get()->SoundSEPlayWave(getBallSound);
 	ball_ = ball;
 	ball_->SetHaveFlag(true);
 }
@@ -91,6 +94,16 @@ void Player::Move()
 		speed.x = speed.x + 0.25f;
 	}
 
+	if (walkSoundCount == 0&&
+		(input->IsBack()||input->IsForward()||input->IsLeft()||input->IsRight()))
+	{
+		Audio::Get()->SoundSEPlayWave(walkSound);
+	}
+	walkSoundCount++;
+	if (walkSoundCount >= walkSoundCountMax)
+	{
+		walkSoundCount = 0;
+	}
 	//
 	if (input->IsDash())
 	{
@@ -137,7 +150,7 @@ void Player::Jump()
 		fallV_ = { 0, jumpVYFist, 0 };
 		isAction = true;
 		animeNo = JAMP;
-		
+
 	}
 
 	if (!onGround_ && position.y < 0)
@@ -167,6 +180,7 @@ void Player::BallThrow()
 		ball_ = nullptr;
 		isAction = true;
 		animeNo = THROW;
+		Audio::Get()->SoundSEPlayWave(throwSound);
 	}
 }
 
@@ -263,6 +277,7 @@ void Player::Action()
 		}
 		else if (animeNo == THROW)
 		{
+			m_fbx->SetSpeed(5);
 			m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
 
 			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("throw")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("throw")))
@@ -272,6 +287,6 @@ void Player::Action()
 		}
 	}
 
-	
+
 	m_fbx->Update();
 }

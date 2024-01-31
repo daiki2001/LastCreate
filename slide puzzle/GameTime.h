@@ -1,6 +1,7 @@
 #pragma once
 #include"Sprite.h"
 #include<time.h>
+#include<Audio.h>
 time_t time(time_t*);
 class GameTime
 {
@@ -31,5 +32,6 @@ private:
 	int differenceTime = 0;
 
 	bool sceneChangeFlag = false;
+	SoundData finishSound;
 };
 

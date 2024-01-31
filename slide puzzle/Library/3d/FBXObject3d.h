@@ -113,6 +113,9 @@ public://メンバ関数
 	int GetArmature(std::string name);
 	FbxTime GetAnimeCurrentTime(int num) { return animeDatas_[num].currentTime; }
 	FbxTime GetAnimeEndTime(int num) { return animeDatas_[num].endTime; }
+
+	void SetSpeed(int speed) { this->speed = speed; }
+
 protected://メンバ変数
 	//定数バッファ
 	ComPtr<ID3D12Resource>m_constBuffTransform;
@@ -157,4 +160,6 @@ protected://メンバ変数
 	FbxScene* scene;
 	//アーマチュア番号
 	int armatureNo = 0;
+
+	int speed = 1;
 };

@@ -396,7 +396,8 @@ void FBXObject3d::Update()
 	if (m_isPlay)
 	{
 		//1ƒtƒŒ[ƒ€i‚ß‚é
-		animeDatas_[armatureNo].currentTime += m_frameTime;
+		FbxTime addTime = m_frameTime * speed;
+		animeDatas_[armatureNo].currentTime += addTime;
 		//ÅŒã‚Ü‚ÅÄ¶‚µ‚½‚çæ“ª‚É–ß‚·
 		if (animeDatas_[armatureNo].currentTime > animeDatas_[armatureNo].endTime)
 		{

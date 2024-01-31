@@ -30,7 +30,12 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		hp_ -= 1 * (comboCount_ + 10);
 		if (hp_ <= 0) {
-			forcusChangeFlag_ = true;
+			m_fbx->PlayAnimation(m_fbx->GetArmature("die"), false);
+
+			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("die")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("die")))
+			{
+				forcusChangeFlag_ = true;
+			}
 		}
 	}
 }
