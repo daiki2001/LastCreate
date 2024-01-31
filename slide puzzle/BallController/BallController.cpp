@@ -30,14 +30,66 @@ std::array<double, BallController::sensorCount> ToImuData(const Vec3& a, const V
 }
 }
 
-const char BallController::Data::header[4] = { 'D', 'A', 'T', 'F' };
+const char BallController::RawData::header[4] = { 'D', 'A', 'T', 'F' };
 
-const int BallController::Data::GetPacketSize()
+const int BallController::RawData::GetPacketSize()
 {
 	int result = 0;
 	result += sizeof(header);
 	result += sizeof(int16_t) * sensorCount;
 	result += sizeof(uint8_t);
+	return result;
+}
+
+void BallController::KeepData::Update(std::array<bool, flagCount> cencorFlags)
+{
+	this->cencorFlags.push_back(cencorFlags);
+	if (this->cencorFlags.size() > MAX_KEEP_COUNT) {
+		this->cencorFlags.erase(this->cencorFlags.begin());
+	}
+}
+
+bool BallController::KeepData::GetCencorFlags(const size_t& index) const
+{
+	if (index < 0 || index >= flagCount) return false;
+	bool result = false;
+
+	for (size_t i = 0; i < this->cencorFlags.size(); i++)
+	{
+		if (result) break;
+		if (cencorFlags[i][index]) result = true;
+	}
+	return result;
+}
+
+bool BallController::KeepData::GetCencorFlagsTriger(const int count, const size_t& index) const
+{
+	if (index < 0 || index >= flagCount) return false;
+	bool result = false;
+	int hitCount = 0;
+
+	for (size_t i = 1; i < this->cencorFlags.size(); i++)
+	{
+		if (cencorFlags[i][index] && !cencorFlags[i - 1][index]) hitCount++;
+		if (hitCount >= count) result = true;
+		if (result) break;
+	}
+
+	return result;
+}
+
+bool BallController::KeepData::GetCencorFlagsReturn(const int count, const size_t& index) const
+{
+	if (index < 0 || index >= flagCount) return false;
+	bool result = false;
+	int hitCount = 0;
+
+	for (size_t i = 1; i < this->cencorFlags.size(); i++)
+	{
+		if (!cencorFlags[i][index] && cencorFlags[i - 1][index]) hitCount++;
+		if (hitCount >= count) result = true;
+		if (result) break;
+	}
 	return result;
 }
 
@@ -54,8 +106,6 @@ BallController::BallController(const char* serialDevice) :
 	oldAngle{},
 	startAngle{},
 	startAngleSum{},
-	flag(false),
-	oldFlag(false),
 	startTime(std::chrono::system_clock::now()),
 	count{},
 	oldCount(count),
@@ -100,22 +150,19 @@ int BallController::Update() {
 	contentSize += receivedSize;
 
 	// データの記録
-	oldAccle = accel;
-	oldGyro = gyro;
 	oldAngle = angle;
-	oldFlag = flag;
 	oldCount = count;
 	char* p = buf;
-	const int packetSize = Data::GetPacketSize();
+	const int packetSize = RawData::GetPacketSize();
 	std::array<float, sensorCount> rawData = {};
 	for (; p < buf + contentSize - packetSize; ) {
-		if (memcmp(p, Data::header, sizeof(Data::header)) != 0) {
+		if (memcmp(p, RawData::header, sizeof(RawData::header)) != 0) {
 			p++;
 			continue;
 		}
 		dataCount++;
-		Data record = {};
-		p += sizeof(Data::header);
+		RawData record = {};
+		p += sizeof(RawData::header);
 		/* センサーの情報 */
 		for (int i = 0; i < sensorCount; i++, p += sizeof(int16_t)) {
 			const float accelSensitivity_16g = 2048;
@@ -144,6 +191,8 @@ int BallController::Update() {
 	memmove(buf, p, tailSize);
 	contentSize = tailSize;
 
+	oldAccle = accel;
+	oldGyro = gyro;
 	for (int i = 0; i < sensorCount; i++)
 	{
 		records.back().cencor[i] = rawData[i] / dataCount;
@@ -156,7 +205,7 @@ int BallController::Update() {
 				records.back().cencor[GYRO_Y],
 				records.back().cencor[GYRO_Z]);
 	gyro /= static_cast<float>(DEGREE);
-	flag = records.back().flags[0];
+	this->keepData.Update(records.back().flags);
 
 #ifdef _DEBUG
 	//outlog << count.count() << ", ";
@@ -170,7 +219,7 @@ int BallController::Update() {
 	AngleUpdate();
 	count = std::chrono::system_clock::now() - startTime;
 #ifdef _DEBUG
-	outlog << count.count() << ", " << kalman.GetX()[0] << "," << kalman.GetX()[1] << "," << kalman.GetX()[2] << std::endl;
+	outlog << count.count() << ", " << kalman.GetX()[0] << "," << kalman.GetX()[1] << "," << kalman.GetX()[2] << "," << records.back().flags[0] << std::endl;
 #endif // _DEBUG
 
 	return dataCount;
@@ -178,6 +227,7 @@ int BallController::Update() {
 
 void BallController::Load()
 {
+	if (!this->serial) return;
 #ifndef _DEBUG
 	return;
 #endif // !_DEBUG
@@ -192,6 +242,7 @@ void BallController::Load()
 
 void BallController::DrawGraph()
 {
+	if (!this->serial) return;
 #ifndef _DEBUG
 	return;
 #endif // !_DEBUG
@@ -229,7 +280,8 @@ void BallController::DrawGraph()
 			int flagIndex = i - sensorCount;
 
 			int x = 0;
-			for (const auto& record : this->records) {
+			for (const auto& record : this->records)
+			{
 				const Vec2 point = { (float)((x + 1) * tickX), baseY - (float)(record.flags[flagIndex] * tickY) };
 				Sprite::Get()->Draw(pointGraph, point, 10.0f / sizeScale, 10.0f / sizeScale);
 				x++;
@@ -242,7 +294,8 @@ void BallController::DrawGraph()
 
 void BallController::AngleUpdate()
 {
-	if (GetFlagTriger() || abs((count - oldCount).count()) > 1.35)
+	if (!this->serial) return;
+	if (keepData.GetCencorFlagsTriger(2) || abs((count - oldCount).count()) > 1.35)
 	{
 		AngleReset();
 	}
@@ -277,6 +330,7 @@ void BallController::AngleUpdate()
 
 void BallController::AngleReset()
 {
+	if (!this->serial) return;
 #ifdef _DEBUG
 	outlog << std::endl;
 	outlog << std::endl;
@@ -291,6 +345,7 @@ void BallController::AngleReset()
 
 bool BallController::IsForward() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y > +deadzone;
 	//Vec3 v = startAngle - angle;
@@ -300,6 +355,7 @@ bool BallController::IsForward() const
 
 bool BallController::IsBack() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y < -deadzone;
 	//Vec3 v = startAngle - angle;
@@ -309,6 +365,7 @@ bool BallController::IsBack() const
 
 bool BallController::IsLeft() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x > +deadzone + 0.5f;
 	//result = (startAngle - angle).y > +deadzone;
@@ -317,6 +374,7 @@ bool BallController::IsLeft() const
 
 bool BallController::IsRight() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x < -deadzone + 0.5f;
 	//result = (startAngle - angle).y < -deadzone;
@@ -325,6 +383,7 @@ bool BallController::IsRight() const
 
 bool BallController::IsJamp() const
 {
+	if (!this->serial) return false;
 	static bool isJamp = false;
 	bool result = false;
 
@@ -358,6 +417,7 @@ bool BallController::IsJamp() const
 
 bool BallController::IsBallThrow() const
 {
+	if (!this->serial) return false;
 	bool result = GetFlagReturn() && (gyro.x + gyro.z < -15.0f);
 	return result;
 }

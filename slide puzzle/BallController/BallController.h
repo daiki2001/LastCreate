@@ -29,7 +29,7 @@ private:
 	static const float deadzone;
 
 private: //サブクラス
-	struct Data {
+	struct RawData {
 	public: //定数
 		static const char header[4];
 
@@ -41,10 +41,32 @@ private: //サブクラス
 		static const int GetPacketSize();
 	};
 
+	struct KeepData {
+	public: //定数
+		static const int MAX_KEEP_COUNT = 10;
+
+	private: //メンバ変数
+		std::vector<std::array<bool, flagCount>> cencorFlags;
+
+	public: //メンバ関数
+		// コンストラクター
+		KeepData() = default;
+		KeepData(const KeepData&) = default;
+
+		// 更新
+		void Update(std::array<bool, flagCount > cencorFlags);
+
+		// ゲッター
+		bool GetCencorFlags(const size_t& index = 0) const;
+		bool GetCencorFlagsTriger(const int count = 1, const size_t& index = 0) const;
+		bool GetCencorFlagsReturn(const int count = 1, const size_t& index = 0) const;
+	};
+
 private: //メンバ変数
 	Serial* serial;
-	std::vector<Data> records;
+	std::vector<RawData> records;
 
+	KeepData keepData;
 	Vec3 accel;
 	Vec3 oldAccle;
 	Vec3 accelLPF;
@@ -55,8 +77,6 @@ private: //メンバ変数
 	Vec3 oldAngle;
 	Vec3 startAngle;
 	Vec3 startAngleSum;
-	bool flag;
-	bool oldFlag;
 	std::chrono::system_clock::time_point startTime;
 	std::chrono::duration<double> count;
 	std::chrono::duration<double> oldCount;
@@ -87,9 +107,9 @@ public: //メンバ関数
 	Vec3 GetAccelGLPF() const { return accelLPF; }
 	Vec3 GetGyroDps() const { return gyro; }
 	Vec3 GetGyroDpsLPF() const { return gyroLPF; }
-	bool GetFlag() const { return flag; }
-	bool GetFlagTriger() const { return flag && !oldFlag; }
-	bool GetFlagReturn() const { return !flag && oldFlag; }
+	bool GetFlag() const { return keepData.GetCencorFlags(); }
+	bool GetFlagTriger() const { return keepData.GetCencorFlagsTriger(); }
+	bool GetFlagReturn() const { return keepData.GetCencorFlagsReturn(); }
 private:
 	BallController(const char* serialDevice);
 };
