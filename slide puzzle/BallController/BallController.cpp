@@ -227,6 +227,7 @@ int BallController::Update() {
 
 void BallController::Load()
 {
+	if (!this->serial) return;
 #ifndef _DEBUG
 	return;
 #endif // !_DEBUG
@@ -241,6 +242,7 @@ void BallController::Load()
 
 void BallController::DrawGraph()
 {
+	if (!this->serial) return;
 #ifndef _DEBUG
 	return;
 #endif // !_DEBUG
@@ -292,6 +294,7 @@ void BallController::DrawGraph()
 
 void BallController::AngleUpdate()
 {
+	if (!this->serial) return;
 	if (keepData.GetCencorFlagsTriger(2) || abs((count - oldCount).count()) > 1.35)
 	{
 		AngleReset();
@@ -327,6 +330,7 @@ void BallController::AngleUpdate()
 
 void BallController::AngleReset()
 {
+	if (!this->serial) return;
 #ifdef _DEBUG
 	outlog << std::endl;
 	outlog << std::endl;
@@ -341,6 +345,7 @@ void BallController::AngleReset()
 
 bool BallController::IsForward() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y > +deadzone;
 	//Vec3 v = startAngle - angle;
@@ -350,6 +355,7 @@ bool BallController::IsForward() const
 
 bool BallController::IsBack() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y < -deadzone;
 	//Vec3 v = startAngle - angle;
@@ -359,6 +365,7 @@ bool BallController::IsBack() const
 
 bool BallController::IsLeft() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x > +deadzone + 0.5f;
 	//result = (startAngle - angle).y > +deadzone;
@@ -367,6 +374,7 @@ bool BallController::IsLeft() const
 
 bool BallController::IsRight() const
 {
+	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x < -deadzone + 0.5f;
 	//result = (startAngle - angle).y < -deadzone;
@@ -375,6 +383,7 @@ bool BallController::IsRight() const
 
 bool BallController::IsJamp() const
 {
+	if (!this->serial) return false;
 	static bool isJamp = false;
 	bool result = false;
 
@@ -408,6 +417,7 @@ bool BallController::IsJamp() const
 
 bool BallController::IsBallThrow() const
 {
+	if (!this->serial) return false;
 	bool result = GetFlagReturn() && (gyro.x + gyro.z < -15.0f);
 	return result;
 }
