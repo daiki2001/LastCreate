@@ -40,6 +40,7 @@ void ResultScene::Init()
 	m_fbx->SetRotation(Vec3(0, 90, 0));
 
 	m_fbx->PlayAnimation(0, true);
+	decideSound = Audio::Get()->SoundLoadWave("Resources/Sound/decide.wav");
 }
 
 void ResultScene::Update()
@@ -47,6 +48,11 @@ void ResultScene::Update()
 
 	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
+		if (soundFlag == false)
+		{
+			Audio::Get()->SoundSEPlayWave(decideSound);
+			soundFlag = true;
+		}
 		sceneChange_->SceneChangeStart("");
 	}
 
@@ -56,6 +62,7 @@ void ResultScene::Update()
 		sceneManager_->SetNextScene(scene);
 	}
 	m_fbx->SetPosition(Vec3(-2.6f, 0.65f, -1.0f));
+	m_fbx->SetSpeed(2);
 	m_fbx->Update();
 	lightGroup->Update();
 	sceneChange_->Update();

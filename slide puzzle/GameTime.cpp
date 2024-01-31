@@ -25,6 +25,7 @@ void GameTime::Init()
 	start = time(NULL);
 	now = time(NULL);
 	sceneChangeFlag = false;
+	finishSound = Audio::Get()->SoundLoadWave("Resources/Sound/finish.wav");
 }
 
 void GameTime::Update()
@@ -40,6 +41,7 @@ void GameTime::Update()
 	if (nowTime <= 0)
 	{
 		sceneChangeFlag = true;
+		Audio::Get()->SoundSEPlayWave(finishSound);
 	}
 }
 

@@ -1,7 +1,7 @@
 #pragma once
 #include"BaseScene.h"
 #include"../slide puzzle/SceneChange.h"
-
+#include<Audio.h>
 /// <summary>
 /// リザルトシーン
 /// </summary>
@@ -47,4 +47,7 @@ private:
 	ObjectData stageObj;
 	// シーンチェンジ
 	std::unique_ptr<SceneChange> sceneChange_;
+
+	SoundData decideSound;
+	bool soundFlag = false;
 };
