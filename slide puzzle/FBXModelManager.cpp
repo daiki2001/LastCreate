@@ -8,6 +8,7 @@ void FBXModelManager::Initialize()
     LoadModel("player");
     LoadModel("titlePlayer");
     LoadModel("enemy");
+    LoadModel("endEnemy");
 }
 
 void FBXModelManager::Finalize()

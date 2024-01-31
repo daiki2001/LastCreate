@@ -36,7 +36,6 @@ void StageSelect::Update()
 {
 	//ライト更新
 	lightGroup->Update();
-
 	if (GameInputManager::Get()->IsDecide() && sceneChange_->GetinEndFlag())
 	{
 		sceneChange_->SceneChangeStart("");
@@ -70,7 +69,7 @@ void StageSelect::Draw()
 void StageSelect::ShadowDraw()
 {
 
-	Object::Draw(object, Vec3(), Vec3(0.5f, 0.5f, 0.5f), Vec3());
+	Object::Draw(object, Vec3(-3.0f, 1.0f, 0.2f), Vec3(1.6f, 1.6f, 0.0f), Vec3(15, -240, 0));
 	Vec2 size = { 700,500 };
 	float posX = static_cast<float>(window_width) / 2 - size.x / 2;
 	float posY = static_cast<float>(window_height) / 2 - size.y / 2;
