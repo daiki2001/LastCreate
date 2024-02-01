@@ -112,9 +112,13 @@ public://メンバ関数
 	//アーマチュアの番号検索
 	int GetArmature(std::string name);
 	FbxTime GetAnimeCurrentTime(int num) { return animeDatas_[num].currentTime; }
+	FbxTime GetAnimeStartTime(int num) { return animeDatas_[num].startTime; }
 	FbxTime GetAnimeEndTime(int num) { return animeDatas_[num].endTime; }
+	FbxTime GetFrameTime() { return m_frameTime; }
+
 
 	void SetSpeed(int speed) { this->speed = speed; }
+	void SetCurrentTime(int num, FbxTime time) { animeDatas_[num].currentTime = time; }
 
 protected://メンバ変数
 	//定数バッファ

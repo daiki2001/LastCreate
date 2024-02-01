@@ -12,7 +12,6 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 	m_fbx->SetModel(FBXModelManager::GetInstance()->GetModel("enemy"));
 	m_fbx->LoadAnumation();
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
-
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
 	hp_ = 10;

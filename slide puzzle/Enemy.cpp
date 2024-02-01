@@ -17,6 +17,21 @@ void Enemy::BallCatch()
 {
 }
 
+bool Enemy::GetDamageAnime()
+{
+	m_fbx->PlayAnimation(m_fbx->GetArmature("damage"), true);
+
+	if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("damage")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("damage")))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+	
+}
+
 void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 {
 	// UŒ‚‚ª“–‚½‚Á‚½‚ç
@@ -30,12 +45,7 @@ void Enemy::DamageHit(Vec3 pos ,int comboCount_)
 	if (axyz.x + axyz.y + axyz.z <= ar) {
 		hp_ -= 1 * (comboCount_ + 10);
 		if (hp_ <= 0) {
-			m_fbx->PlayAnimation(m_fbx->GetArmature("die"), false);
-
-			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("die")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("die")))
-			{
-				forcusChangeFlag_ = true;
-			}
+			forcusChangeFlag_ = true;
 		}
 	}
 }

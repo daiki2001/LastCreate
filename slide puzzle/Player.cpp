@@ -123,7 +123,7 @@ void Player::Move()
 	}
 	if (onGround_ && (input->IsForward() || input->IsBack() || input->IsLeft() || input->IsRight()))
 	{
-
+		m_fbx->SetSpeed(1);
 		m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 		dustParticle->DustAdd(position,
 			0.0f, 0.4f, 0.0f,
@@ -155,7 +155,7 @@ void Player::Jump()
 
 	if (!onGround_ && position.y < 0)
 	{
-		position.y = 0.0f;
+		position.y = 0;
 		fallV_ = {};
 		onGround_ = true;
 	}
@@ -171,7 +171,9 @@ void Player::BallThrow()
 	// 溜める
 	if (GameInputManager::Get()->IsCharge()) {
 		ball_->SetChargeFlag(true);
-		oldBall_ = nullptr;
+		oldBall_ = nullptr; 
+		isAction = true;
+		animeNo = CHARGE;
 	}
 	// 投げる
 	if (GameInputManager::Get()->IsThrow()) {
@@ -261,6 +263,7 @@ void Player::Action()
 {
 	if (!input->IsForward() && !input->IsBack() && !input->IsLeft() && !input->IsRight() && !isAction)
 	{
+		m_fbx->SetSpeed(1);
 		m_fbx->PlayAnimation(m_fbx->GetArmature("wait"), true);
 	}
 
@@ -268,6 +271,7 @@ void Player::Action()
 	{
 		if (animeNo == JAMP)
 		{
+			m_fbx->SetSpeed(1);
 			m_fbx->PlayAnimation(m_fbx->GetArmature("jump"), true);
 
 			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("jump")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("jump")))
@@ -277,13 +281,19 @@ void Player::Action()
 		}
 		else if (animeNo == THROW)
 		{
-			m_fbx->SetSpeed(5);
-			m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
 
-			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("throw")) >= m_fbx->GetAnimeEndTime(m_fbx->GetArmature("throw")))
+			m_fbx->SetSpeed(7);
+			m_fbx->PlayAnimation(m_fbx->GetArmature("throw"), true);
+			if (m_fbx->GetAnimeCurrentTime(m_fbx->GetArmature("throw")) >= m_fbx->GetFrameTime() * 63)
 			{
 				isAction = false;
+				m_fbx->SetCurrentTime(m_fbx->GetArmature("throw"), m_fbx->GetAnimeStartTime(m_fbx->GetArmature("throw")));
 			}
+		}
+		else if (animeNo == CHARGE)
+		{
+			m_fbx->SetSpeed(5);
+			m_fbx->PlayAnimation(m_fbx->GetArmature("charge"), true);
 		}
 	}
 

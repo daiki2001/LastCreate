@@ -75,7 +75,8 @@ private:
 	enum Action
 	{
 		THROW,
-		JAMP
+		JAMP,
+		CHARGE
 	};
 
 	std::unique_ptr < ParticleManager> dustParticle = nullptr;

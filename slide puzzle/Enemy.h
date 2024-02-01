@@ -23,6 +23,7 @@ public:
 	const Vec3 GetRotation() { return rotation; }
 	bool GetForcusChangeFlag() { return forcusChangeFlag_; };
 	void SetForcusChangeFlag(bool changeFlag_) { forcusChangeFlag_ = changeFlag_; }
+	bool GetDamageAnime();
 
 	int GetHp() { return hp_; }
 
