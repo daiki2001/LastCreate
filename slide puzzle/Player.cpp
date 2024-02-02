@@ -292,12 +292,19 @@ void Player::Action()
 		}
 		else if (animeNo == CHARGE)
 		{
-			m_fbx->SetSpeed(5);
-			m_fbx->PlayAnimation(m_fbx->GetArmature("charge"), true);
-
 			if (!GameInputManager::Get()->IsCharge())
 			{
 				isAction = false;
+			}
+
+			if ((!input->IsForward() && !input->IsBack() && !input->IsLeft() && !input->IsRight()))
+			{
+				m_fbx->StopAnimation();
+			}
+			else
+			{
+				m_fbx->SetSpeed(5);
+				m_fbx->PlayAnimation(m_fbx->GetArmature("charge"), true);
 			}
 		}
 	}
