@@ -94,7 +94,7 @@ private://定義
 
 	std::vector<std::unique_ptr<Enemy>>enemys;         //敵
 	std::vector<LoadStatus*>loadStatus;//敵の出現位置
-	int enemyMax = 3;                  //敵最大数
+	int enemyMax = 6;                  //敵最大数
 	int spwnCoolTime = 0;              //現在のクールタイム
 	int spwnCoolTimeMax = 500;         //クールタイム最大
 
