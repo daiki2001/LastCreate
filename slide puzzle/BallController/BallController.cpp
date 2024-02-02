@@ -12,7 +12,8 @@ const double PI = 3.14159265358979323846;
 const double DEGREE = 180.0 / PI;
 
 #ifdef _DEBUG
-std::ofstream outlog;
+std::ofstream inputlog;
+std::ofstream outputlog;
 #endif // _DEBUG
 
 std::array<double, BallController::sensorCount> ToImuData(const Vec3& a, const Vec3& g)
@@ -115,8 +116,10 @@ BallController::BallController(const char* serialDevice) :
 	this->serial = Serial::create(serialDevice);
 
 #ifdef _DEBUG
-	outlog.open("./data/angle_output.txt");
-	outlog << std::fixed << std::setprecision(6);
+	inputlog.open("./data/angle_input.txt");
+	inputlog << std::fixed << std::setprecision(6);
+	outputlog.open("./data/angle_output.txt");
+	outputlog << std::fixed << std::setprecision(6);
 #endif // _DEBUG
 }
 
@@ -208,18 +211,22 @@ int BallController::Update() {
 	this->keepData.Update(records.back().flags);
 
 #ifdef _DEBUG
-	//outlog << count.count() << ", ";
+	//outputlog << count.count() << ", ";
 	//for (size_t i = 0; i < records.back().cencor.size(); i++)
 	//{
 	//	double x = (i < accelCount) ? 1.0 : DEGREE;
-	//	outlog << records.back().cencor[i] / static_cast<float>(x) << ", ";
+	//	outputlog << records.back().cencor[i] / static_cast<float>(x) << ", ";
 	//}
-	//outlog << std::endl;
+	//outputlog << std::endl;
 #endif // _DEBUG
 	AngleUpdate();
 	count = std::chrono::system_clock::now() - startTime;
 #ifdef _DEBUG
-	outlog << count.count() << ", " << kalman.GetX()[0] << "," << kalman.GetX()[1] << "," << kalman.GetX()[2] << "," << records.back().flags[0] << std::endl;
+	inputlog << count.count() << ", "
+		<< records.back().cencor[ACCEL_X] << "," << records.back().cencor[ACCEL_Y] << "," << records.back().cencor[ACCEL_Z] << ","
+		<< records.back().cencor[GYRO_X] << "," << records.back().cencor[GYRO_Y] << "," << records.back().cencor[GYRO_Z] << ","
+		<< records.back().flags[0] << std::endl;
+	outputlog << kalman.GetX()[0] << "," << kalman.GetX()[1] << "," << kalman.GetX()[2] << std::endl;
 #endif // _DEBUG
 
 	return dataCount;
@@ -332,9 +339,12 @@ void BallController::AngleReset()
 {
 	if (!this->serial) return;
 #ifdef _DEBUG
-	outlog << std::endl;
-	outlog << std::endl;
-	outlog << std::endl;
+	inputlog << std::endl;
+	inputlog << std::endl;
+	inputlog << std::endl;
+	outputlog << std::endl;
+	outputlog << std::endl;
+	outputlog << std::endl;
 #endif // _DEBUG
 
 	kalman.Reset();
@@ -418,6 +428,7 @@ bool BallController::IsJamp() const
 bool BallController::IsBallThrow() const
 {
 	if (!this->serial) return false;
-	bool result = GetFlagReturn() && (gyro.x + gyro.z < -15.0f);
+	bool result = GetFlagReturn();
+	result &= (gyro.x + gyro.z < -10.0f);
 	return result;
 }
