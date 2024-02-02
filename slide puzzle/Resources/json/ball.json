@@ -6,7 +6,7 @@
             "name": "player",
             "transform": {
                 "translation": [
-                    0.0,
+                    5.0,
                     0.0,
                     0.2
                 ],
@@ -27,7 +27,7 @@
             "name": "enemy",
             "transform": {
                 "translation": [
-                    0.0,
+                    5.0,
                     -20.0,
                     0.2
                 ],
@@ -49,7 +49,7 @@
         "name": "enemy.001",
         "transform": {
           "translation": [
-            0.0,
+            5.0,
             20.0,
             0.2
           ],
