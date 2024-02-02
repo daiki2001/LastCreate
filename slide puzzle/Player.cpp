@@ -294,6 +294,11 @@ void Player::Action()
 		{
 			m_fbx->SetSpeed(5);
 			m_fbx->PlayAnimation(m_fbx->GetArmature("charge"), true);
+
+			if (!GameInputManager::Get()->IsCharge())
+			{
+				isAction = false;
+			}
 		}
 	}
 
