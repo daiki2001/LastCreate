@@ -27,7 +27,7 @@ public:
 
 	int GetHp() { return hp_; }
 
-	void DamageHit(Vec3 pos, int comboCount_);
+	void DamageHit(Vec3 pos, int comboCount_, bool hitFlag);
 protected:
 	void BallThrow();
 	void BallCatch();

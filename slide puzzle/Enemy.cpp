@@ -29,20 +29,14 @@ bool Enemy::GetDamageAnime()
 	{
 		return false;
 	}
+	return false;
 	
 }
 
-void Enemy::DamageHit(Vec3 pos ,int comboCount_)
-{
-	// UŒ‚‚ª“–‚½‚Á‚½‚ç
-	const float playerR = 3.0f;
-	const float ballR = 3.0f;
-
-	Vec3 axyz = (position - pos) * (position - pos);
-	float ar = (ballR + playerR) * (ballR + playerR);
+void Enemy::DamageHit(Vec3 pos, int comboCount_ ,bool hitFlag) {
 
 	// ƒ{[ƒ‹‚É“–‚½‚Á‚½
-	if (axyz.x + axyz.y + axyz.z <= ar) {
+	if (hitFlag) {
 		hp_ -= 1 * (comboCount_ + 10);
 		if (hp_ <= 0) {
 			forcusChangeFlag_ = true;
