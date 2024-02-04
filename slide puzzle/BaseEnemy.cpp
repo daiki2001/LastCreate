@@ -30,7 +30,7 @@ void BaseEnemy::Update()
 
 void BaseEnemy::Draw()
 {
-	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
 	m_fbx->Draw();
 }
 

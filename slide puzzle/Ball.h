@@ -35,6 +35,7 @@ public:
 	void SetComboMissFlag(bool flag) { comboMissFlag_ = flag; }
 	bool GetComboMissFlag() { return comboMissFlag_; }
 	void SetTargetPos(Vec3 pos) { targetPos_ = pos; }
+	bool GetBallBoundedFlag() { return ballBoundedFlag; }
 	bool GetHitFlag();
 
 private:
@@ -66,8 +67,8 @@ private:
 	bool comboMissFlag_ = false;
 	float speed_ = 0.5f;
 	float baseBound_ = 0.0f;
-	float nearBound_ = 4.0f;
-	float farBound_ = 6.0f;
+	float nearBound_ = 3.0f;
+	float farBound_ = 4.0f;
 	float baseTime_ = 0.05f;
 	float nearTime_ = 0.01625f;
 	float farTime_ = 0.0125f;
@@ -95,4 +96,6 @@ private:
 	bool enemyHave = false;
 
 	bool wallReflectFlag = false;
+
+	bool ballBoundedFlag = false;
 };

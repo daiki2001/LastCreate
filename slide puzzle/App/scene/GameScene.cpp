@@ -195,7 +195,7 @@ void GameScene::TargetAct()
 		if (ball->GetThrowFlag() && ball->GetHitFlag())
 		{
 			Audio::Get()->SoundSEPlayWave(damegeSound);
-			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount());
+			enemys[forcusEnemyNum]->DamageHit(ball->GetPosition(), player->GetComboCount(),ball->GetHitFlag());
 			damegeParticle->DamegeAdd(ball->GetPosition(), enemys[forcusEnemyNum]->GetPosition(),
 				1.0f, 2.0f, 0.0f,
 				Vec4(0.5f, 0.0f, 0.0f, 0.5f), Vec4(0.0f, 0.0f, 0.0f, 0.0f));
@@ -239,7 +239,7 @@ void GameScene::BallDelete()
 
 	for (auto& ball : balls)
 	{
-		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag())
+		if (ball->GetPosition().z >= 1 && !ball->GetThrowFlag()&& ball->GetBallBoundedFlag())
 		{
 			balls.erase(balls.begin() + count);
 		}
