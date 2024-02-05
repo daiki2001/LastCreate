@@ -37,7 +37,7 @@ void Enemy::DamageHit(Vec3 pos, int comboCount_ ,bool hitFlag) {
 
 	// É{Å[ÉãÇ…ìñÇΩÇ¡ÇΩ
 	if (hitFlag) {
-		hp_ -= 1 * (comboCount_ + 10);
+		hp_ -= 1/* * (comboCount_ + 10)*/;
 		if (hp_ <= 0) {
 			forcusChangeFlag_ = true;
 		}

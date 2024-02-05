@@ -14,7 +14,7 @@ void BaseEnemy::Init(Vec3 pos, Vec3 rot)
 	m_fbx->SetScale(Vec3(0.0025f, 0.0025f, 0.0025f));
 	m_fbx->PlayAnimation(m_fbx->GetArmature("run"), true);
 
-	hp_ = 10;
+	hp_ = 1;
 
 	BallCatch();
 }
@@ -30,7 +30,7 @@ void BaseEnemy::Update()
 
 void BaseEnemy::Draw()
 {
-	Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
+	//Object::Draw(pObject, position, Vec3(1.0f, 1.0f, 1.0f), rotation);
 	m_fbx->Draw();
 }
 
