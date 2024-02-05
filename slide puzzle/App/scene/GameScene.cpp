@@ -69,6 +69,7 @@ void GameScene::Update()
 		enemy->Update();
 	}
 
+	EnemyDeath();
 	for (auto& ball : balls)
 	{
 		ball->Update(
@@ -77,7 +78,6 @@ void GameScene::Update()
 	}
 	sceneChange_->Update();
 
-	EnemyDeath();
 	BallDelete();
 	BallRespawn();
 
@@ -176,10 +176,15 @@ void GameScene::EnemyDeath()
 			enemys.erase(enemys.begin() + count);
 			targetFlag_ = true;
 			Score::Get()->PlasScore();
+			break;
 		}
-		else
+		count++;
+	}
+	for (auto& enemy : enemys)
+	{
+		if (enemy->GetHp() <= 0)
 		{
-			count++;
+			EnemyDeath();
 		}
 	}
 }

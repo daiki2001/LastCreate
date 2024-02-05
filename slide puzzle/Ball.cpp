@@ -96,7 +96,8 @@ bool Ball::GetHitFlag()
 {
 	if (BallHitFlag(targetPos_)) {
 		throwFlag_ = false;
-		
+
+		hitFlag_ = true;
 		return true;
 	}
 
@@ -117,8 +118,8 @@ void Ball::ThrowAct(Vec3 targetPos) {
 
 bool Ball::BallHitFlag(Vec3 targetPos) {
 	// 半径指定
-	const float targetR = 3.0f;
-	const float ballR = 3.0f;
+	const float targetR = 1.0f;
+	const float ballR = 1.0f;
 
 	// 距離計算
 	Vec3 axyz = (position - targetPos) * (position - targetPos);
@@ -145,14 +146,10 @@ void Ball::BallReflectBound(Vec3 havePos_, Vec3 targetPos_) {
 		oldThrowPos = position;
 		if (BallHitFlag(targetPos_)) {
 			comboUpFlag_ = true;
-			hitFlag_ = true;
 		}
 	}
 	// ボールが敵に当たったフラグ
 	else {
-		if (throwFlag_ || wallReflectFlag) {
-			
-		}
 
 		chargeFlag_ = false;
 		if (time_[0] < 1) {
