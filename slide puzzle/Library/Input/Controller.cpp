@@ -494,22 +494,24 @@ void UpdateGamePad()
 	{
 		if (is_push[i] == true)
 		{
+			//âüÇµÇΩèuä‘
 			if (g_ButtonStates[i] == ButtonState::ButtonStateNone)
 			{
 				g_ButtonStates[i] = ButtonState::ButtonStateDown;
-			}
-			else
+			}//í∑âüÇµ
+			else if (g_ButtonStates[i] == ButtonState::ButtonStateDown)
 			{
 				g_ButtonStates[i] = ButtonState::ButtonStatePush;
 			}
 		}
 		else
 		{
+			//ó£ÇµÇΩèuä‘
 			if (g_ButtonStates[i] == ButtonState::ButtonStatePush)
 			{
 				g_ButtonStates[i] = ButtonState::ButtonStateUp;
 			}
-			else
+			else//ó£ÇµÇƒÇ¢ÇÈä‘
 			{
 				g_ButtonStates[i] = ButtonState::ButtonStateNone;
 			}
