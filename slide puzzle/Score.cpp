@@ -30,6 +30,7 @@ void Score::Init()
 
 void Score::ScoreReset()
 {
+	loadFlag = true;
 	score = 0;
 }
 
