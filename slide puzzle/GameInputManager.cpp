@@ -103,7 +103,7 @@ bool GameInputManager::IsThrow() const
 {
 	bool result = false;
 	result |= input->MouseReleaseLeft();
-	result |= input->ControllerDown(ButtonKind::ButtonRT);
+	result |= input->ControllerUp(ButtonKind::ButtonRT);
 	result |= ball->IsBallThrow();
 	return result;
 }
