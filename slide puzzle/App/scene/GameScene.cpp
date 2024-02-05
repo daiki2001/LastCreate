@@ -294,6 +294,10 @@ void GameScene::SpawnEnemy()
 	if (spwnCoolTime > 0)
 	{
 		spwnCoolTime--;
+		if (enemys.size() <= 0)
+		{
+			spwnCoolTime = 0;
+		}
 	}
 }
 
