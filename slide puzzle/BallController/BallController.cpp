@@ -103,10 +103,9 @@ BallController::BallController(const char* serialDevice) :
 	gyro{},
 	oldGyro(gyro),
 	gyroLPF(gyro),
+	startVector{},
+	startVectorSum{},
 	angle{},
-	oldAngle{},
-	startAngle{},
-	startAngleSum{},
 	startTime(std::chrono::system_clock::now()),
 	count{},
 	oldCount(count),
@@ -153,7 +152,6 @@ int BallController::Update() {
 	contentSize += receivedSize;
 
 	// データの記録
-	oldAngle = angle;
 	oldCount = count;
 	char* p = buf;
 	const int packetSize = RawData::GetPacketSize();
@@ -307,32 +305,34 @@ void BallController::AngleUpdate()
 		AngleReset();
 	}
 
-	const Vec3 baisA = { -0.5849296877f, 0.072347369f, -0.01939517739f };
-	const Vec3 baisG = { -0.8886206362f, 0.03656522179f, 0.6347734145f };
-	accel -= baisA;
-	gyro -= baisG;
-
-	if (count.count() < 0.0005)
-	{
-		accelLPF = accel;
-		gyroLPF = gyro;
-	}
-	else
-	{
-		float lpf = 0.07f;
-		accelLPF = lpf * accel + (1.0f - lpf) * accelLPF;
-		gyroLPF = lpf * gyro + (1.0f - lpf) * gyroLPF;
-	}
-
-	// kalman filter and normalize quaternion
-	kalman.Update(count.count(), accelLPF, gyroLPF);
-
-	if (count.count() < 1.35)
+	if (dataCount <= KeepData::MAX_KEEP_COUNT)
 	{
 		dataCount++;
-		startAngleSum += angle;
-		startAngle = (dataCount == 0) ? Vec3() : (startAngleSum / static_cast<float>(dataCount));
+		startVectorSum += accel;
+		startVector = (dataCount == 0) ? Vec3() : (startVectorSum / static_cast<float>(dataCount));
 	}
+
+	static const Vec3 worldXAxis = Vec3(1, 0, 0).normalize();
+
+	Vec3 startG = startVector;
+	startG.normalize();
+	Vec3 startSideVec = startG.cross(worldXAxis);
+	Vec3 startForwardVec = startSideVec.cross(startG);
+	//startSideVec.normalize();
+	//startForwardVec.normalize();
+
+	Vec3 nowG = accel;
+	nowG.normalize();
+	Vec3 nowSideVec = nowG.cross(worldXAxis);
+	Vec3 nowForwardVec = nowSideVec.cross(nowG);
+	//nowSideVec.normalize();
+	//nowForwardVec.normalize();
+
+	angle.x = (nowForwardVec.x * startForwardVec.x + nowForwardVec.y * startForwardVec.y + nowForwardVec.z * startForwardVec.z) / (nowForwardVec.length() * startForwardVec.length());
+	angle.y = (nowSideVec.x * startSideVec.x + nowSideVec.y * startSideVec.y + nowSideVec.z * startSideVec.z) / (nowSideVec.length() * startSideVec.length());
+	angle.z = (nowG.x * startG.x + nowG.y * startG.y + nowG.z * startG.z) / (nowG.length() * startG.length());
+	angle = Vec3(acos(angle.x), acos(angle.y), acos(angle.z));
+	gravityCross = startG.cross(nowG);
 }
 
 void BallController::AngleReset()
@@ -348,7 +348,7 @@ void BallController::AngleReset()
 #endif // _DEBUG
 
 	kalman.Reset();
-	startAngleSum = {};
+	startVectorSum = {};
 	dataCount = 0;
 	startTime = std::chrono::system_clock::now();
 }
@@ -358,8 +358,7 @@ bool BallController::IsForward() const
 	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y > +deadzone;
-	//Vec3 v = startAngle - angle;
-	//result = v.z > +deadzone;
+	//result = (angle.x > +deadzone) && (gravityCross.x < 0);
 	return result;
 }
 
@@ -368,8 +367,7 @@ bool BallController::IsBack() const
 	if (!this->serial) return false;
 	bool result = false;
 	result = accel.y < -deadzone;
-	//Vec3 v = startAngle - angle;
-	//result = v.z < -deadzone;
+	//result = (angle.x < -deadzone) && (gravityCross.x > 0);
 	return result;
 }
 
@@ -378,7 +376,7 @@ bool BallController::IsLeft() const
 	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x > +deadzone + 0.5f;
-	//result = (startAngle - angle).y > +deadzone;
+	//result = angle.y > +deadzone;
 	return result;
 }
 
@@ -387,7 +385,7 @@ bool BallController::IsRight() const
 	if (!this->serial) return false;
 	bool result = false;
 	result = accel.x < -deadzone + 0.5f;
-	//result = (startAngle - angle).y < -deadzone;
+	//result = angle.y < -deadzone;
 	return result;
 }
 
@@ -403,7 +401,7 @@ bool BallController::IsJamp() const
 	}
 	else
 	{
-		if (accel.z > 0.0f)
+		if (angle.z > 1.57f)
 		{
 			if (isJamp)
 			{

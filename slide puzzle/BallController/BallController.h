@@ -73,10 +73,10 @@ private: //メンバ変数
 	Vec3 gyro;
 	Vec3 oldGyro;
 	Vec3 gyroLPF;
+	Vec3 startVector;
+	Vec3 startVectorSum;
 	Vec3 angle;
-	Vec3 oldAngle;
-	Vec3 startAngle;
-	Vec3 startAngleSum;
+	Vec3 gravityCross;
 	std::chrono::system_clock::time_point startTime;
 	std::chrono::duration<double> count;
 	std::chrono::duration<double> oldCount;
